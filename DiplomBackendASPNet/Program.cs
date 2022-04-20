@@ -23,3 +23,17 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+//public static void ConfigureIdentity(WebApplicationBuilder builder)
+//{
+//    builder.Services.AddIdentity<User, IdentityRole>(options =>
+//   {
+//       options.Password.RequireDigit = false;
+//       options.Password.RequireLowercase = false;
+//       options.Password.RequireUppercase = false;
+//       options.Password.RequiredLength = 0;
+//       options.Password.RequireNonAlphanumeric = false;
+//   })
+//        .AddEntityFrameworkStores<AppDbContext>()
+//        .AddDefaultTokenProviders();
+//}
