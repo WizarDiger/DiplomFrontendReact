@@ -1,171 +1,54 @@
 import React from 'react';
-import Header from './Header';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-function LoginPage()
-{
-    return(
-        <Box
-        component="form"
+import KeyIcon from '@mui/icons-material/Key';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Button from '@mui/material/Button';
+function LoginPage() {
+  return (
+
+
+    <div style={{ width: '100%', marginTop: "10%", textAlign: 'center' }}>
+      <Box
         sx={{
-          '& .MuiTextField-root': { m: 1, width: '25ch' },
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+
+
+          bgcolor: 'background.paper',
+          borderRadius: 1,
         }}
-        noValidate
-        autoComplete="off"
       >
-        <div>
-          <TextField
-            required
-            id="outlined-required"
-            label="Required"
-            defaultValue="Hello World"
-          />
-          <TextField
-            disabled
-            id="outlined-disabled"
-            label="Disabled"
-            defaultValue="Hello World"
-          />
-          <TextField
+        <Box sx={{ mr: -4, my:3,fontSize: 35 }}>
+          Авторизация
+        </Box>
+        <Box>
+
+          <AccountCircle sx={{ mr: 1, my: 3 }} />
+          <TextField sx={{ my: 1 }}
             id="outlined-password-input"
-            label="Password"
+            label="Логин"
+
+          />
+        </Box>
+        <Box>
+
+          <KeyIcon sx={{ mr: 1, my: 3 }} />
+          <TextField sx={{ my: 1 }}
+            id="outlined-password-input"
+            label="Пароль"
             type="password"
-            autoComplete="current-password"
           />
-          <TextField
-            id="outlined-read-only-input"
-            label="Read Only"
-            defaultValue="Hello World"
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField
-            id="outlined-number"
-            label="Number"
-            type="number"
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <TextField id="outlined-search" label="Search field" type="search" />
-          <TextField
-            id="outlined-helperText"
-            label="Helper text"
-            defaultValue="Default Value"
-            helperText="Some important text"
-          />
-        </div>
-        <div>
-          <TextField
-            required
-            id="filled-required"
-            label="Required"
-            defaultValue="Hello World"
-            variant="filled"
-          />
-          <TextField
-            disabled
-            id="filled-disabled"
-            label="Disabled"
-            defaultValue="Hello World"
-            variant="filled"
-          />
-          <TextField
-            id="filled-password-input"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            variant="filled"
-          />
-          <TextField
-            id="filled-read-only-input"
-            label="Read Only"
-            defaultValue="Hello World"
-            InputProps={{
-              readOnly: true,
-            }}
-            variant="filled"
-          />
-          <TextField
-            id="filled-number"
-            label="Number"
-            type="number"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            variant="filled"
-          />
-          <TextField
-            id="filled-search"
-            label="Search field"
-            type="search"
-            variant="filled"
-          />
-          <TextField
-            id="filled-helperText"
-            label="Helper text"
-            defaultValue="Default Value"
-            helperText="Some important text"
-            variant="filled"
-          />
-        </div>
-        <div>
-          <TextField
-            required
-            id="standard-required"
-            label="Required"
-            defaultValue="Hello World"
-            variant="standard"
-          />
-          <TextField
-            disabled
-            id="standard-disabled"
-            label="Disabled"
-            defaultValue="Hello World"
-            variant="standard"
-          />
-          <TextField
-            id="standard-password-input"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            variant="standard"
-          />
-          <TextField
-            id="standard-read-only-input"
-            label="Read Only"
-            defaultValue="Hello World"
-            InputProps={{
-              readOnly: true,
-            }}
-            variant="standard"
-          />
-          <TextField
-            id="standard-number"
-            label="Number"
-            type="number"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            variant="standard"
-          />
-          <TextField
-            id="standard-search"
-            label="Search field"
-            type="search"
-            variant="standard"
-          />
-          <TextField
-            id="standard-helperText"
-            label="Helper text"
-            defaultValue="Default Value"
-            helperText="Some important text"
-            variant="standard"
-          />
-        </div>
-      </Box>
-    );
+        </Box>
+        <Button sx={{ mr:-4,my: 2, fontSize: 20, width: "5%" }} variant="contained">Войти</Button>
+        <Button sx={{ mr:-4,my: 2, fontSize: 20, width: "11%" }} variant="contained">Зарегистрироваться</Button>
+
+      </Box >
+    </div>
+
+
+  );
 }
 
 export default LoginPage;

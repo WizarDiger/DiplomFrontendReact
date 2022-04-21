@@ -6,25 +6,10 @@ import { Box } from '@mui/system';
 function App() {
     return (
         <>
-       <Box
-         sx={{
-            width: 300,
-            height: 80,   
-          }}
-       >
-        <Header />
-       </Box>
-  
-
-        <Box
-          sx={{
-            width: 2000,
-            height: 300,
-          
-          }}
-        >
+     
+        <Header />      
         <LoginPage  />
-        </Box>
+        
       
         </>
         
