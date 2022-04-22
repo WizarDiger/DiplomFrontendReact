@@ -4,9 +4,18 @@ import TextField from '@mui/material/TextField';
 import KeyIcon from '@mui/icons-material/Key';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Button from '@mui/material/Button';
-function LoginPage() {
-    return (
+import EmailIcon from '@mui/icons-material/Email';
+import BadgeIcon from '@mui/icons-material/Badge';
+import CakeIcon from '@mui/icons-material/Cake';
+import LocationCityIcon from '@mui/icons-material/LocationCity';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+function RegisterPage() {
+    const [value, setValue] = React.useState(null);
+    return (
+        
 
         <div style={{ width: '100%', marginTop: "10%", textAlign: 'center' }}>
             <Box
@@ -53,60 +62,66 @@ function LoginPage() {
                 </Box>
                 <Box>
 
-                    <KeyIcon sx={{ mr: 1, my: 3 }} />
+                    <EmailIcon sx={{ mr: 1, my: 3 }} />
                     <TextField sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Почта"
-                        type="password"
+
                     />
                 </Box>
 
                 <Box>
 
-                    <KeyIcon sx={{ mr: 1, my: 3 }} />
+                    <BadgeIcon sx={{ mr: 1, my: 3 }} />
                     <TextField sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Имя"
-                        type="password"
+
                     />
                 </Box>
                 <Box>
 
-                    <KeyIcon sx={{ mr: 1, my: 3 }} />
+                    <BadgeIcon sx={{ mr: 1, my: 3 }} />
                     <TextField sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Фамилия"
-                        type="password"
+
                     />
                 </Box>
                 <Box>
 
-                    <KeyIcon sx={{ mr: 1, my: 3 }} />
+                    <BadgeIcon sx={{ mr: 1, my: 3 }} />
                     <TextField sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Отчество (при наличии)"
-                        type="password"
+
                     />
                 </Box>
                 <Box>
+                    <CakeIcon sx={{ mr: 1, my: 3 }} />
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DatePicker
+                            label="Дата рождения"
+                            value={value}
+                            onChange={(newValue) => {
+                                setValue(newValue);
+                            }}
+                            renderInput={(params) => <TextField sx={{ my: 1, width:225}} {...params} />}
+                        />
+                    </LocalizationProvider>
 
-                    <KeyIcon sx={{ mr: 1, my: 3 }} />
-                    <TextField sx={{ my: 1 }}
-                        id="outlined-password-input"
-                        label="Дата рождения"
-                        type="password"
-                    />
+
                 </Box>
                 <Box>
 
-                    <KeyIcon sx={{ mr: 1, my: 3 }} />
+                    <LocationCityIcon sx={{ mr: 1, my: 3 }} />
                     <TextField sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Город"
                         type="password"
                     />
                 </Box>
-                <Button sx={{ mr: -4, my: 2, fontSize: 20, width: "11%" }} variant="contained">Зарегистрироваться</Button>
+                <Button sx={{ mr: -4, my: 2, fontSize: 20, width: 270 }} variant="contained">Зарегистрироваться</Button>
 
             </Box >
         </div>
@@ -115,4 +130,4 @@ function LoginPage() {
     );
 }
 
-export default LoginPage;
+export default RegisterPage;

@@ -4,7 +4,17 @@ import TextField from '@mui/material/TextField';
 import KeyIcon from '@mui/icons-material/Key';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Button from '@mui/material/Button';
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
+
 function LoginPage() {
+ 
   return (
 
 
@@ -41,8 +51,12 @@ function LoginPage() {
             type="password"
           />
         </Box>
-        <Button sx={{ mr:-4,my: 2, fontSize: 20, width: "5%" }} variant="contained">Войти</Button>
-        <Button sx={{ mr:-4,my: 2, fontSize: 20, width: "11%" }} variant="contained">Зарегистрироваться</Button>
+        <Button sx={{ mr:-4,my: 2, fontSize: 20, width: 100 }} variant="contained">Войти</Button>
+        
+        <Link to={'/RegisterPage'}  style={{ textDecoration: 'none' }}>
+        <Button sx={{ mr:-4,my: 2, fontSize: 20, width: 270 }} variant="contained">Зарегистрироваться</Button>
+        </Link>
+        
 
       </Box >
     </div>
@@ -50,5 +64,4 @@ function LoginPage() {
 
   );
 }
-
 export default LoginPage;
