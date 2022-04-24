@@ -21,6 +21,7 @@ root.render(
     <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route path="RegisterPage" element={<RegisterPage/>} />
+      <Route path="LoginPage" element={<LoginPage/>} />
      
     </Routes>
     </BrowserRouter>

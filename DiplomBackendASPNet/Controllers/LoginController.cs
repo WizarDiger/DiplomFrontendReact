@@ -23,7 +23,7 @@ namespace DiplomBackendASPNet.Controllers
 
         public JsonResult Get()
         {
-            string query = @"SELECT id AS ""userId"",login AS ""login"",password AS ""password"",name AS ""name"",mail AS ""mail"",birthday AS ""birthday"" from Пользователь";
+            string query = @"SELECT id AS ""userId"",login AS ""login"",password AS ""password"",name AS ""name"",mail AS ""mail"",birthday AS ""birthday"",city AS ""city"" from Пользователь";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
             NpgsqlDataReader myReader;
@@ -45,8 +45,8 @@ namespace DiplomBackendASPNet.Controllers
         [HttpPost]
         public JsonResult Post(User user)
         {
-            string query = @"insert into Пользователь(login,password,name,mail,birthday)
-                values(@login, @password, @name, @mail, @birthday);";
+            string query = @"insert into Пользователь(login,password,name,mail,birthday,city)
+                values(@login, @password, @name, @mail, @birthday, @city);";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
             NpgsqlDataReader myReader;
@@ -60,6 +60,7 @@ namespace DiplomBackendASPNet.Controllers
                     myCommand.Parameters.AddWithValue("@name", (user.Name + " "+ user.Surname + " " + user.Patronymic).Trim());
                     myCommand.Parameters.AddWithValue("@mail", user.Email);
                     myCommand.Parameters.AddWithValue("@birthday", user.DateOfBirth);
+                    myCommand.Parameters.AddWithValue("@city", user.City);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -79,7 +80,8 @@ namespace DiplomBackendASPNet.Controllers
 	        password = @password,
 	        name = @name,
 	        mail = @mail,
-	        birthday = @birthday
+	        birthday = @birthday,
+            city = @city
             where id = @id;";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
@@ -95,6 +97,7 @@ namespace DiplomBackendASPNet.Controllers
                     myCommand.Parameters.AddWithValue("@name", user.Name + user.Surname + user.Patronymic);
                     myCommand.Parameters.AddWithValue("@mail", user.Email);
                     myCommand.Parameters.AddWithValue("@birthday", user.DateOfBirth);
+                    myCommand.Parameters.AddWithValue("@city", user.City);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
