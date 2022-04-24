@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import KeyIcon from '@mui/icons-material/Key';
@@ -12,201 +12,176 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Alert } from '@mui/material';
+import ruLocale from 'date-fns/locale/ru';
 
 
+function RegisterPage(props) {
 
-export class RegisterPage extends Component {
-    constructor(props) {
-        super(props);
-        this.handleSubmit=this.handleSubmit.bind(this);
-       
-      }
-      state = { 
-		login: '', 
-        password:'',
-        email:'',
-        name:'',
-        surname:'',
-        patronymic:'',
-        dateOfBirth:'',
-        city:''
-	} 
-    handleLoginChange = (e) => this.setState({ 
-        login: e.target.value    
-	}) 
-    handlePasswordChange = (e) => this.setState({ 
-        password: e.target.value  
-   
-	}) 
-    handleMailChange = (e) => this.setState({ 
-        email: e.target.value  
-   
-	}) 
-    handleNameChange = (e) => this.setState({ 
-        name: e.target.value  
-   
-	}) 
-    handleSurnameChange = (e) => this.setState({ 
-        surname: e.target.value  
-   
-	}) 
-    handlePatronymicChange = (e) => this.setState({ 
-        patronymic: e.target.value  
-   
-	}) 
-    handleDateOfBirthChange = (e) => this.setState({ 
-        dateOfBirth: e.target.value  
-   
-	}) 
-    handleCityChange = (e) => this.setState({ 
-        city: e.target.value  
-   
-	}) 
-    handlePasswordCheck = (e) => this.setState({ 
-        city: e.target.value  
-   
-	}) 
+    const [myLogin, setLogin] = useState('')
+    const [myPassword, setPassword] = useState('')
+    const [myEmail, setEmail] = useState('')
+    const [myName, setName] = useState('')
+    const [mySurname, setSurname] = useState('')
+    const [myPatronymic, setPatronymic] = useState('')
+    const [myDateOfBirth, setDateOfBirth] = useState('')
+    const [myCity, setCity] = useState('')
 
-  
-      handleSubmit(event)
-      {
-        
-          event.preventDefault();
-          fetch('https://localhost:7049/api/Login',{
-              method:'POST',
-              headers:
-              {
-                  'Accept':'application/json',
-                  'Content-Type':'application/json'
-              },
-              body:JSON.stringify(this.state)
-          })
-          
-          .then(res=>res.json())
-          .then((result)=>{
-              alert(result);
-          },
-          (error)=>{
-              alert('Failed');
-          })
-      }
-    render() {
-      
-        return (
+    const [value, setValue] = React.useState(null);
 
 
-            <div style={{ width: '100%', marginTop: "10%", textAlign: 'center' }}>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        flexDirection: 'column',
+    const handleSubmit = async () => {
 
 
-                        bgcolor: 'background.paper',
-                        borderRadius: 1,
-                    }}
-                >
-                    <Box sx={{ mr: -4, my: 3, fontSize: 35 }}>
-                        Регистрация
-                    </Box>
-                    <Box>
+        fetch('https://localhost:7049/api/Login', {
+            method: 'POST',
+            headers:
+            {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    login: myLogin,
+                    password: myPassword,
+                    email: myEmail,
+                    name: myName,
+                    surname: mySurname,
+                    patronymic: myPatronymic,
+                    dateOfBirth: myDateOfBirth,
+                    city: myCity
+                }
+            )
+        })
 
-                        <AccountCircle sx={{ mr: 1, my: 3 }} />
-                        <TextField value={this.state.login} onChange={this.handleLoginChange} sx={{ my: 1 }}
-                            id="outlined-password-input"
-                            label="Логин"
-                            
-                        />
-                    </Box>
-                    <Box>
-
-                        <KeyIcon sx={{ mr: 1, my: 3 }} />
-                        <TextField value={this.state.password} onChange={this.handlePasswordChange} sx={{ my: 1 }}
-                            id="outlined-password-input"
-                            label="Пароль"
-                            type="password"
-                        />
-                    </Box>
-
-                    <Box>
-
-                        <KeyIcon sx={{ mr: 1, my: 3 }} />
-                        <TextField  sx={{ my: 1 }}
-                            id="outlined-password-input"
-                            label="Повторите пароль"
-                            type="password"
-                        />
-                    </Box>
-                    <Box>
-
-                        <EmailIcon sx={{ mr: 1, my: 3 }} />
-                        <TextField value={this.state.email} onChange={this.handleMailChange} sx={{ my: 1 }}
-                            id="outlined-password-input"
-                            label="Почта"
-
-                        />
-                    </Box>
-
-                    <Box>
-
-                        <BadgeIcon sx={{ mr: 1, my: 3 }} />
-                        <TextField value={this.state.name} onChange={this.handleNameChange} sx={{ my: 1 }}
-                            id="outlined-password-input"
-                            label="Имя"
-
-                        />
-                    </Box>
-                    <Box>
-
-                        <BadgeIcon sx={{ mr: 1, my: 3 }} />
-                        <TextField value={this.state.surname} onChange={this.handleSurnameChange} sx={{ my: 1 }}
-                            id="outlined-password-input"
-                            label="Фамилия"
-
-                        />
-                    </Box>
-                    <Box>
-
-                        <BadgeIcon sx={{ mr: 1, my: 3 }} />
-                        <TextField value={this.state.patronymic} onChange={this.handlePatronymicChange} sx={{ my: 1 }}
-                            id="outlined-password-input"
-                            label="Отчество (при наличии)"
-
-                        />
-                    </Box>
-
-                    <Box>
-
-
-                       
-                           
-                        <CakeIcon sx={{ mr: 1, my: 3 }} />
-                        <TextField value={this.state.dateOfBirth} onChange={this.handleDateOfBirthChange} sx={{ my: 1 }}
-                            id="outlined-password-input"
-                            label="Дата рождения"
-
-                        />
-
-
-                    </Box>
-                    <Box>
-
-                        <LocationCityIcon sx={{ mr: 1, my: 3 }} />
-                        <TextField value={this.state.city} onChange={this.handleCityChange} sx={{ my: 1 }}
-                            id="outlined-password-input"
-                            label="Город"
-                           
-                        />
-                    </Box>
-                    <Button onClick={this.handleSubmit} sx={{ mr: -4, my: 2, fontSize: 20, width: 270 }} variant="contained">Зарегистрироваться</Button>
-
-                </Box >
-            </div>
-
-
-        );
+            .then(res => res.json())
+            .then((result) => {
+                alert(result);
+            },
+                (error) => {
+                    alert('Failed');
+                })
     }
+
+
+    return (
+
+
+        <div style={{ width: '100%', marginTop: "10%", textAlign: 'center' }}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+
+
+                    bgcolor: 'background.paper',
+                    borderRadius: 1,
+                }}
+            >
+                <Box sx={{ mr: -4, my: 3, fontSize: 35 }}>
+                    Регистрация
+                </Box>
+                <Box>
+
+                    <AccountCircle sx={{ mr: 1, my: 3 }} />
+                    <TextField value={myLogin} onChange={(e) => setLogin(e.target.value)} sx={{ my: 1 }}
+                        id="outlined-password-input"
+                        label="Логин"
+
+                    />
+                </Box>
+                <Box>
+
+                    <KeyIcon sx={{ mr: 1, my: 3 }} />
+                    <TextField value={myPassword} onChange={(e) => setPassword(e.target.value)} sx={{ my: 1 }}
+                        id="outlined-password-input"
+                        label="Пароль"
+                        type="password"
+                    />
+                </Box>
+
+                <Box>
+
+                    <KeyIcon sx={{ mr: 1, my: 3 }} />
+                    <TextField sx={{ my: 1 }}
+                        id="outlined-password-input"
+                        label="Повторите пароль"
+                        type="password"
+                    />
+                </Box>
+                <Box>
+
+                    <EmailIcon sx={{ mr: 1, my: 3 }} />
+                    <TextField value={myEmail} onChange={(e) => setEmail(e.target.value)} sx={{ my: 1 }}
+                        id="outlined-password-input"
+                        label="Почта"
+
+                    />
+                </Box>
+
+                <Box>
+
+                    <BadgeIcon sx={{ mr: 1, my: 3 }} />
+                    <TextField value={myName} onChange={(e) => setName(e.target.value)} sx={{ my: 1 }}
+                        id="outlined-password-input"
+                        label="Имя"
+
+                    />
+                </Box>
+                <Box>
+
+                    <BadgeIcon sx={{ mr: 1, my: 3 }} />
+                    <TextField value={mySurname} onChange={(e) => setSurname(e.target.value)} sx={{ my: 1 }}
+                        id="outlined-password-input"
+                        label="Фамилия"
+
+                    />
+                </Box>
+                <Box>
+
+                    <BadgeIcon sx={{ mr: 1, my: 3 }} />
+                    <TextField value={myPatronymic} onChange={(e) => setPatronymic(e.target.value)} sx={{ my: 1 }}
+                        id="outlined-password-input"
+                        label="Отчество (при наличии)"
+
+                    />
+                </Box>
+
+                <Box>
+
+
+                        <CakeIcon sx={{ mr: 1, my: 3 }} />
+                    <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
+                        <DatePicker
+                            label="Дата рождения"
+                            value={myDateOfBirth}
+                            onChange={(newValue) => {
+                                setDateOfBirth(newValue);
+                            }}
+                            renderInput={(params) => <TextField sx={{ my: 1 ,width:225}} {...params} />}
+                        />
+                    </LocalizationProvider>
+
+
+
+                </Box>
+                <Box>
+
+                    <LocationCityIcon sx={{ mr: 1, my: 3 }} />
+                    <TextField value={myCity} onChange={(e) => setCity(e.target.value)} sx={{ my: 1 }}
+                        id="outlined-password-input"
+                        label="Город"
+
+                    />
+                </Box>
+                <Button onClick={handleSubmit} sx={{ mr: -4, my: 2, fontSize: 20, width: 270 }} variant="contained">Зарегистрироваться</Button>
+
+            </Box >
+        </div>
+
+
+    );
+
 }
 
 export default RegisterPage;
