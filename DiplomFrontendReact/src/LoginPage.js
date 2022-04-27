@@ -58,7 +58,7 @@ export class LoginPage extends Component {
                
             Авторизация
             {deps.map(dep=> <div>{dep.mail}</div>)}
-                
+              
              
           </Box>
           <Box>

@@ -1,9 +1,10 @@
-﻿namespace DiplomBackendASPNet.Models
-{
-    public class User
-    {
-        public int id { get; set; }
+﻿using Microsoft.AspNetCore.Identity;
 
+namespace DiplomBackendASPNet.Models
+{
+    public class User: IdentityUser
+    {
+       
         public string Login { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
@@ -14,6 +15,9 @@
         public string City { get; set; }
 
 
-
+      
+        
     }
+
+  
 }

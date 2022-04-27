@@ -55,7 +55,7 @@ function RegisterPage(props) {
 
             .then(res => res.json())
             .then((result) => {
-                alert(result);
+                alert(JSON.stringify(result));
             },
                 (error) => {
                     alert('Failed');
@@ -84,7 +84,7 @@ function RegisterPage(props) {
                 <Box>
 
                     <AccountCircle sx={{ mr: 1, my: 3 }} />
-                    <TextField value={myLogin} onChange={(e) => setLogin(e.target.value)} sx={{ my: 1 }}
+                    <TextField  value={myLogin} onChange={(e) => setLogin(e.target.value)} sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Логин"
 
@@ -93,7 +93,7 @@ function RegisterPage(props) {
                 <Box>
 
                     <KeyIcon sx={{ mr: 1, my: 3 }} />
-                    <TextField value={myPassword} onChange={(e) => setPassword(e.target.value)} sx={{ my: 1 }}
+                    <TextField  value={myPassword} onChange={(e) => setPassword(e.target.value)} sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Пароль"
                         type="password"
@@ -103,7 +103,7 @@ function RegisterPage(props) {
                 <Box>
 
                     <KeyIcon sx={{ mr: 1, my: 3 }} />
-                    <TextField sx={{ my: 1 }}
+                    <TextField required sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Повторите пароль"
                         type="password"
@@ -112,7 +112,7 @@ function RegisterPage(props) {
                 <Box>
 
                     <EmailIcon sx={{ mr: 1, my: 3 }} />
-                    <TextField value={myEmail} onChange={(e) => setEmail(e.target.value)} sx={{ my: 1 }}
+                    <TextField required value={myEmail} onChange={(e) => setEmail(e.target.value)} sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Почта"
 
@@ -122,7 +122,7 @@ function RegisterPage(props) {
                 <Box>
 
                     <BadgeIcon sx={{ mr: 1, my: 3 }} />
-                    <TextField value={myName} onChange={(e) => setName(e.target.value)} sx={{ my: 1 }}
+                    <TextField required value={myName} onChange={(e) => setName(e.target.value)} sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Имя"
 
@@ -131,7 +131,7 @@ function RegisterPage(props) {
                 <Box>
 
                     <BadgeIcon sx={{ mr: 1, my: 3 }} />
-                    <TextField value={mySurname} onChange={(e) => setSurname(e.target.value)} sx={{ my: 1 }}
+                    <TextField required value={mySurname} onChange={(e) => setSurname(e.target.value)} sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Фамилия"
 
@@ -158,7 +158,7 @@ function RegisterPage(props) {
                             onChange={(newValue) => {
                                 setDateOfBirth(newValue);
                             }}
-                            renderInput={(params) => <TextField sx={{ my: 1 ,width:225}} {...params} />}
+                            renderInput={(params) => <TextField  sx={{ my: 1 ,width:225}} {...params} />}
                         />
                     </LocalizationProvider>
 
@@ -168,13 +168,13 @@ function RegisterPage(props) {
                 <Box>
 
                     <LocationCityIcon sx={{ mr: 1, my: 3 }} />
-                    <TextField value={myCity} onChange={(e) => setCity(e.target.value)} sx={{ my: 1 }}
+                    <TextField required value={myCity} onChange={(e) => setCity(e.target.value)} sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Город"
 
                     />
                 </Box>
-                <Button onClick={handleSubmit} sx={{ mr: -4, my: 2, fontSize: 20, width: 270 }} variant="contained">Зарегистрироваться</Button>
+                <Button type='submit' onClick={handleSubmit} sx={{ mr: -4, my: 2, fontSize: 20, width: 270 }} variant="contained">Зарегистрироваться</Button>
 
             </Box >
         </div>

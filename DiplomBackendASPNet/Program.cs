@@ -1,6 +1,9 @@
+using DiplomBackendASPNet.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Serialization;
-
+using Npgsql;
+using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,6 +19,21 @@ builder.Services.AddCors(c =>
 
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
     .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+options.UseNpgsql("Server=localhost;Database=postgres;Port=5432;Ssl Mode=allow;User Id=postgres;Password=20001508"));
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 0;
+    options.Password.RequireNonAlphanumeric = false;
+})
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,13 +51,18 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/Photos"
 });
 
+
+
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+
 
 //public static void ConfigureIdentity(WebApplicationBuilder builder)
 //{

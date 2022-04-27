@@ -1,5 +1,6 @@
 ﻿using DiplomBackendASPNet.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using System.Data;
@@ -12,18 +13,22 @@ namespace DiplomBackendASPNet.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
 
-        public LoginController(IConfiguration configuration, IWebHostEnvironment env)
+        public LoginController(IConfiguration configuration, IWebHostEnvironment env, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _configuration = configuration;
             _env = env;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         [HttpGet]
 
         public JsonResult Get()
         {
-            string query = @"SELECT id AS ""userId"",login AS ""login"",password AS ""password"",name AS ""name"",mail AS ""mail"",birthday AS ""birthday"",city AS ""city"" from Пользователь";
+            string query = @"SELECT id AS ""userId"",login AS ""login"",password AS ""password"",name AS ""name"",mail AS ""mail"",birthday AS ""birthday"",city AS ""city"", roleid AS ""roleid"" from Пользователь";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
             NpgsqlDataReader myReader;
@@ -43,32 +48,37 @@ namespace DiplomBackendASPNet.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(User user)
-        {
-            string query = @"insert into Пользователь(login,password,name,mail,birthday,city)
-                values(@login, @password, @name, @mail, @birthday, @city);";
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
-            NpgsqlDataReader myReader;
-            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+        public async Task<JsonResult> POST(User user)
+        {         
+            if (ModelState.IsValid)
             {
-                myCon.Open();
-                using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
+                var user_identity = new User
                 {
-                    myCommand.Parameters.AddWithValue("@login", user.Login);
-                    myCommand.Parameters.AddWithValue("@password", user.Password);
-                    myCommand.Parameters.AddWithValue("@name", (user.Name + " "+ user.Surname + " " + user.Patronymic).Trim());
-                    myCommand.Parameters.AddWithValue("@mail", user.Email);
-                    myCommand.Parameters.AddWithValue("@birthday", user.DateOfBirth);
-                    myCommand.Parameters.AddWithValue("@city", user.City);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
+                    Login = user.Login,
+                    UserName = user.Name,
+                    Surname = user.Surname,
+                    Patronymic = user.Patronymic,
+                    Name = user.Name,
+                    Email = user.Email,
+                    DateOfBirth = user.DateOfBirth,
+                    City = user.City
+                };
+                Console.WriteLine(user_identity.ToString());
+                var result = await userManager.CreateAsync(user_identity, user.Password);
+                if (result.Succeeded)
+                {
+                    
+                    await signInManager.SignInAsync(user_identity, isPersistent: false);
 
                 }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+        
+                return new JsonResult("Didn't manage to register user");
             }
-            return new JsonResult("Added Succesfully");
+            return new JsonResult("RegisterFailed");
         }
 
         [HttpPut]
@@ -81,7 +91,8 @@ namespace DiplomBackendASPNet.Controllers
 	        name = @name,
 	        mail = @mail,
 	        birthday = @birthday,
-            city = @city
+            city = @city,
+            roleid = @roleid
             where id = @id;";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
@@ -91,13 +102,14 @@ namespace DiplomBackendASPNet.Controllers
                 myCon.Open();
                 using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@id", user.id);
+                    myCommand.Parameters.AddWithValue("@id", user.Id);
                     myCommand.Parameters.AddWithValue("@login", user.Login);
                     myCommand.Parameters.AddWithValue("@password", user.Password);
                     myCommand.Parameters.AddWithValue("@name", user.Name + user.Surname + user.Patronymic);
                     myCommand.Parameters.AddWithValue("@mail", user.Email);
                     myCommand.Parameters.AddWithValue("@birthday", user.DateOfBirth);
                     myCommand.Parameters.AddWithValue("@city", user.City);
+                  
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
