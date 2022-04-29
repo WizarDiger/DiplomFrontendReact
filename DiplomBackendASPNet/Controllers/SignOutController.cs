@@ -7,7 +7,7 @@ namespace DiplomBackendASPNet.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SignInController : ControllerBase
+    public class SignOutController : ControllerBase
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
@@ -15,7 +15,7 @@ namespace DiplomBackendASPNet.Controllers
         private readonly SignInManager<User> signInManager;
 
 
-        public SignInController(IConfiguration configuration, IWebHostEnvironment env, UserManager<User> userManager, SignInManager<User> signInManager)
+        public SignOutController(IConfiguration configuration, IWebHostEnvironment env, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _configuration = configuration;
             _env = env;
@@ -29,17 +29,11 @@ namespace DiplomBackendASPNet.Controllers
             if (ModelState.IsValid)
             {
 
-                var result = await signInManager.PasswordSignInAsync(user.Login, user.Password, isPersistent: false, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    return new JsonResult(1);
-                }
-                
-
-                ModelState.AddModelError("", "Invalid Login Attempt");
+                 await signInManager.SignOutAsync();
+               
 
             }
-            return new JsonResult("LoginFailed");
+            return new JsonResult("SignoutSuccess");
         }
     }
 }

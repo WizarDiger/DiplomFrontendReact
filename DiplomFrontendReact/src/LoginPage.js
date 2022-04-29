@@ -9,26 +9,33 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  Navigate
 } from "react-router-dom";
 import { Login } from '@mui/icons-material';
 import RegisterPage from './RegisterPage';
-
+import { useNavigate } from 'react-router-dom';
 
 
 function LoginPage(props)  {
 
   const [myLogin, setLogin] = useState('')
   const [myPassword, setPassword] = useState('')
-
+  let errormessage = "";
+  let navigate = useNavigate();
 
   const handleSubmit = async () => {
 
-   
+
+  
     fetch('https://localhost:7049/api/SignIn', {
-        method: 'POST',
+      
+      method: 'POST',
+      credentials: 'include',
+    
         headers:
         {
+            
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
@@ -51,9 +58,15 @@ function LoginPage(props)  {
         .then((result) => {
           if (JSON.stringify(result) === '1')
           {    
-            alert("kek");    
+            alert(result)
+            navigate('/MainPage')           
           }
-          alert(result);
+          else
+          {
+            errormessage = "Неправильный логин и/или пароль";
+            alert(errormessage);
+          }
+          
            
           
         },
@@ -80,8 +93,8 @@ function LoginPage(props)  {
   
     return (
 
-
       <div style={{ width: '100%', marginTop: "10%", textAlign: 'center' }}>
+       
         <Box
           sx={{
             display: 'flex',
@@ -94,7 +107,7 @@ function LoginPage(props)  {
           }}
         >
           <Box sx={{ mr: -4, my: 3, fontSize: 35 }}>
-               
+          
             Авторизация
                  
           </Box>
@@ -121,8 +134,12 @@ function LoginPage(props)  {
           <Link to={'/RegisterPage'} style={{ textDecoration: 'none' }}>
             <Button sx={{ mr: -4, my: 2, fontSize: 20, width: 270 }} variant="contained">Зарегистрироваться</Button>
           </Link>
-
-
+          <div>
+              
+                  <h1> {errormessage} </h1>
+              
+          </div>
+        
         </Box >
       </div >
 

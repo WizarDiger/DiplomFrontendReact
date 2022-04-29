@@ -13,13 +13,23 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 
 
 function RegisterPage(props) {
-
-   
-
+  let currentusername;
+  const refreshList = async () => {
+    fetch('https://localhost:7049/api/Login')
+      .then(response => response.json())
+      .then(data => {
+       
+       
+      });
+  }
+  let x = document.cookie;
+  
     return (
 
         
         <div style={{ width: '100%', marginTop: "1%", textAlign: 'center' }}>
+         
+        
              <Box sx={{marginLeft:'15%', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
       <nav aria-label="main mailbox folders">
         <List>
