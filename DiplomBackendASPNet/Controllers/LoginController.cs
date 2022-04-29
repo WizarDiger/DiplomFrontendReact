@@ -16,19 +16,21 @@ namespace DiplomBackendASPNet.Controllers
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
 
+        
         public LoginController(IConfiguration configuration, IWebHostEnvironment env, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _configuration = configuration;
             _env = env;
             this.userManager = userManager;
             this.signInManager = signInManager;
+           
         }
 
         [HttpGet]
 
         public JsonResult Get()
         {
-            string query = @"SELECT id AS ""userId"",login AS ""login"",password AS ""password"",name AS ""name"",mail AS ""mail"",birthday AS ""birthday"",city AS ""city"", roleid AS ""roleid"" from Пользователь";
+            string query = @"SELECT Id AS ""userId"",""Login"" AS ""Login"",""Password"" AS ""password"",""Name"" AS ""name"",""Email"" AS ""email"",""DateOfBirth"" AS ""DateOfBirth"",""City"" AS ""city"" FROM ""AspNetUsers""";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
             NpgsqlDataReader myReader;
@@ -44,8 +46,10 @@ namespace DiplomBackendASPNet.Controllers
 
                 }
             }
+            
             return new JsonResult(table);
         }
+     
 
         [HttpPost]
         public async Task<JsonResult> POST(User user)
@@ -71,12 +75,16 @@ namespace DiplomBackendASPNet.Controllers
                     await signInManager.SignInAsync(user_identity, isPersistent: false);
 
                 }
+                string errors = "";
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
+                    errors += error.Description;
                 }
-        
-                return new JsonResult("Didn't manage to register user");
+                if (errors == "")
+                    return new JsonResult(1);
+                else return new JsonResult(errors);
+              
             }
             return new JsonResult("RegisterFailed");
         }

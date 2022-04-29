@@ -11,7 +11,7 @@ import {
 import LoginPage from './LoginPage';
 import RegisterPage from './RegisterPage';
 import Header from './Header';
-
+import MainPage from './MainPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -22,6 +22,7 @@ root.render(
       <Route path="/" element={<LoginPage />} />
       <Route path="RegisterPage" element={<RegisterPage/>} />
       <Route path="LoginPage" element={<LoginPage/>} />
+      <Route path="MainPage" element={<MainPage/>} />
      
     </Routes>
     </BrowserRouter>

@@ -13,7 +13,15 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Alert } from '@mui/material';
 import ruLocale from 'date-fns/locale/ru';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+    Navigate
+  } from "react-router-dom";
 
+let isSignedIn = false;
 
 function RegisterPage(props) {
 
@@ -55,7 +63,14 @@ function RegisterPage(props) {
 
             .then(res => res.json())
             .then((result) => {
-                alert(JSON.stringify(result));
+                if (JSON.stringify(result) === '1')
+                {
+                    
+                   
+                    isSignedIn = true;
+                }
+               
+              
             },
                 (error) => {
                     alert('Failed');
@@ -65,7 +80,7 @@ function RegisterPage(props) {
 
     return (
 
-
+        
         <div style={{ width: '100%', marginTop: "10%", textAlign: 'center' }}>
             <Box
                 sx={{
@@ -174,7 +189,11 @@ function RegisterPage(props) {
 
                     />
                 </Box>
+
+               
                 <Button type='submit' onClick={handleSubmit} sx={{ mr: -4, my: 2, fontSize: 20, width: 270 }} variant="contained">Зарегистрироваться</Button>
+                
+              
 
             </Box >
         </div>
