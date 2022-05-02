@@ -39,7 +39,7 @@ function RegisterPage(props) {
 
     const handleSubmit = async () => {
 
-
+        alert(myPassword);
         fetch('https://localhost:7049/api/Login', {
             method: 'POST',
             headers:
@@ -51,7 +51,7 @@ function RegisterPage(props) {
                 {
                     login: myLogin,
                     password: myPassword,
-                    email: myEmail,
+                    Email: myEmail,
                     name: myName,
                     surname: mySurname,
                     patronymic: myPatronymic,
@@ -64,13 +64,9 @@ function RegisterPage(props) {
             .then(res => res.json())
             .then((result) => {
                 if (JSON.stringify(result) === '1')
-                {
-                    
-                   
+                {                            
                     isSignedIn = true;
-                }
-               
-              
+                }                         
             },
                 (error) => {
                     alert('Failed');
@@ -192,7 +188,7 @@ function RegisterPage(props) {
 
                
                 <Button type='submit' onClick={handleSubmit} sx={{ mr: -4, my: 2, fontSize: 20, width: 270 }} variant="contained">Зарегистрироваться</Button>
-                
+               
               
 
             </Box >

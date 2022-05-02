@@ -30,14 +30,21 @@ namespace DiplomBackendASPNet.Controllers
         {
             if (ModelState.IsValid)
             {
-                var jwt = jwtService.Generate(userManager.Users.FirstOrDefault(u=>u.Login == user.Login).Id);
+                if (userManager.Users.FirstOrDefault(u => u.Login == user.Login) == null)
+                {
+                    return new JsonResult("1!Неверный логин и/или пароль");
+                }
+                var jwt = jwtService.Generate(userManager.Users.FirstOrDefault(u => u.Login == user.Login).Id);
                 Response.Cookies.Append("jwt", jwt, new CookieOptions { HttpOnly = true });
+
+
+
                 var result = await signInManager.PasswordSignInAsync(user.Login, user.Password, isPersistent: false, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     return new JsonResult(1);
                 }
-                
+
 
                 ModelState.AddModelError("", "Invalid Login Attempt");
 

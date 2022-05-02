@@ -1,6 +1,6 @@
 
 
-import * as React from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -32,33 +32,45 @@ function getCookie(name) {
 
 
 function MainPage(props) {
-  let currentusername;
-  const refreshList = async () => {
-    fetch('https://localhost:7049/api/Login')
-      .then(response => response.json())
-      .then(data => {
 
 
-      });
+  const [myData, setData] = useState("");
+
+  const getUserData = async () => {
+    fetch('https://localhost:7049/api/Login', {
+      method: 'GET', 
+     credentials: 'include',
+  })
+      .then((response) => response.json())
+      .then((data) => { setData(data) });
   }
+  useEffect(() => {
+    
+    getUserData();
+   
+  }, [""]);
+
+
   let navigate = useNavigate();
   const checkLogin = async () => {
 
   }
-  const componentDidMount = async() => {
-    var myCookie = getCookie(".AspNetCore.Identity.Application");
-    alert("ABOBA");
 
-    if (myCookie == null) {
-      navigate("/LoginPage")
-
-    }
+  const componentDidMount = async () => {
+   
   }
+
   return (
 
-
     <div style={{ width: '100%', marginTop: "1%", textAlign: 'center' }}>
-    
+       
+       <li>
+        {myData.Name}
+
+       </li>
+      
+        
+        
       <Box sx={{ marginLeft: '15%', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
         <nav aria-label="main mailbox folders">
           <List>

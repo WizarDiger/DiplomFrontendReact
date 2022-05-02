@@ -33,18 +33,16 @@ namespace DiplomBackendASPNet.Controllers
         {
             try
             {
-
-                var jwt = Request.Cookies["jwt"];
+                var jwt = Request.Cookies["jwt"];               
                 var token =  jwtService.Verify(jwt);
-                var userId = token.Issuer;
-                Console.WriteLine("UserId = " + userId);
+                var userId = token.Issuer;              
                 var user =  userManager.Users.FirstOrDefault(u=>u.Id == userId);
            
                 return new JsonResult(user);
             }
             catch (Exception ex)
             {
-                return new JsonResult("Didn't manage to get user");
+                return new JsonResult(ex);
             }
         }
      
@@ -71,7 +69,7 @@ namespace DiplomBackendASPNet.Controllers
                 if (result.Succeeded)
                 {
                     jwt =  jwtService.Generate(user.Id);
-                    await signInManager.SignInAsync(user_identity, isPersistent: false);
+                    
 
                 }
                 string errors = "";

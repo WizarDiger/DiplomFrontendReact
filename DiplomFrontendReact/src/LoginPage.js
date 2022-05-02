@@ -15,19 +15,18 @@ import {
 import { Login } from '@mui/icons-material';
 import RegisterPage from './RegisterPage';
 import { useNavigate } from 'react-router-dom';
-
+import Visibility from '@mui/icons-material/Visibility';
 
 function LoginPage(props) {
 
   const [myLogin, setLogin] = useState('')
   const [myPassword, setPassword] = useState('')
+  
   let errormessage = "";
   let navigate = useNavigate();
 
   const handleSubmit = async () => {
-
-
-
+    alert(myPassword);
     fetch('https://localhost:7049/api/SignIn', {
 
       method: 'POST',
@@ -61,6 +60,7 @@ function LoginPage(props) {
           navigate('/MainPage')
         }
         else {
+          alert(result);
           errormessage = "Неправильный логин и/или пароль";
           alert(errormessage);
         }
@@ -89,7 +89,7 @@ function LoginPage(props) {
   return (
 
     <div style={{ width: '100%', marginTop: "10%", textAlign: 'center' }}>
-
+      
       <Box
         sx={{
           display: 'flex',
@@ -109,19 +109,20 @@ function LoginPage(props) {
         <Box>
 
           <AccountCircle sx={{ mr: 1, my: 3 }} />
-          <TextField value={myLogin} onChange={(e) => setLogin(e.target.value)} sx={{ my: 1 }}
+          <TextField  value={myLogin} onChange={(e) => setLogin(e.target.value)} sx={{ my: 1 }}
             id="outlined-password-input"
             label="Логин"
-
+            
           />
         </Box>
         <Box>
 
           <KeyIcon sx={{ mr: 1, my: 3 }} />
-          <TextField value={myPassword} onChange={(e) => setPassword(e.target.value)} sx={{ my: 1 }}
+          <TextField  value={myPassword} onChange={(e) => setPassword(e.target.value)} sx={{ my: 1 }}
             id="outlined-password-input"
             label="Пароль"
             type="password"
+            
           />
         </Box>
         <Button onClick={handleSubmit} sx={{ mr: -4, my: 2, fontSize: 20, width: 100 }} variant="contained">Войти</Button>

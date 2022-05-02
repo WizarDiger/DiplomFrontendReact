@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -47,7 +47,24 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
- function Header(props) {
+function Header(props) {
+
+
+   const [myData, setData] = useState("");
+
+  const getUserData = async () => {
+    fetch('https://localhost:7049/api/Login', {
+      method: 'GET', 
+     credentials: 'include',
+  })
+      .then((response) => response.json())
+      .then((data) => { setData(data) });
+  }
+  useEffect(() => {
+    
+    getUserData();
+   
+  }, [""]);
   let navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
