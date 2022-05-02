@@ -1,4 +1,5 @@
-﻿using DiplomBackendASPNet.Models;
+﻿using DiplomBackendASPNet.Helpers;
+using DiplomBackendASPNet.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,14 +14,15 @@ namespace DiplomBackendASPNet.Controllers
         private readonly IWebHostEnvironment _env;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
+        private readonly JwtService jwtService;
 
-
-        public SignInController(IConfiguration configuration, IWebHostEnvironment env, UserManager<User> userManager, SignInManager<User> signInManager)
+        public SignInController(IConfiguration configuration, IWebHostEnvironment env, UserManager<User> userManager, SignInManager<User> signInManager, JwtService jwtService)
         {
             _configuration = configuration;
             _env = env;
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.jwtService = jwtService;
         }
 
         [HttpPost]
@@ -28,7 +30,8 @@ namespace DiplomBackendASPNet.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                var jwt = jwtService.Generate(userManager.Users.FirstOrDefault(u=>u.Login == user.Login).Id);
+                Response.Cookies.Append("jwt", jwt, new CookieOptions { HttpOnly = true });
                 var result = await signInManager.PasswordSignInAsync(user.Login, user.Password, isPersistent: false, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {

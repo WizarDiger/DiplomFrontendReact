@@ -17,7 +17,7 @@ import RegisterPage from './RegisterPage';
 import { useNavigate } from 'react-router-dom';
 
 
-function LoginPage(props)  {
+function LoginPage(props) {
 
   const [myLogin, setLogin] = useState('')
   const [myPassword, setPassword] = useState('')
@@ -27,52 +27,47 @@ function LoginPage(props)  {
   const handleSubmit = async () => {
 
 
-  
+
     fetch('https://localhost:7049/api/SignIn', {
-      
+
       method: 'POST',
       credentials: 'include',
-    
-        headers:
+
+      headers:
+      {
+        'Access-Control-Allow-Origin': 'https://localhost:3000/',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
         {
-            
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(
-            {
-              login: myLogin,
-              password: myPassword,
-              email: '1',
-              name: '1',
-              surname: '1',
-              patronymic: '1',
-              dateOfBirth: '1',
-              city: '1'
-             
-            }
-        )
+          login: myLogin,
+          password: myPassword,
+          email: '1',
+          name: '1',
+          surname: '1',
+          patronymic: '1',
+          dateOfBirth: '1',
+          city: '1'
+
+        }
+      )
     })
-  
-        .then(res => res.json())
-        .then((result) => {
-          if (JSON.stringify(result) === '1')
-          {    
-            alert(result)
-            navigate('/MainPage')           
-          }
-          else
-          {
-            errormessage = "Неправильный логин и/или пароль";
-            alert(errormessage);
-          }
-          
-           
-          
-        },
-            (error) => {
-                alert('Failed');
-            })
+
+      .then(res => res.json())
+      .then((result) => {
+        if (JSON.stringify(result) === '1') {
+
+          navigate('/MainPage')
+        }
+        else {
+          errormessage = "Неправильный логин и/или пароль";
+          alert(errormessage);
+        }
+      },
+        (error) => {
+          alert('Failed');
+        })
   }
 
   const refreshList = async () => {
@@ -82,70 +77,70 @@ function LoginPage(props)  {
         this.setState({ deps: data });
       });
   }
-  const componentDidMount = async() => {
+  const componentDidMount = async () => {
     this.refreshList();
   }
 
-  const componentDidUpdate = async() =>{
+  const componentDidUpdate = async () => {
     this.refreshList();
   }
- 
-  
-    return (
-
-      <div style={{ width: '100%', marginTop: "10%", textAlign: 'center' }}>
-       
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            flexDirection: 'column',
 
 
-            bgcolor: 'background.paper',
-            borderRadius: 1,
-          }}
-        >
-          <Box sx={{ mr: -4, my: 3, fontSize: 35 }}>
-          
-            Авторизация
-                 
-          </Box>
-          <Box>
+  return (
 
-            <AccountCircle sx={{ mr: 1, my: 3 }} />
-            <TextField value={myLogin} onChange={(e) => setLogin(e.target.value)} sx={{ my: 1 }}
-              id="outlined-password-input"
-              label="Логин"
+    <div style={{ width: '100%', marginTop: "10%", textAlign: 'center' }}>
 
-            />
-          </Box>
-          <Box>
-
-            <KeyIcon sx={{ mr: 1, my: 3 }} />
-            <TextField value={myPassword} onChange={(e) => setPassword(e.target.value)} sx={{ my: 1 }}
-              id="outlined-password-input"
-              label="Пароль"
-              type="password"
-            />
-          </Box>
-          <Button onClick={handleSubmit} sx={{ mr: -4, my: 2, fontSize: 20, width: 100 }} variant="contained">Войти</Button>
-
-          <Link to={'/RegisterPage'} style={{ textDecoration: 'none' }}>
-            <Button sx={{ mr: -4, my: 2, fontSize: 20, width: 270 }} variant="contained">Зарегистрироваться</Button>
-          </Link>
-          <div>
-              
-                  <h1> {errormessage} </h1>
-              
-          </div>
-        
-        </Box >
-      </div >
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
 
 
-    );
-  
+          bgcolor: 'background.paper',
+          borderRadius: 1,
+        }}
+      >
+        <Box sx={{ mr: -4, my: 3, fontSize: 35 }}>
+
+          Авторизация
+
+        </Box>
+        <Box>
+
+          <AccountCircle sx={{ mr: 1, my: 3 }} />
+          <TextField value={myLogin} onChange={(e) => setLogin(e.target.value)} sx={{ my: 1 }}
+            id="outlined-password-input"
+            label="Логин"
+
+          />
+        </Box>
+        <Box>
+
+          <KeyIcon sx={{ mr: 1, my: 3 }} />
+          <TextField value={myPassword} onChange={(e) => setPassword(e.target.value)} sx={{ my: 1 }}
+            id="outlined-password-input"
+            label="Пароль"
+            type="password"
+          />
+        </Box>
+        <Button onClick={handleSubmit} sx={{ mr: -4, my: 2, fontSize: 20, width: 100 }} variant="contained">Войти</Button>
+
+        <Link to={'/RegisterPage'} style={{ textDecoration: 'none' }}>
+          <Button sx={{ mr: -4, my: 2, fontSize: 20, width: 270 }} variant="contained">Зарегистрироваться</Button>
+        </Link>
+        <div>
+
+          <h1> {errormessage} </h1>
+
+        </div>
+
+      </Box >
+    </div >
+
+
+  );
+
 }
 
 export default LoginPage;

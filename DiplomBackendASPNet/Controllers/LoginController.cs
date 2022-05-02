@@ -1,4 +1,5 @@
-﻿using DiplomBackendASPNet.Models;
+﻿using DiplomBackendASPNet.Helpers;
+using DiplomBackendASPNet.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,39 +16,36 @@ namespace DiplomBackendASPNet.Controllers
         private readonly IWebHostEnvironment _env;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
+        private readonly JwtService jwtService;
 
-        
-        public LoginController(IConfiguration configuration, IWebHostEnvironment env, UserManager<User> userManager, SignInManager<User> signInManager)
+        public LoginController(IConfiguration configuration, IWebHostEnvironment env, UserManager<User> userManager, SignInManager<User> signInManager, JwtService jwtService)
         {
             _configuration = configuration;
             _env = env;
             this.userManager = userManager;
             this.signInManager = signInManager;
-           
+            this.jwtService = jwtService;
         }
 
         [HttpGet]
 
-        public JsonResult Get()
+        public async Task<JsonResult> Get() 
         {
-            string query = @"SELECT Id AS ""userId"",""Login"" AS ""Login"",""Password"" AS ""password"",""Name"" AS ""name"",""Email"" AS ""email"",""DateOfBirth"" AS ""DateOfBirth"",""City"" AS ""city"" FROM ""AspNetUsers""";
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
-            NpgsqlDataReader myReader;
-            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+            try
             {
-                myCon.Open();
-                using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
 
-                }
+                var jwt = Request.Cookies["jwt"];
+                var token =  jwtService.Verify(jwt);
+                var userId = token.Issuer;
+                Console.WriteLine("UserId = " + userId);
+                var user =  userManager.Users.FirstOrDefault(u=>u.Id == userId);
+           
+                return new JsonResult(user);
             }
-            
-            return new JsonResult(table);
+            catch (Exception ex)
+            {
+                return new JsonResult("Didn't manage to get user");
+            }
         }
      
 
@@ -56,6 +54,7 @@ namespace DiplomBackendASPNet.Controllers
         {         
             if (ModelState.IsValid)
             {
+                var jwt = "";
                 var user_identity = new User
                 {
                     Login = user.Login,
@@ -71,7 +70,7 @@ namespace DiplomBackendASPNet.Controllers
                 var result = await userManager.CreateAsync(user_identity, user.Password);
                 if (result.Succeeded)
                 {
-                    
+                    jwt =  jwtService.Generate(user.Id);
                     await signInManager.SignInAsync(user_identity, isPersistent: false);
 
                 }
@@ -82,7 +81,7 @@ namespace DiplomBackendASPNet.Controllers
                     errors += error.Description;
                 }
                 if (errors == "")
-                    return new JsonResult(1);
+                    return new JsonResult(jwt);
                 else return new JsonResult(errors);
               
             }

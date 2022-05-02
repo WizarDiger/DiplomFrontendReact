@@ -33,7 +33,7 @@ namespace DiplomBackendASPNet.Controllers
                
 
             }
-            return new JsonResult("SignoutSuccess");
+            return new JsonResult(1);
         }
     }
 }
