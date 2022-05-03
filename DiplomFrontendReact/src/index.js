@@ -12,12 +12,13 @@ import LoginPage from './LoginPage';
 import RegisterPage from './RegisterPage';
 import Header from './Header';
 import MainPage from './MainPage';
-
+import LeftMenu from './LeftMenu';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
     <Header/>
+    <LeftMenu/>
     <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route path="RegisterPage" element={<RegisterPage/>} />

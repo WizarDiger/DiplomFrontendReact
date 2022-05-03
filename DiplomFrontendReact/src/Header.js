@@ -16,6 +16,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
+
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -74,7 +75,6 @@ function Header(props) {
 
   const handleSubmit = async () => {
   
-
 
   
     fetch('https://localhost:7049/api/SignOut', {
@@ -206,7 +206,22 @@ function Header(props) {
       </MenuItem>
     </Menu>
   );
-
+let a = 0;
+  if(a===1)
+{
+  return(
+    <IconButton
+    size="large"
+    edge="start"
+    color="inherit"
+    aria-label="open drawer"
+    sx={{ mr: 2 }}
+  >
+    <MenuIcon />
+  </IconButton>
+  )
+}
+else
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -230,9 +245,10 @@ function Header(props) {
           </Typography>
         
           <Box sx={{ flexGrow: 1 }} />
+            {myData.Name}
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
            
-           
+            
             <IconButton
               size="large"
               edge="end"

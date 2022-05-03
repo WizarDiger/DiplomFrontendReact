@@ -11,6 +11,9 @@ import Divider from '@mui/material/Divider';
 import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import { useNavigate } from 'react-router-dom';
+import { wait } from '@testing-library/user-event/dist/utils';
+import LeftMenu from './LeftMenu';
+import Typography from '@mui/material/Typography';
 function getCookie(name) {
   var dc = document.cookie;
   var prefix = name + "=";
@@ -26,120 +29,68 @@ function getCookie(name) {
       end = dc.length;
     }
   }
-
   return decodeURI(dc.substring(begin + prefix.length, end));
 }
-
 
 function MainPage(props) {
 
 
   const [myData, setData] = useState("");
-
+  let check = 0;
   const getUserData = async () => {
     fetch('https://localhost:7049/api/Login', {
-      method: 'GET', 
-     credentials: 'include',
-  })
+      method: 'GET',
+      credentials: 'include',
+    })
       .then((response) => response.json())
       .then((data) => { setData(data) });
+    check = 11;
   }
   useEffect(() => {
-    
+
     getUserData();
-   
+
+
+    if (check === 11) {
+      checkLogin();
+    }
+    else {
+      alert("ABOBA")
+    }
+
+
   }, [""]);
 
 
   let navigate = useNavigate();
   const checkLogin = async () => {
+    var myCookie = getCookie("jwt");
 
+    if (myCookie === null) {
+
+    }
+    else {
+      alert("ABOBUS");
+    }
   }
 
   const componentDidMount = async () => {
-   
+
   }
 
   return (
-
-    <div style={{ width: '100%', marginTop: "1%", textAlign: 'center' }}>
-       
-       <li>
-        {myData.Name}
-
-       </li>
-      
-        
-        
-      <Box sx={{ marginLeft: '15%', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-        <nav aria-label="main mailbox folders">
-          <List>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary="Моя страница" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <DraftsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Новости" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <DraftsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Сообщения" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <DraftsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Друзья" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <DraftsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Фотографии" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <DraftsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Товары" />
-              </ListItemButton>
-            </ListItem>
-          </List>
-        </nav>
-        <Divider />
-        <nav aria-label="secondary mailbox folders">
-          <List>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemText primary="Trash" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component="a" href="#simple-list">
-                <ListItemText primary="Spam" />
-              </ListItemButton>
-            </ListItem>
-          </List>
-        </nav>
+    <div style={{ verticalAlign: 'top', width: '70%', marginTop: "%", textAlign: 'center', display: 'inline-block' }}>
+      <Box width={'40%'} display={'inline-block'}>
+        {myData.Surname}
       </Box>
+      <Box width={'60%'} display={'inline-block'}>
+        <li>
+          {myData.Name}
+
+        </li>
+      </Box>
+
+
     </div>
 
 
