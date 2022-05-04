@@ -43,12 +43,12 @@ function LoginPage(props) {
           login: myLogin,
           password: myPassword,
           email: '1',
-          name: '1',
+          name: myLogin,
           surname: '1',
           patronymic: '1',
           dateOfBirth: '1',
-          city: '1'
-
+          city: '1',
+          UserName: myLogin
         }
       )
     })
@@ -110,7 +110,7 @@ function LoginPage(props) {
 
           <AccountCircle sx={{ mr: 1, my: 3 }} />
           <TextField  value={myLogin} onChange={(e) => setLogin(e.target.value)} sx={{ my: 1 }}
-            id="outlined-password-input"
+            id="loginfield"
             label="Логин"
             
           />
@@ -119,7 +119,7 @@ function LoginPage(props) {
 
           <KeyIcon sx={{ mr: 1, my: 3 }} />
           <TextField  value={myPassword} onChange={(e) => setPassword(e.target.value)} sx={{ my: 1 }}
-            id="outlined-password-input"
+            id="passwordfield"
             label="Пароль"
             type="password"
             

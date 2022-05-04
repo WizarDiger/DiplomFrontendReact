@@ -32,13 +32,18 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = false;
     options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 5;
+    options.Password.RequiredLength = 0;
     options.Password.RequireNonAlphanumeric = false;
     
 })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+builder.Services.ConfigureApplicationCookie(options =>
+{
 
+    options.Cookie.HttpOnly = false;
+
+});
 
 var app = builder.Build();
 

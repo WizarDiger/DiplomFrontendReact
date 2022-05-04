@@ -8,17 +8,17 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import LoginPage from './LoginPage';
-import RegisterPage from './RegisterPage';
-import Header from './Header';
-import MainPage from './MainPage';
-import LeftMenu from './LeftMenu';
+import LoginPage from './Pages/LoginPage';
+import RegisterPage from './Pages/RegisterPage';
+import Header from './Layout/Header';
+import MainPage from './Pages/MainPage';
+import LeftMenu from './Layout/LeftMenu';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
     <Header/>
-    <LeftMenu/>
+   
     <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route path="RegisterPage" element={<RegisterPage/>} />

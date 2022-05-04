@@ -49,14 +49,15 @@ function RegisterPage(props) {
             },
             body: JSON.stringify(
                 {
-                    login: myLogin,
-                    password: myPassword,
+                    Login: myLogin,
+                    Password: myPassword,
                     Email: myEmail,
-                    name: myName,
-                    surname: mySurname,
-                    patronymic: myPatronymic,
-                    dateOfBirth: myDateOfBirth,
-                    city: myCity
+                    Name: myName,
+                    Surname: mySurname,
+                    Patronymic: myPatronymic,
+                    DateOfBirth: myDateOfBirth,
+                    City: myCity,
+                    UserName: myLogin
                 }
             )
         })
@@ -65,7 +66,7 @@ function RegisterPage(props) {
             .then((result) => {
                 if (JSON.stringify(result) === '1')
                 {                            
-                    isSignedIn = true;
+                    
                 }                         
             },
                 (error) => {

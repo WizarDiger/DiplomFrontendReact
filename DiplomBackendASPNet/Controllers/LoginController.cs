@@ -56,7 +56,7 @@ namespace DiplomBackendASPNet.Controllers
                 var user_identity = new User
                 {
                     Login = user.Login,
-                    UserName = user.Name,
+                    UserName = user.Login,
                     Surname = user.Surname,
                     Patronymic = user.Patronymic,
                     Name = user.Name,

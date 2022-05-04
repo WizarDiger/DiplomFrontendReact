@@ -13,12 +13,13 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import { useNavigate } from 'react-router-dom';
 import { wait } from '@testing-library/user-event/dist/utils';
 
+
 function LeftMenu(props) {
        return(
-
-        <div  style={{ width: '30%', marginTop: "1%", textAlign: 'center', display: 'inline-block'}}>
+       
+        <div  style={{ marginBottom:'20%', width: '40%', marginTop: "1%", textAlign: 'right', display: 'inline-block'}}>
             
-      <Box sx={{ marginLeft: '30%', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+      <Box sx={{ marginLeft: '50%', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
       <nav aria-label="main mailbox folders">
         <List>
           <ListItem disablePadding>

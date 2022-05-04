@@ -28,10 +28,9 @@ namespace DiplomBackendASPNet.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                 Response.Cookies.Delete("jwt");
                  await signInManager.SignOutAsync();
                
-
             }
             return new JsonResult(1);
         }

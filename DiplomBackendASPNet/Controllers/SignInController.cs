@@ -34,14 +34,16 @@ namespace DiplomBackendASPNet.Controllers
                 {
                     return new JsonResult("1!Неверный логин и/или пароль");
                 }
-                var jwt = jwtService.Generate(userManager.Users.FirstOrDefault(u => u.Login == user.Login).Id);
-                Response.Cookies.Append("jwt", jwt, new CookieOptions { HttpOnly = true });
 
-
+                    
 
                 var result = await signInManager.PasswordSignInAsync(user.Login, user.Password, isPersistent: false, lockoutOnFailure: false);
+                
                 if (result.Succeeded)
                 {
+
+                var jwt = jwtService.Generate(userManager.Users.FirstOrDefault(u => u.Login == user.Login).Id);
+                Response.Cookies.Append("jwt", jwt, new CookieOptions { HttpOnly = false });
                     return new JsonResult(1);
                 }
 
