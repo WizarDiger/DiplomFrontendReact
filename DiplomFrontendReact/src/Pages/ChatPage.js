@@ -1,60 +1,80 @@
-import {CharEgnine, ChatEngine} from 'react-chat-engine';
-import './ChatPage.css';
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { HubConnectionBuilder } from '@microsoft/signalr';
+
+
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import { useNavigate } from 'react-router-dom';
-import { wait } from '@testing-library/user-event/dist/utils';
+import ChatWindow from '../Layout/ChatWindow';
+import ChatInput from '../Layout/ChatInput';
 import LeftMenu from '../Layout/LeftMenu';
-import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
-import dstu from './PageImages/dstu.jpg'
-import { BrowserRouter as Router, Link, Navigate } from "react-router-dom";
 import Footer from '../Layout/Footer';
-const ChatPage = () =>{
+const ChatPage = () => {
+    const [chat, setChat] = useState([]);
+    const latestChat = useRef(null);
 
-    
-  const [myData, setData] = useState("");
-  let check = 0;
-  const getUserData = async () => {
-    fetch('https://localhost:7049/api/Login', {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data)
-      });
+    latestChat.current = chat;
 
-  }
-  useEffect(() => {
+    useEffect(() => {
+        const connection = new HubConnectionBuilder()
+            .withUrl('https://localhost:7049/hubs/chat')
+            .withAutomaticReconnect()
+            .build();
 
-    getUserData();
+        connection.start()
+            .then(result => {
+                console.log('Connected!');
 
-    var cookie = getCookie('jwt');
-    if (String(cookie) === "null") {
-      navigate('/LoginPage'
-      )
+                connection.on('ReceiveMessage', message => {
+                    const updatedChat = [...latestChat.current];
+                    updatedChat.push(message);
+
+                    setChat(updatedChat);
+                });
+            })
+            .catch(e => console.log('Connection failed: ', e));
+    }, []);
+
+    const sendMessage = async (user, message) => {
+        const chatMessage = {
+            user: user,
+            message: message
+        };
+
+        try {
+            await fetch('https://localhost:7049/api/Chat/messages', {
+                method: 'POST',
+                body: JSON.stringify(chatMessage),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+        catch (e) {
+            console.log('Sending message failed.', e);
+        }
     }
-  }, [""]);
 
-  let navigate = useNavigate();
-    return(
-        <ChatEngine
-            height = "100vh"
-            projectID="29672749-0cb6-4599-8aa8-3199e4b45a53"
-            userName=""
-            userSecret=""
+    return (
+        <>
+        <div style={{ verticalAlign: 'top', width: '100%', marginTop: "0%", textAlign: 'start', display: 'flex', backgroundColor: 'whitesmoke' }}>
+
+            <LeftMenu />
+            <List>
+                <ListItem>
+
+                    <ChatWindow chat={chat} />
+                </ListItem>
+                <ListItem>
+
+                    <ChatInput sendMessage={sendMessage} />
+                </ListItem>
+            </List>
+        </div>
+            <Footer/>
+        </>
+    );
+};
 
 
-        />
-    )
-}
-export default ChatPage();
+export default ChatPage;

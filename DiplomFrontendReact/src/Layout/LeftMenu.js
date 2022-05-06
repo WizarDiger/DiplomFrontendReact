@@ -17,12 +17,12 @@ import { BrowserRouter as Router, Link, Navigate } from "react-router-dom";
 function LeftMenu(props) {
   return (
 
-    <div style={{ width: '40%', marginTop: "1%", textAlign: 'right', display: 'flex' }}>
+    <div style={{marginBottom:'23.3%', width: '35%', marginTop: "1.1%", textAlign: 'right', display: 'flex' }}>
 
-      <Box borderRadius={3} sx={{ marginLeft: '50%', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+      <Box borderRadius={3} sx={{ marginLeft: '53%', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
         <nav aria-label="main mailbox folders">
           <List>
-            <Link to={'/MainPage'} style={{ textDecoration: 'none', color: 'inherit'}}>
+            <Link to={'/MainPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
               <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
@@ -40,14 +40,17 @@ function LeftMenu(props) {
                 <ListItemText primary="Новости" />
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <DraftsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Сообщения" />
-              </ListItemButton>
-            </ListItem>
+            <Link to={'/ChatPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <DraftsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Сообщения" />
+                </ListItemButton>
+
+              </ListItem>
+            </Link>
             <ListItem disablePadding>
               <ListItemButton>
                 <ListItemIcon>

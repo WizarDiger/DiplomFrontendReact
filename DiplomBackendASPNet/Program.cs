@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Cors;
 using DiplomBackendASPNet.Helpers;
-
+using DiplomBackendASPNet.Hubs;
+using Microsoft.AspNetCore.SignalR;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -44,6 +45,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = false;
 
 });
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -63,7 +65,8 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/Photos"
 });
 
-
+app.UseRouting();
+app.UseEndpoints(endpoints => endpoints.MapHub<ChatHub>("/hubs/chat"));
 
 app.UseHttpsRedirection();
 

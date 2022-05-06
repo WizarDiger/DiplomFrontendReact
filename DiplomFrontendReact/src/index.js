@@ -13,6 +13,8 @@ import RegisterPage from './Pages/RegisterPage';
 import Header from './Layout/Header';
 import MainPage from './Pages/MainPage';
 import LeftMenu from './Layout/LeftMenu';
+import ChatPage from './Pages/ChatPage';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -24,6 +26,7 @@ root.render(
       <Route path="RegisterPage" element={<RegisterPage/>} />
       <Route path="LoginPage" element={<LoginPage/>} />
       <Route path="MainPage" element={<MainPage/>} />
+      <Route path="ChatPage" element={<ChatPage/>} />
      
     </Routes>
     </BrowserRouter>

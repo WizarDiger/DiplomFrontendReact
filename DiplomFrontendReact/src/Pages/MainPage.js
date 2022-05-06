@@ -82,9 +82,9 @@ function MainPage(props) {
     <>
       <div style={{ verticalAlign: 'top', width: '100%', marginTop: "0%", textAlign: 'start', display: 'flex', backgroundColor: 'whitesmoke' }}>
         <LeftMenu />
-        <Box width={'60%'} textAlign={'start'} display={'flex'}  justify-content={'space-between'}>
+        <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'}  justify-content={'space-between'}>
 
-          <Box  paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'}  textAlign={'center'} verticalAlign={'top'}>
+          <Box  paddingTop={3}  bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'}  textAlign={'center'} verticalAlign={'top'}>
 
             <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
           </Box>
