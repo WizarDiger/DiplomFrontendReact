@@ -65,32 +65,45 @@ function MainPage(props) {
   }, [""]);
 
   let navigate = useNavigate();
-
+  const ColoredLine = ({ color }) => (
+    <hr
+        style={{
+            color: color,
+            backgroundColor: color,
+            width: "100%"
+        }}
+    />
+);
   const componentDidMount = async () => {
 
   }
 
   return (
     <>
-      <LeftMenu />
-      <div style={{ verticalAlign: 'top', width: '60%', marginTop: "1%", textAlign: 'center', display: 'inline-block' }}>
-        <Box width={'100%'} textAlign={'start'}>
+      <div style={{ verticalAlign: 'top', width: '100%', marginTop: "0%", textAlign: 'start', display: 'flex', backgroundColor: 'whitesmoke' }}>
+        <LeftMenu />
+        <Box width={'60%'} textAlign={'start'} display={'flex'}  justify-content={'space-between'}>
 
-          <Box borderBottom={1} marginTop={'0'} width={'330'} display={'inline-block'}>
+          <Box  paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'}  textAlign={'center'} verticalAlign={'top'}>
 
             <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
           </Box>
-          <Box borderTop={1} marginLeft={'2%'} marginTop={'0%'} width={'50%'} display={'inline-block'} >
+          <Box textAlign={'center'}   bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
+           
+         
             <List>
               <ListItem>
 
-                <Typography variant="h3" gutterBottom component="div">
+                <Typography variant="h5" gutterBottom component="div">
                   <p>
                     {myData.Name} {myData.Surname} {myData.Patronymic}
                   </p>
                 </Typography>
               </ListItem>
-
+              <ListItem>
+                
+                <ColoredLine color="black"/>
+              </ListItem>
               <Typography variant="h6" gutterBottom component="div">
 
                 <ListItem>
@@ -101,12 +114,13 @@ function MainPage(props) {
                 </ListItem>
               </Typography>
             </List>
+            
           </Box>
         </Box>
 
 
       </div>
-      <Footer/>
+      <Footer />
     </>
 
   );

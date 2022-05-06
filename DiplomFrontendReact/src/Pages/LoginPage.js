@@ -26,7 +26,7 @@ function LoginPage(props) {
   let navigate = useNavigate();
 
   const handleSubmit = async () => {
-    alert(myPassword);
+    
     fetch('https://localhost:7049/api/SignIn', {
 
       method: 'POST',
@@ -60,7 +60,7 @@ function LoginPage(props) {
           navigate('/MainPage')
         }
         else {
-          alert(result);
+         
           errormessage = "Неправильный логин и/или пароль";
           alert(errormessage);
         }

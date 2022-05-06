@@ -7,7 +7,7 @@ export default function Footer() {
     return <footer>
         <Typography variant="subtitle1" gutterBottom component="div">
 
-            <Box  px={{xs: 3, sm:10}} py={{xs: 5,sm:10}} bgcolor={'GrayText'} color={'white'}>
+            <Box  px={{xs: 3, sm:10}} py={{xs: 5,sm:2}} bgcolor={'GrayText'} color={'white'}>
                 <Container maxWidth="lg">
                     <Grid container spacint={5}>
                         <Grid item xs={12} sm={4}>
