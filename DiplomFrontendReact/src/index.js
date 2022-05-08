@@ -14,12 +14,12 @@ import Header from './Layout/Header';
 import MainPage from './Pages/MainPage';
 import LeftMenu from './Layout/LeftMenu';
 import ChatPage from './Pages/ChatPage';
-
+import FindPeoplePage from './Pages/FindPeoplePage';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-    <Header/>
+  
    
     <Routes>
       <Route path="/" element={<LoginPage />} />
@@ -27,6 +27,7 @@ root.render(
       <Route path="LoginPage" element={<LoginPage/>} />
       <Route path="MainPage" element={<MainPage/>} />
       <Route path="ChatPage" element={<ChatPage/>} />
+      <Route path="FindPeoplePage" element={<FindPeoplePage/>} />
      
     </Routes>
     </BrowserRouter>

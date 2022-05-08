@@ -18,6 +18,7 @@ import Avatar from '@mui/material/Avatar';
 import dstu from './PageImages/dstu.jpg'
 import { BrowserRouter as Router, Link, Navigate } from "react-router-dom";
 import Footer from '../Layout/Footer';
+import Header from '../Layout/Header';
 
 function getCookie(name) {
   var dc = document.cookie;
@@ -41,7 +42,7 @@ function MainPage(props) {
 
 
   const [myData, setData] = useState("");
-  let check = 0;
+
   const getUserData = async () => {
     fetch('https://localhost:7049/api/Login', {
       method: 'GET',
@@ -56,7 +57,7 @@ function MainPage(props) {
   useEffect(() => {
 
     getUserData();
-
+   
     var cookie = getCookie('jwt');
     if (String(cookie) === "null") {
       navigate('/LoginPage'
@@ -67,30 +68,31 @@ function MainPage(props) {
   let navigate = useNavigate();
   const ColoredLine = ({ color }) => (
     <hr
-        style={{
-            color: color,
-            backgroundColor: color,
-            width: "100%"
-        }}
+      style={{
+        color: color,
+        backgroundColor: color,
+        width: "100%"
+      }}
     />
-);
+  );
   const componentDidMount = async () => {
 
   }
 
   return (
     <>
-      <div style={{ verticalAlign: 'top', width: '100%', marginTop: "0%", textAlign: 'start', display: 'flex', backgroundColor: 'whitesmoke' }}>
+      <Header/>
+      <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
         <LeftMenu />
-        <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'}  justify-content={'space-between'}>
+        <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
 
-          <Box  paddingTop={3}  bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'}  textAlign={'center'} verticalAlign={'top'}>
+          <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
 
             <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
           </Box>
-          <Box textAlign={'center'}   bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
-           
-         
+          <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
+
+
             <List>
               <ListItem>
 
@@ -101,8 +103,8 @@ function MainPage(props) {
                 </Typography>
               </ListItem>
               <ListItem>
-                
-                <ColoredLine color="black"/>
+
+                <ColoredLine color="black" />
               </ListItem>
               <Typography variant="h6" gutterBottom component="div">
 
@@ -114,7 +116,7 @@ function MainPage(props) {
                 </ListItem>
               </Typography>
             </List>
-            
+
           </Box>
         </Box>
 

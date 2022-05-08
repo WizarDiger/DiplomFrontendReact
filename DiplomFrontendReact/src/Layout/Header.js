@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component, useState, useEffect, useReducer } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -32,7 +32,15 @@ const Search = styled('div')(({ theme }) => ({
     width: 'auto',
   },
 }));
-
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
@@ -63,8 +71,8 @@ function Header(props) {
   useEffect(() => {
     
     getUserData();
-   
-  }, [""]);
+ 
+  }, []);
   let navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -112,7 +120,7 @@ function Header(props) {
                 alert('Failed');
             })
 
-            
+         
   }
 
   const handleProfileMenuOpen = (event) => {
@@ -148,10 +156,12 @@ function Header(props) {
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
+      
     >
       <MenuItem onClick={handleMenuClose}>Мой профиль</MenuItem>
       <MenuItem onClick={handleSubmit}>Выйти</MenuItem>
     </Menu>
+    
   );
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
@@ -205,19 +215,27 @@ function Header(props) {
       </MenuItem>
     </Menu>
   );
-let a = 0;
-  if(a===1)
+
+  if(String(myData.Name) === "undefined")
 {
   return(
-    <IconButton
-    size="large"
-    edge="start"
-    color="inherit"
-    aria-label="open drawer"
-    sx={{ mr: 2 }}
-  >
-    <MenuIcon />
-  </IconButton>
+    <Box  sx={{ flexGrow: 1 }}>
+    <AppBar position="static">
+      <Toolbar>   
+        <Typography
+          variant="h6"
+          noWrap
+          component="div"
+          sx={{ display: { xs: 'none', sm: 'block' } }}
+        >
+          Diplom
+        </Typography>
+      </Toolbar>
+    </AppBar>
+    {renderMobileMenu}
+    {renderMenu}
+    
+  </Box>
   )
 }
 else
@@ -240,9 +258,17 @@ else
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            Diplom
           </Typography>
-        
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </Search>
           <Box sx={{ flexGrow: 1 }} />
             {myData.Name}
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -276,6 +302,7 @@ else
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      
     </Box>
   );
 }

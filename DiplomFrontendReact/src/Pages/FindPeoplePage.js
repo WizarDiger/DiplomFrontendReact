@@ -6,6 +6,9 @@ import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 
+import { Paper } from '@mui/material';
+import { Grid } from '@mui/material';
+import TextField from '@mui/material/TextField';
 import ChatInput from '../Layout/ChatInput';
 import LeftMenu from '../Layout/LeftMenu';
 import Footer from '../Layout/Footer';
@@ -17,23 +20,7 @@ const ChatPage = () => {
     latestChat.current = chat;
 
     useEffect(() => {
-        const connection = new HubConnectionBuilder()
-            .withUrl('https://localhost:7049/hubs/chat')
-            .withAutomaticReconnect()
-            .build();
 
-        connection.start()
-            .then(result => {
-                console.log('Connected!');
-
-                connection.on('ReceiveMessage', message => {
-                    const updatedChat = [...latestChat.current];
-                    updatedChat.push(message);
-
-                    setChat(updatedChat);
-                });
-            })
-            .catch(e => console.log('Connection failed: ', e));
     }, []);
 
     const sendMessage = async (user, message) => {
@@ -58,16 +45,16 @@ const ChatPage = () => {
 
     return (
         <>
-          <Header/>
+            <Header />
             <div style={{ verticalAlign: 'top', width: '100%', marginTop: "0%", textAlign: 'start', display: 'flex', backgroundColor: 'whitesmoke' }}>
 
                 <LeftMenu />
-                <List style={{width:'100%'}}>
-                    <ListItem >
-                        <ChatInput sendMessage={sendMessage} chat={chat}/>
-                    </ListItem>
-                  
-                </List>
+                <Grid marginTop={'1%'} width={'30%'} container component={Paper}>
+
+                    <TextField id="outlined-search" label="Поиск" type="search" fullWidth />
+                </Grid>
+
+
             </div>
             <Footer />
         </>

@@ -20,9 +20,7 @@ namespace DiplomBackendASPNet.Controllers
 
         [HttpPost("messages")]
         public async Task Post(ChatMessage message)
-        {
-            
-
+        {          
             await _chatHub.Clients.All.ReceiveMessage(message);
         }
     }

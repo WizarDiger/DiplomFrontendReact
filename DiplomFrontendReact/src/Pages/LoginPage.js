@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import KeyIcon from '@mui/icons-material/Key';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Button from '@mui/material/Button';
-
+import Header from '../Layout/Header';
 import {
   BrowserRouter as Router,
   Switch,
@@ -21,12 +21,12 @@ function LoginPage(props) {
 
   const [myLogin, setLogin] = useState('')
   const [myPassword, setPassword] = useState('')
-  
+
   let errormessage = "";
   let navigate = useNavigate();
 
   const handleSubmit = async () => {
-    
+
     fetch('https://localhost:7049/api/SignIn', {
 
       method: 'POST',
@@ -60,7 +60,7 @@ function LoginPage(props) {
           navigate('/MainPage')
         }
         else {
-         
+
           errormessage = "Неправильный логин и/или пароль";
           alert(errormessage);
         }
@@ -87,59 +87,61 @@ function LoginPage(props) {
 
 
   return (
+    <>
+      <Header/>
+      <div style={{ width: '100%', marginTop: "10%", textAlign: 'center' }}>
 
-    <div style={{ width: '100%', marginTop: "10%", textAlign: 'center' }}>
-      
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          flexDirection: 'column',
-
-
-          bgcolor: 'background.paper',
-          borderRadius: 1,
-        }}
-      >
-        <Box sx={{ mr: -4, my: 3, fontSize: 35 }}>
-
-          Авторизация
-
-        </Box>
-        <Box>
-
-          <AccountCircle sx={{ mr: 1, my: 3 }} />
-          <TextField  value={myLogin} onChange={(e) => setLogin(e.target.value)} sx={{ my: 1 }}
-            id="loginfield"
-            label="Логин"
-            
-          />
-        </Box>
-        <Box>
-
-          <KeyIcon sx={{ mr: 1, my: 3 }} />
-          <TextField  value={myPassword} onChange={(e) => setPassword(e.target.value)} sx={{ my: 1 }}
-            id="passwordfield"
-            label="Пароль"
-            type="password"
-            
-          />
-        </Box>
-        <Button onClick={handleSubmit} sx={{ mr: -4, my: 2, fontSize: 20, width: 100 }} variant="contained">Войти</Button>
-
-        <Link to={'/RegisterPage'} style={{ textDecoration: 'none' }}>
-          <Button sx={{ mr: -4, my: 2, fontSize: 20, width: 270 }} variant="contained">Зарегистрироваться</Button>
-        </Link>
-        <div>
-
-          <h1> {errormessage} </h1>
-
-        </div>
-
-      </Box >
-    </div >
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column',
 
 
+            bgcolor: 'background.paper',
+            borderRadius: 1,
+          }}
+        >
+          <Box sx={{ mr: -4, my: 3, fontSize: 35 }}>
+
+            Авторизация
+
+          </Box>
+          <Box>
+
+            <AccountCircle sx={{ mr: 1, my: 3 }} />
+            <TextField value={myLogin} onChange={(e) => setLogin(e.target.value)} sx={{ my: 1 }}
+              id="loginfield"
+              label="Логин"
+
+            />
+          </Box>
+          <Box>
+
+            <KeyIcon sx={{ mr: 1, my: 3 }} />
+            <TextField value={myPassword} onChange={(e) => setPassword(e.target.value)} sx={{ my: 1 }}
+              id="passwordfield"
+              label="Пароль"
+              type="password"
+
+            />
+          </Box>
+          <Button onClick={handleSubmit} sx={{ mr: -4, my: 2, fontSize: 20, width: 100 }} variant="contained">Войти</Button>
+
+          <Link to={'/RegisterPage'} style={{ textDecoration: 'none' }}>
+            <Button sx={{ mr: -4, my: 2, fontSize: 20, width: 270 }} variant="contained">Зарегистрироваться</Button>
+          </Link>
+          <div>
+
+            <h1> {errormessage} </h1>
+
+          </div>
+
+        </Box >
+      </div >
+
+
+    </>
   );
 
 }

@@ -17,9 +17,9 @@ import { BrowserRouter as Router, Link, Navigate } from "react-router-dom";
 function LeftMenu(props) {
   return (
 
-    <div style={{marginBottom:'23.3%', width: '35%', marginTop: "1.1%", textAlign: 'right', display: 'flex' }}>
+    <div style={{ marginBottom: '30%', width: '35%', marginTop: "1.1%", textAlign: 'right', display: 'flex' }}>
 
-      <Box borderRadius={3} sx={{ marginLeft: '53%', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+      <Box borderRadius={3} sx={{ marginLeft: '55%', width: '100%', maxWidth: 360, bgcolor: 'background.paper', marginRight: '5%' }}>
         <nav aria-label="main mailbox folders">
           <List>
             <Link to={'/MainPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -75,6 +75,16 @@ function LeftMenu(props) {
                 <ListItemText primary="Товары" />
               </ListItemButton>
             </ListItem>
+            <Link to={'/FindPeoplePage'} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <DraftsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Найти людей" />
+                </ListItemButton>
+              </ListItem>
+            </Link>
           </List>
         </nav>
         <Divider />
