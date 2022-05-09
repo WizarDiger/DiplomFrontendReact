@@ -79,7 +79,7 @@ namespace DiplomBackendASPNet.Controllers
                     errors += error.Description;
                 }
                 if (errors == "")
-                    return new JsonResult(jwt);
+                    return new JsonResult(1);
                 else return new JsonResult(errors);
               
             }

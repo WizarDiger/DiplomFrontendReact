@@ -98,7 +98,7 @@ function MainPage(props) {
 
                 <Typography variant="h5" gutterBottom component="div">
                   <p>
-                    {myData.Name} {myData.Surname} {myData.Patronymic}
+                    {myData.Name} {myData.Patronymic} {myData.Surname} 
                   </p>
                 </Typography>
               </ListItem>

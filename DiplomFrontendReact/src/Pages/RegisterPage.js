@@ -21,7 +21,7 @@ import {
     Navigate
   } from "react-router-dom";
 
-let isSignedIn = false;
+  import { useNavigate } from 'react-router-dom';
 
 function RegisterPage(props) {
 
@@ -35,11 +35,11 @@ function RegisterPage(props) {
     const [myCity, setCity] = useState('')
 
     const [value, setValue] = React.useState(null);
-
+    let navigate = useNavigate();
 
     const handleSubmit = async () => {
 
-        alert(myPassword);
+        
         fetch('https://localhost:7049/api/Login', {
             method: 'POST',
             headers:
@@ -64,13 +64,15 @@ function RegisterPage(props) {
 
             .then(res => res.json())
             .then((result) => {
+              
                 if (JSON.stringify(result) === '1')
-                {                            
-                    
+                {                
+                    alert("kek")            
+                    navigate('/LoginPage')
                 }                         
             },
                 (error) => {
-                    alert('Failed');
+                    alert(error);
                 })
     }
 
