@@ -47,7 +47,7 @@ namespace DiplomBackendASPNet.Controllers
         [HttpDelete]
         public JsonResult Delete(FriendRequest friendRequest)
         {
-            string query = $@"DELETE FROM ""Friends"" WHERE host='{friendRequest.Host}'AND friend ='{friendRequest.Friend}'";
+            string query = $@"DELETE FROM ""Friends"" WHERE host='{friendRequest.Host}' AND friend ='{friendRequest.Friend}' OR host='{friendRequest.Friend}' AND friend='{friendRequest.Host}'";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
             NpgsqlDataReader myReader;

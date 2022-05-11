@@ -8,14 +8,14 @@ namespace DiplomBackendASPNet.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CheckFriendController : ControllerBase
+    public class ChatSearchController : ControllerBase
     {
 
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
 
 
-        public CheckFriendController(IConfiguration configuration, IWebHostEnvironment env)
+        public ChatSearchController(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
             _env = env;
@@ -23,9 +23,9 @@ namespace DiplomBackendASPNet.Controllers
         }
 
         [HttpPost]
-        public JsonResult CheckFriend(FriendRequest friendRequest)
+        public JsonResult GetFriends(FriendRequest friendRequest)
         {
-            string query = $@"SELECT * FROM ""Friends"" WHERE host='{friendRequest.Host}'AND friend ='{friendRequest.Friend}' OR host='{friendRequest.Friend}'AND friend ='{friendRequest.Host}' ";
+            string query = $@"SELECT * FROM ""AspNetUsers"" WHERE ""Id""='{friendRequest.Host}'";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
             NpgsqlDataReader myReader;
@@ -42,11 +42,8 @@ namespace DiplomBackendASPNet.Controllers
 
                 }
             }
-            if (table.Rows.Count.Equals(0))
-            {
-                return new JsonResult(0);
-            }
-            return new JsonResult(1);
+          
+            return new JsonResult(table);
         }
     }
 }

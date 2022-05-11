@@ -18,10 +18,10 @@ function Search({ details }) {
   const [searchField, setSearchField] = useState("");
 
 
+  
   var array = json2array(details)
-
   const filteredPersons = array.filter(
-
+     
     person => {
 
       return (

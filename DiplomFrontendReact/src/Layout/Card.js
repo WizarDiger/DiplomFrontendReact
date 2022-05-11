@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useRef } from 'react';
+import React, { Component, useState, useEffect, useRef, useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import dstu from './dstu.jpg'
@@ -17,7 +17,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 function Card({ person, currentUserId }) {
 
-  const [myData, setData] = useState("");
+  const [refreshcounter, setRefresh] = useReducer(x=>x+1,0);
   const [open, setOpen] = React.useState(false);
   const [isFriend, setFriend] = useState("");
 
@@ -29,19 +29,9 @@ function Card({ person, currentUserId }) {
 
     setOpen(false);
   };
-  const getUserData = async () => {
-    fetch('https://localhost:7049/api/Login', {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
-      });
 
-  }
   const checkIfAlreadyFriend = async () => {
-
+    
     fetch('https://localhost:7049/api/CheckFriend', {
       method: 'POST',
       credentials: 'include',
@@ -68,14 +58,12 @@ function Card({ person, currentUserId }) {
         (error) => {
           alert(error);
         })
-
+      
   }
 
   useEffect(() => {
-
-    getUserData();
-    checkIfAlreadyFriend();
-  }, []);
+    checkIfAlreadyFriend(); 
+  }, [refreshcounter]);
 
 
   const handleSubmit = async () => {
@@ -94,7 +82,7 @@ function Card({ person, currentUserId }) {
       },
       body: JSON.stringify(
         {
-          Host: myData.Id,
+          Host: currentUserId,
           Friend: person.Id
         }
       )
@@ -112,6 +100,8 @@ function Card({ person, currentUserId }) {
         (error) => {
           alert('Failed');
         })
+
+        setRefresh();
   }
 
   const handleDelete = async () => {
@@ -130,7 +120,7 @@ function Card({ person, currentUserId }) {
       },
       body: JSON.stringify(
         {
-          Host: myData.Id,
+          Host: currentUserId,
           Friend: person.Id
         }
       )
@@ -143,9 +133,37 @@ function Card({ person, currentUserId }) {
         (error) => {
           alert(error);
         })
-      
+      setRefresh();
   }
+  if (currentUserId === person.Id)
+  {
+    return (
+      <Box display={'inline-block'}>
 
+        <Box display={'flex'} width={'40%'}>
+
+          <Avatar src={dstu} sx={{ width: 80, height: 80, marginTop: '3%', marginLeft: "10px" }} />
+          <List>
+            <ListItem>
+              <Typography variant="h5" gutterBottom component="div">
+
+                {person.Name} {person.Surname}
+              </Typography>
+            </ListItem>
+            <ListItem>
+              {person.Email}
+            </ListItem>
+
+
+            <Box paddingLeft={"20px"} width='300px'>
+              <Button variant="text">Это вы</Button>
+            </Box>
+          </List>
+        </Box>
+       
+      </Box>
+    );
+  }
 
   if (isFriend === 0) {
     return (
@@ -173,7 +191,7 @@ function Card({ person, currentUserId }) {
         </Box>
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-            Друг успешно добавлен
+            Друг успешно удалён
           </Alert>
         </Snackbar>
 
@@ -206,7 +224,7 @@ function Card({ person, currentUserId }) {
         </Box>
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-            Друг успешно удалён
+            Друг успешно добавлен
           </Alert>
         </Snackbar>
 
