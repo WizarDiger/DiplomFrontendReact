@@ -74,6 +74,7 @@ const ChatPage = () => {
 
        
         getFriends();
+        getAllUsers();
     }, []);
 
     const sendMessage = async (user, message) => {

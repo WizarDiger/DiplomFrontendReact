@@ -43,21 +43,20 @@ const ChatInput = (props) => {
             );
         }
     );
-    const friendsData = props.allUsers.filter(
-        friend =>
-        {
-            return(
-                friend
-                .Id
-                .includes(filteredFriends.friend)
-            )
-        }
-    )
-    const friendList = filteredFriends
-        .map(m => <Message
-            key={Date.now() * Math.random()}
-            
-            message={m.friend} />);
+    let friendsData = [];
+    for (var i = 0; i < filteredFriends.length; i++) {
+
+        let buffArray = props.allUsers.filter(
+            user => {
+                return (
+
+                    user.Id.includes(filteredFriends[i].friend)
+                )
+            }
+        )
+
+        friendsData.push(buffArray[0]);
+    }
 
 
     const chat = props.chat
@@ -128,10 +127,15 @@ const ChatInput = (props) => {
 
     return (
         <div style={{ width: '100%', display: 'flex' }}>
-          
-            <Grid width={"15%"} marginRight={"2px"} container component={Paper} >
-                {friendList}
-            </Grid>
+           
+
+              
+                <div style={{width:'25%'}}>
+                    <Search details={friendsData} />
+                </div>
+                 
+         
+
             <div style={{ width: '40%', display: 'flex', backgroundColor: 'whitesmoke' }}>
                 <Grid style={{ verticalAlign: 'end' }} container component={Paper} >
 

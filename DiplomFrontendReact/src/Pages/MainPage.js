@@ -19,7 +19,8 @@ import dstu from './PageImages/dstu.jpg'
 import { BrowserRouter as Router, Link, Navigate } from "react-router-dom";
 import Footer from '../Layout/Footer';
 import Header from '../Layout/Header';
-
+import { Input } from '@mui/material';
+import { Button } from '@mui/material';
 function getCookie(name) {
   var dc = document.cookie;
   var prefix = name + "=";
@@ -57,7 +58,7 @@ function MainPage(props) {
   useEffect(() => {
 
     getUserData();
-   
+
     var cookie = getCookie('jwt');
     if (String(cookie) === "null") {
       navigate('/LoginPage'
@@ -81,7 +82,7 @@ function MainPage(props) {
 
   return (
     <>
-      <Header/>
+      <Header />
       <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
         <LeftMenu />
         <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
@@ -89,6 +90,12 @@ function MainPage(props) {
           <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
 
             <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
+            <label htmlFor="contained-button-file">
+              <Input accept="image/*" id="contained-button-file" multiple type="file" />
+              <Button variant="contained" component="span">
+                Upload
+              </Button>
+            </label>
           </Box>
           <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
 
@@ -98,7 +105,7 @@ function MainPage(props) {
 
                 <Typography variant="h5" gutterBottom component="div">
                   <p>
-                    {myData.Name} {myData.Patronymic} {myData.Surname} 
+                    {myData.Name} {myData.Patronymic} {myData.Surname}
                   </p>
                 </Typography>
               </ListItem>
@@ -113,6 +120,9 @@ function MainPage(props) {
                 </ListItem>
                 <ListItem>
                   City: {myData.City}
+                </ListItem>
+                <ListItem>
+                  BirthDaty: {myData.DateOfBirth}
                 </ListItem>
               </Typography>
             </List>

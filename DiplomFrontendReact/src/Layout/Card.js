@@ -17,9 +17,10 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 function Card({ person, currentUserId }) {
 
-  const [refreshcounter, setRefresh] = useReducer(x=>x+1,0);
+  const [refreshcounter, setRefresh] = useReducer(x => x + 1, 0);
   const [open, setOpen] = React.useState(false);
-  const [isFriend, setFriend] = useState("");
+  const [FriendList, setFriend] = useState("");
+  const [isFriend, setCheckFriend] = useState(0);
 
 
   const handleClose = (event, reason) => {
@@ -29,42 +30,29 @@ function Card({ person, currentUserId }) {
 
     setOpen(false);
   };
-
-  const checkIfAlreadyFriend = async () => {
-    
-    fetch('https://localhost:7049/api/CheckFriend', {
-      method: 'POST',
+  let check = 0;
+  let url = window.location.href;
+  for (var i = 0; i < FriendList.length; i++) {
+    if (FriendList[i].host === currentUserId && FriendList[i].friend === person.Id || FriendList[i].friend === currentUserId && FriendList[i].host === person.Id) {
+      check = 1;
+    }
+  }
+  const getFriends = async () => {
+    fetch('https://localhost:7049/api/ChatSearch', {
+      method: 'GET',
       credentials: 'include',
-      headers:
-      {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(
-        {
-          Host: currentUserId,
-          Friend: person.Id
-        }
-      )
     })
+      .then((response) => response.json())
+      .then((data) => {
+        setFriend(data)
+      })
 
-      .then(res => res.json())
-      .then((result) => {
-
-
-        setFriend(result);
-
-      },
-        (error) => {
-          alert(error);
-        })
-      
   }
 
   useEffect(() => {
-    checkIfAlreadyFriend(); 
-  }, [refreshcounter]);
 
+    getFriends();
+  }, [refreshcounter]);
 
   const handleSubmit = async () => {
 
@@ -101,7 +89,7 @@ function Card({ person, currentUserId }) {
           alert('Failed');
         })
 
-        setRefresh();
+    setRefresh();
   }
 
   const handleDelete = async () => {
@@ -128,18 +116,36 @@ function Card({ person, currentUserId }) {
 
       .then(res => res.json())
       .then((result) => {
-     
+
       },
         (error) => {
           alert(error);
         })
-      setRefresh();
+    setRefresh();
   }
-  if (currentUserId === person.Id)
-  {
+  if (String(url) === "https://localhost:3000/ChatPage") {
     return (
       <Box display={'inline-block'}>
+        <Box display={'flex'} width={'20%'}>
 
+          <Avatar src={dstu} sx={{ width: 50, height: 50, marginTop: '25%', marginLeft: "10px" }} />
+          <List>
+            <Box  width='100%'>
+              <Button  style={{marginLeft:'5px', width:'150px'}} variant="text">   <Typography variant="body1"  gutterBottom component="div">
+
+                {person.Name} {person.Surname}
+              </Typography></Button>
+            </Box>
+          </List>
+        </Box>
+
+      </Box>
+    );
+  }
+  if (currentUserId === person.Id) {
+
+    return (
+      <Box display={'inline-block'}>
         <Box display={'flex'} width={'40%'}>
 
           <Avatar src={dstu} sx={{ width: 80, height: 80, marginTop: '3%', marginLeft: "10px" }} />
@@ -160,12 +166,12 @@ function Card({ person, currentUserId }) {
             </Box>
           </List>
         </Box>
-       
+
       </Box>
     );
   }
 
-  if (isFriend === 0) {
+  if (check === 0) {
     return (
       <Box display={'inline-block'}>
 
