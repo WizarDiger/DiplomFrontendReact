@@ -21,7 +21,29 @@ namespace DiplomBackendASPNet.Controllers
             _env = env;
 
         }
+        [HttpGet]
+        public JsonResult GetAllFriends()
+        {
+            string query = $@"SELECT * FROM ""Friends"" ";
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
+            NpgsqlDataReader myReader;
+            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
+                {
 
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+
+                }
+            }
+
+            return new JsonResult(table);
+        }
         [HttpPost]
         public JsonResult GetFriends(FriendRequest friendRequest)
         {

@@ -28,11 +28,45 @@ const ChatInput = (props) => {
     const [myData, setData] = useState("");
     const [myMessage, setMessage] = useState("");
 
+
+
+
+    const filteredFriends = props.friendList.filter(
+
+        person => {
+
+            return (
+                person
+                    .host
+                    .includes(myData.Id)
+
+            );
+        }
+    );
+    const friendsData = props.allUsers.filter(
+        friend =>
+        {
+            return(
+                friend
+                .Id
+                .includes(filteredFriends.friend)
+            )
+        }
+    )
+    const friendList = filteredFriends
+        .map(m => <Message
+            key={Date.now() * Math.random()}
+            
+            message={m.friend} />);
+
+
     const chat = props.chat
         .map(m => <Message
             key={Date.now() * Math.random()}
             user={m.user}
             message={m.message} currentUser={myData.Name} />);
+
+
 
     function getCookie(name) {
         var dc = document.cookie;
@@ -66,7 +100,7 @@ const ChatInput = (props) => {
     }
     let navigate = useNavigate();
     useEffect(() => {
-        
+
         getUserData();
         var cookie = getCookie('jwt');
         if (String(cookie) === "null") {
@@ -90,11 +124,13 @@ const ChatInput = (props) => {
 
     }
 
+
+
     return (
         <div style={{ width: '100%', display: 'flex' }}>
-            {myData.Id}
+          
             <Grid width={"15%"} marginRight={"2px"} container component={Paper} >
-                {props.FriendList}
+                {friendList}
             </Grid>
             <div style={{ width: '40%', display: 'flex', backgroundColor: 'whitesmoke' }}>
                 <Grid style={{ verticalAlign: 'end' }} container component={Paper} >
