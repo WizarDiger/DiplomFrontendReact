@@ -2,7 +2,7 @@ import React, { Component, useState, useEffect, useRef, useReducer } from 'react
 import { useNavigate } from 'react-router-dom';
 
 import dstu from './dstu.jpg'
-import { Box } from '@mui/system';
+import { Box, textAlign } from '@mui/system';
 import { List, ListItem } from '@mui/material';
 import { Typography } from '@mui/material';
 import { Avatar } from '@mui/material';
@@ -10,7 +10,9 @@ import { Button } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-
+import { Link } from 'react-router-dom';
+import { createTheme } from '@mui/material/styles';
+import { BrowserRouter } from 'react-router-dom';
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -22,7 +24,21 @@ function Card({ person, currentUserId }) {
   const [FriendList, setFriend] = useState("");
   const [isFriend, setCheckFriend] = useState(0);
 
-
+  const theme = createTheme({
+    status: {
+      danger: '#e53e3e',
+    },
+    palette: {
+      primary: {
+        main: '#0971f1',
+        darker: '#053e85',
+      },
+      neutral: {
+        main: '#64748B',
+        contrastText: '#fff',
+      },
+    },
+  });
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -130,16 +146,23 @@ function Card({ person, currentUserId }) {
 
           <Avatar src={dstu} sx={{ width: 50, height: 50, marginTop: '25%', marginLeft: "10px" }} />
           <List>
-            <Box  width='100%'>
-              <Button  style={{marginLeft:'5px', width:'150px'}} variant="text">   <Typography variant="body1"  gutterBottom component="div">
+            <ListItem>
 
-                {person.Name} {person.Surname}
-              </Typography></Button>
-            </Box>
+              <Box width='100%'>
+           
+                <Link to={'/OtherUserPage/'+ person.Id} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <Button style={{ width: '180%', justifyContent: "flex-start", textTransform: 'none' }} variant="theme">   <Typography variant="h5" gutterBottom component="div">
+
+                    {person.Name} {person.Surname}
+                  </Typography></Button>
+                </Link>
+                
+              </Box>
+            </ListItem>
           </List>
-        </Box>
+        </Box >
 
-      </Box>
+      </Box >
     );
   }
   if (currentUserId === person.Id) {
@@ -148,17 +171,20 @@ function Card({ person, currentUserId }) {
       <Box display={'inline-block'}>
         <Box display={'flex'} width={'40%'}>
 
-          <Avatar src={dstu} sx={{ width: 80, height: 80, marginTop: '3%', marginLeft: "10px" }} />
+          <Avatar src={dstu} sx={{ width: 80, height: 80, marginTop: '15%', marginLeft: "10px" }} />
           <List>
-            <ListItem>
-              <Typography variant="h5" gutterBottom component="div">
+            <Link to={'/OtherUserPage/'+ person.Id} style={{ textDecoration: 'none', color: 'inherit' }}>
+              
+              <Button style={{ width: '100%', justifyContent: "flex-start", textTransform: 'none' }} variant="theme">   <Typography variant="h5" gutterBottom component="div">
+                <ListItem>
 
-                {person.Name} {person.Surname}
-              </Typography>
-            </ListItem>
-            <ListItem>
-              {person.Email}
-            </ListItem>
+                  {person.Name} {person.Surname}
+                </ListItem>
+                <ListItem>
+                  {person.Email}
+                </ListItem>
+              </Typography></Button>
+            </Link>
 
 
             <Box paddingLeft={"20px"} width='300px'>
@@ -177,17 +203,19 @@ function Card({ person, currentUserId }) {
 
         <Box display={'flex'} width={'40%'}>
 
-          <Avatar src={dstu} sx={{ width: 80, height: 80, marginTop: '3%', marginLeft: "10px" }} />
+          <Avatar src={dstu} sx={{ width: 80, height: 80, marginTop: '15%', marginLeft: "10px" }} />
           <List>
-            <ListItem>
-              <Typography variant="h5" gutterBottom component="div">
+            <Link to={'/OtherUserPage/'+ person.Id} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <Button style={{ width: '130%', justifyContent: "flex-start", textTransform: 'none' }} variant="theme">   <Typography variant="h5" gutterBottom component="div">
+                <ListItem>
 
-                {person.Name} {person.Surname}
-              </Typography>
-            </ListItem>
-            <ListItem>
-              {person.Email}
-            </ListItem>
+                  {person.Name} {person.Surname}
+                </ListItem>
+                <ListItem>
+                  {person.Email}
+                </ListItem>
+              </Typography></Button>
+            </Link>
 
 
             <Box paddingLeft={"20px"} width='300px'>
@@ -210,17 +238,19 @@ function Card({ person, currentUserId }) {
 
         <Box display={'flex'} width={'40%'}>
 
-          <Avatar src={dstu} sx={{ width: 80, height: 80, marginTop: '3%', marginLeft: "10px" }} />
+          <Avatar src={dstu} sx={{ width: 80, height: 80, marginTop: '15%', marginLeft: "10px" }} />
           <List>
-            <ListItem>
-              <Typography variant="h5" gutterBottom component="div">
+          <Link to={'/OtherUserPage/'+ person.Id} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <Button style={{ width: '100%', justifyContent: "flex-start", textTransform: 'none' }} variant="theme">   <Typography variant="h5" gutterBottom component="div">
+                <ListItem>
 
-                {person.Name} {person.Surname}
-              </Typography>
-            </ListItem>
-            <ListItem>
-              {person.Email}
-            </ListItem>
+                  {person.Name} {person.Surname}
+                </ListItem>
+                <ListItem>
+                  {person.Email}
+                </ListItem>
+              </Typography></Button>
+            </Link>
 
 
             <Box paddingLeft={"20px"} width='300px'>

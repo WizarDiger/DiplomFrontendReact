@@ -58,20 +58,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 function Header(props) {
 
 
-   const [myData, setData] = useState("");
+  const [myData, setData] = useState("");
 
   const getUserData = async () => {
     fetch('https://localhost:7049/api/Login', {
-      method: 'GET', 
-     credentials: 'include',
-  })
+      method: 'GET',
+      credentials: 'include',
+    })
       .then((response) => response.json())
       .then((data) => { setData(data) });
   }
   useEffect(() => {
-    
+
     getUserData();
- 
+
   }, []);
   let navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -83,44 +83,43 @@ function Header(props) {
   const handleSubmit = async () => {
 
     fetch('https://localhost:7049/api/SignOut', {
-      
+
       method: 'POST',
       credentials: 'include',
-    
-        headers:
+
+      headers:
+      {
+        'Access-Control-Allow-Origin': 'https://localhost:3000/',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
         {
-            'Access-Control-Allow-Origin': 'https://localhost:3000/',
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(
-          {
-            login: 1,
-            password: 1,
-            email: '1',
-            name: '1',
-            surname: '1',
-            patronymic: '1',
-            dateOfBirth: '1',
-            city: '1'
-           
-          }
+          login: 1,
+          password: 1,
+          email: '1',
+          name: '1',
+          surname: '1',
+          patronymic: '1',
+          dateOfBirth: '1',
+          city: '1'
+
+        }
       )
     })
-  
-        .then(res => res.json())
-        .then((result) => {
-          if (JSON.stringify(result) === '1')
-          {    
-            
-            navigate('/LoginPage')           
-          }    
-        },
-            (error) => {
-                alert('Failed');
-            })
 
-         
+      .then(res => res.json())
+      .then((result) => {
+        if (JSON.stringify(result) === '1') {
+
+          navigate('/LoginPage')
+        }
+      },
+        (error) => {
+          alert('Failed');
+        })
+
+
   }
 
   const handleProfileMenuOpen = (event) => {
@@ -156,12 +155,12 @@ function Header(props) {
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
-      
+
     >
       <MenuItem onClick={handleMenuClose}>Мой профиль</MenuItem>
       <MenuItem onClick={handleSubmit}>Выйти</MenuItem>
     </Menu>
-    
+
   );
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
@@ -216,94 +215,96 @@ function Header(props) {
     </Menu>
   );
 
-  if(String(myData.Name) === "undefined")
-{
-  return(
-    <Box  sx={{ flexGrow: 1 }}>
-    <AppBar position="static">
-      <Toolbar>   
-        <Typography
-          variant="h6"
-          noWrap
-          component="div"
-          sx={{ display: { xs: 'none', sm: 'block' } }}
-        >
-          Diplom
-        </Typography>
-      </Toolbar>
-    </AppBar>
-    {renderMobileMenu}
-    {renderMenu}
-    
-  </Box>
-  )
-}
-else
-  return (
-    <Box  sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            Diplom
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-          <Box sx={{ flexGrow: 1 }} />
+  if (String(myData.Name) === "undefined") {
+    return (
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ display: { xs: 'none', sm: 'block' } }}
+            >
+              Diplom
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        {renderMobileMenu}
+        {renderMenu}
+
+      </Box>
+    )
+  }
+  else
+    return (
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ display: { xs: 'none', sm: 'block' } }}
+            >
+              Diplom
+            </Typography>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </Search>
+            <Box sx={{ flexGrow: 1 }} />
+
+
             {myData.Name}
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-           
-            
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
-      
-    </Box>
-  );
+
+            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+
+
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </Box>
+            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                size="large"
+                aria-label="show more"
+                aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+        {renderMobileMenu}
+        {renderMenu}
+
+      </Box>
+    );
 }
 export default Header;

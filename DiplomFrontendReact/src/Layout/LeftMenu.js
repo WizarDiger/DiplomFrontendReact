@@ -51,14 +51,16 @@ function LeftMenu(props) {
 
               </ListItem>
             </Link>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <DraftsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Друзья" />
-              </ListItemButton>
-            </ListItem>
+            <Link to={'/FriendsPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <DraftsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Друзья" />
+                </ListItemButton>
+              </ListItem>
+            </Link>
             <ListItem disablePadding>
               <ListItemButton>
                 <ListItemIcon>

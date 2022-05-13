@@ -51,17 +51,34 @@ function Search({ details }) {
     );
   }
   let url = window.location.href;
+
+  if (String(url) === "https://localhost:3000/FriendsPage") {
+
+    return (
+      <Box container component={Paper}>
+
+        <Typography marginLeft={'35%'} marginTop={'1%'} variant="h4" gutterBottom component="div">
+          Друзья
+        </Typography>
+
+        <Box width={'100%'}>
+          <TextField onChange={handleChange} id="outlined-basic-email" label="Поиск" fullWidth />
+        </Box>
+        {searchList()}
+      </Box>
+    );
+  }
   if (String(url) === "https://localhost:3000/ChatPage") {
 
     return (
       <Box container component={Paper}>
-        
+
         <Typography marginLeft={'35%'} marginTop={'1%'} variant="h6" gutterBottom component="div">
           Друзья
         </Typography>
 
         <Box width={'100%'}>
-          <TextField onChange={handleChange} id="outlined-basic-email" label="Поиск"  fullWidth/>
+          <TextField onChange={handleChange} id="outlined-basic-email" label="Поиск" fullWidth />
         </Box>
         {searchList()}
       </Box>

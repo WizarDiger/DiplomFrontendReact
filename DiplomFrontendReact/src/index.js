@@ -15,23 +15,27 @@ import MainPage from './Pages/MainPage';
 import LeftMenu from './Layout/LeftMenu';
 import ChatPage from './Pages/ChatPage';
 import FindPeoplePage from './Pages/FindPeoplePage';
+import FriendsPage from './Pages/FriendsPage'
+import OtherUserPage from './Pages/OtherUserPage'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 
-    <BrowserRouter>
-  
-   
+  <BrowserRouter>
+
+
     <Routes>
       <Route path="/" element={<LoginPage />} />
-      <Route path="RegisterPage" element={<RegisterPage/>} />
-      <Route path="LoginPage" element={<LoginPage/>} />
-      <Route path="MainPage" element={<MainPage/>} />
-      <Route path="ChatPage" element={<ChatPage/>} />
-      <Route path="FindPeoplePage" element={<FindPeoplePage/>} />
-     
+      <Route path="RegisterPage" element={<RegisterPage />} />
+      <Route path="LoginPage" element={<LoginPage />} />
+      <Route path="MainPage" element={<MainPage />} />
+      <Route path="ChatPage" element={<ChatPage />} />
+      <Route path="FindPeoplePage" element={<FindPeoplePage />} />
+      <Route path="FriendsPage" element={<FriendsPage />} />
+      <Route path="OtherUserPage/:id" element={<OtherUserPage />} />
+
     </Routes>
-    </BrowserRouter>
- 
+  </BrowserRouter>
+
 );
 
 // If you want to start measuring performance in your app, pass a function

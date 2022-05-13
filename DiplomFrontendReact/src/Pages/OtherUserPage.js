@@ -21,7 +21,7 @@ import Footer from '../Layout/Footer';
 import Header from '../Layout/Header';
 import { Input } from '@mui/material';
 import { Button } from '@mui/material';
-
+import { useParams } from 'react-router';
 function getCookie(name) {
   var dc = document.cookie;
   var prefix = name + "=";
@@ -40,23 +40,43 @@ function getCookie(name) {
   return decodeURI(dc.substring(begin + prefix.length, end));
 }
 
-function MainPage(props) {
+function OtherUserPage(props) {
+
+
 
 
   const [myData, setData] = useState("");
+  const [myUsers, setUsers] = useState([]);
   const [myPicture, setPicture] = useState("");
 
+  let currentUserId = useParams().id;
+
+  const currentUser = myUsers.filter(
+
+    person => {
+      return (
+        person
+          .Id
+          .includes(currentUserId)
+      );
+
+    }
+  );
+
+  
   const getUserData = async () => {
-    fetch('https://localhost:7049/api/Login', {
+    fetch('https://localhost:7049/api/Search', {
       method: 'GET',
       credentials: 'include',
     })
       .then((response) => response.json())
       .then((data) => {
-        setData(data)
+        setUsers(data)
       });
 
   }
+
+
   useEffect(() => {
 
     getUserData();
@@ -67,6 +87,8 @@ function MainPage(props) {
       )
     }
   }, [""]);
+
+
 
   let navigate = useNavigate();
   const ColoredLine = ({ color }) => (
@@ -85,8 +107,9 @@ function MainPage(props) {
 
   return (
     <>
-   
+
       <Header />
+
       <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
         <LeftMenu />
         <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
@@ -109,7 +132,7 @@ function MainPage(props) {
 
                 <Typography variant="h5" gutterBottom component="div">
                   <p>
-                    {myData.Name} {myData.Patronymic} {myData.Surname}
+                    {currentUser.map(m=>m.Name)} {currentUser.map(m=>m.Patronymic)} {currentUser.map(m=>m.Surname)}
                   </p>
                 </Typography>
               </ListItem>
@@ -120,13 +143,13 @@ function MainPage(props) {
               <Typography variant="h6" gutterBottom component="div">
 
                 <ListItem>
-                  E-mail: {myData.Email}
+                  E-mail: {currentUser.map(m=>m.Email)}
                 </ListItem>
                 <ListItem>
-                  City: {myData.City}
+                  City: {currentUser.map(m=>m.City)}
                 </ListItem>
                 <ListItem>
-                  BirthDaty: {myData.DateOfBirth}
+                  BirthDaty: {currentUser.map(m=>m.DateOfBirth)}
                 </ListItem>
               </Typography>
             </List>
@@ -143,4 +166,4 @@ function MainPage(props) {
 
 }
 
-export default MainPage;
+export default OtherUserPage;

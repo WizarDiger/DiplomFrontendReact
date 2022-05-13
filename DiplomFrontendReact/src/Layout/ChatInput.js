@@ -39,7 +39,6 @@ const ChatInput = (props) => {
                 person
                     .host
                     .includes(myData.Id)
-
             );
         }
     );
