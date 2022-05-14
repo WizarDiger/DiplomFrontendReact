@@ -41,10 +41,6 @@ function getCookie(name) {
 }
 
 function OtherUserPage(props) {
-
-
-
-
   const [myData, setData] = useState("");
   const [myUsers, setUsers] = useState([]);
   const [myPicture, setPicture] = useState("");
@@ -109,8 +105,8 @@ function OtherUserPage(props) {
     <>
 
       <Header />
+     
       
-    
       <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
         <LeftMenu />
         <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>

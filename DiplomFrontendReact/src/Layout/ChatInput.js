@@ -57,11 +57,12 @@ const ChatInput = (props) => {
         friendsData.push(buffArray[0]);
     }
 
-
+    
     const chat = props.chat
         .map(m => <Message
             key={Date.now() * Math.random()}
             user={m.user}
+            sendername={m.sendername}
             message={m.message} currentUser={myData.Name} />);
 
 

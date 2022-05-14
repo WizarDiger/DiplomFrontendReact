@@ -93,7 +93,7 @@ const ChatPage = () => {
 
         }
     );
-    console.log(savedChat);
+  
     const getFriends = async () => {
         fetch('https://localhost:7049/api/ChatSearch', {
             method: 'GET',
@@ -167,7 +167,7 @@ const ChatPage = () => {
                         Reciever: currentChatFriendId,
                         SenderName: myCurrentUser.Name,
                         RecieverName: currentReciever[0].Name,
-                        Message: JSON.stringify(chatMessage.message)
+                        Message: chatMessage.message
 
                     }
                 )
