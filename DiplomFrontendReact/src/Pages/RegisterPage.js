@@ -19,9 +19,9 @@ import {
     Route,
     Link,
     Navigate
-  } from "react-router-dom";
+} from "react-router-dom";
 
-  import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function RegisterPage(props) {
 
@@ -39,7 +39,7 @@ function RegisterPage(props) {
 
     const handleSubmit = async () => {
 
-        
+
         fetch('https://localhost:7049/api/Login', {
             method: 'POST',
             headers:
@@ -64,12 +64,11 @@ function RegisterPage(props) {
 
             .then(res => res.json())
             .then((result) => {
-              
-                if (JSON.stringify(result) === '1')
-                {                
-                    alert("kek")            
+
+                if (JSON.stringify(result) === '1') {
+                 
                     navigate('/LoginPage')
-                }                         
+                }
             },
                 (error) => {
                     alert(error);
@@ -79,7 +78,7 @@ function RegisterPage(props) {
 
     return (
 
-        
+
         <div style={{ width: '100%', marginTop: "10%", textAlign: 'center' }}>
             <Box
                 sx={{
@@ -98,7 +97,7 @@ function RegisterPage(props) {
                 <Box>
 
                     <AccountCircle sx={{ mr: 1, my: 3 }} />
-                    <TextField  value={myLogin} onChange={(e) => setLogin(e.target.value)} sx={{ my: 1 }}
+                    <TextField value={myLogin} onChange={(e) => setLogin(e.target.value)} sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Логин"
 
@@ -107,7 +106,7 @@ function RegisterPage(props) {
                 <Box>
 
                     <KeyIcon sx={{ mr: 1, my: 3 }} />
-                    <TextField  value={myPassword} onChange={(e) => setPassword(e.target.value)} sx={{ my: 1 }}
+                    <TextField value={myPassword} onChange={(e) => setPassword(e.target.value)} sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Пароль"
                         type="password"
@@ -164,7 +163,7 @@ function RegisterPage(props) {
                 <Box>
 
 
-                        <CakeIcon sx={{ mr: 1, my: 3 }} />
+                    <CakeIcon sx={{ mr: 1, my: 3 }} />
                     <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
                         <DatePicker
                             label="Дата рождения"
@@ -172,7 +171,7 @@ function RegisterPage(props) {
                             onChange={(newValue) => {
                                 setDateOfBirth(newValue);
                             }}
-                            renderInput={(params) => <TextField  sx={{ my: 1 ,width:225}} {...params} />}
+                            renderInput={(params) => <TextField sx={{ my: 1, width: 225 }} {...params} />}
                         />
                     </LocalizationProvider>
 
@@ -189,10 +188,10 @@ function RegisterPage(props) {
                     />
                 </Box>
 
-               
+
                 <Button type='submit' onClick={handleSubmit} sx={{ mr: -4, my: 2, fontSize: 20, width: 270 }} variant="contained">Зарегистрироваться</Button>
-               
-              
+
+
 
             </Box >
         </div>

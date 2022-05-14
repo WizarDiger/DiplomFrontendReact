@@ -28,7 +28,7 @@ root.render(
       <Route path="RegisterPage" element={<RegisterPage />} />
       <Route path="LoginPage" element={<LoginPage />} />
       <Route path="MainPage" element={<MainPage />} />
-      <Route path="ChatPage" element={<ChatPage />} />
+      <Route path="ChatPage/:id" element={<ChatPage />} />
       <Route path="FindPeoplePage" element={<FindPeoplePage />} />
       <Route path="FriendsPage" element={<FriendsPage />} />
       <Route path="OtherUserPage/:id" element={<OtherUserPage />} />

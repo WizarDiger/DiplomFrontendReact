@@ -40,7 +40,7 @@ function LeftMenu(props) {
                 <ListItemText primary="Новости" />
               </ListItemButton>
             </ListItem>
-            <Link to={'/ChatPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to={'/ChatPage/default'} style={{ textDecoration: 'none', color: 'inherit' }}>
               <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>

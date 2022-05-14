@@ -105,6 +105,38 @@ function Card({ person, currentUserId }) {
           alert('Failed');
         })
 
+
+    fetch('https://localhost:7049/api/AddFriend', {
+
+      method: 'POST',
+      credentials: 'include',
+
+      headers:
+      {
+
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+        {
+          Host: person.Id,
+          Friend: currentUserId
+        }
+      )
+    })
+
+      .then(res => res.json())
+      .then((result) => {
+        if (JSON.stringify(result) === '1') {
+
+        }
+        else {
+
+        }
+      },
+        (error) => {
+          alert('Failed');
+        })
     setRefresh();
   }
 
@@ -137,9 +169,37 @@ function Card({ person, currentUserId }) {
         (error) => {
           alert(error);
         })
+
+    fetch('https://localhost:7049/api/AddFriend', {
+
+      method: 'DELETE',
+      credentials: 'include',
+
+      headers:
+      {
+
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+        {
+          Host: person.Id,
+          Friend: currentUserId
+        }
+      )
+    })
+
+      .then(res => res.json())
+      .then((result) => {
+
+      },
+        (error) => {
+          alert(error);
+        })
+
     setRefresh();
   }
-  if (String(url) === "https://localhost:3000/ChatPage") {
+  if (String(url).substring(0, 32) === `https://localhost:3000/ChatPage/`) {
     return (
       <Box display={'inline-block'}>
         <Box display={'flex'} width={'20%'}>
@@ -149,14 +209,14 @@ function Card({ person, currentUserId }) {
             <ListItem>
 
               <Box width='100%'>
-           
-                <Link to={'/OtherUserPage/'+ person.Id} style={{ textDecoration: 'none', color: 'inherit' }}>
+
+                <Link to={'/ChatPage/' + person.Id} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <Button style={{ width: '180%', justifyContent: "flex-start", textTransform: 'none' }} variant="theme">   <Typography variant="h5" gutterBottom component="div">
 
                     {person.Name} {person.Surname}
                   </Typography></Button>
                 </Link>
-                
+
               </Box>
             </ListItem>
           </List>
@@ -173,8 +233,8 @@ function Card({ person, currentUserId }) {
 
           <Avatar src={dstu} sx={{ width: 80, height: 80, marginTop: '15%', marginLeft: "10px" }} />
           <List>
-            <Link to={'/OtherUserPage/'+ person.Id} style={{ textDecoration: 'none', color: 'inherit' }}>
-              
+            <Link to={'/OtherUserPage/' + person.Id} style={{ textDecoration: 'none', color: 'inherit' }}>
+
               <Button style={{ width: '100%', justifyContent: "flex-start", textTransform: 'none' }} variant="theme">   <Typography variant="h5" gutterBottom component="div">
                 <ListItem>
 
@@ -205,7 +265,7 @@ function Card({ person, currentUserId }) {
 
           <Avatar src={dstu} sx={{ width: 80, height: 80, marginTop: '15%', marginLeft: "10px" }} />
           <List>
-            <Link to={'/OtherUserPage/'+ person.Id} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to={'/OtherUserPage/' + person.Id} style={{ textDecoration: 'none', color: 'inherit' }}>
               <Button style={{ width: '130%', justifyContent: "flex-start", textTransform: 'none' }} variant="theme">   <Typography variant="h5" gutterBottom component="div">
                 <ListItem>
 
@@ -240,7 +300,7 @@ function Card({ person, currentUserId }) {
 
           <Avatar src={dstu} sx={{ width: 80, height: 80, marginTop: '15%', marginLeft: "10px" }} />
           <List>
-          <Link to={'/OtherUserPage/'+ person.Id} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to={'/OtherUserPage/' + person.Id} style={{ textDecoration: 'none', color: 'inherit' }}>
               <Button style={{ width: '100%', justifyContent: "flex-start", textTransform: 'none' }} variant="theme">   <Typography variant="h5" gutterBottom component="div">
                 <ListItem>
 

@@ -74,6 +74,8 @@ const FriendsPage = () => {
                 person
                     .host
                     .includes(myData.Id)
+                    
+                    
 
             );
         }

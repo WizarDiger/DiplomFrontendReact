@@ -68,7 +68,7 @@ function Search({ details }) {
       </Box>
     );
   }
-  if (String(url) === "https://localhost:3000/ChatPage") {
+  if (String(url).substring(0,32) === "https://localhost:3000/ChatPage/") {
 
     return (
       <Box container component={Paper}>
