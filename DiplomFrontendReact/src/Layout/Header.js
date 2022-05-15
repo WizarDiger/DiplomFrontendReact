@@ -258,15 +258,7 @@ function Header(props) {
             >
               Diplom
             </Typography>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-              />
-            </Search>
+
             <Box sx={{ flexGrow: 1 }} />
 
 

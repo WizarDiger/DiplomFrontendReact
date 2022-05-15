@@ -13,7 +13,11 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import { useNavigate } from 'react-router-dom';
 import { wait } from '@testing-library/user-event/dist/utils';
 import { BrowserRouter as Router, Link, Navigate } from "react-router-dom";
-
+import FeedIcon from '@mui/icons-material/Feed';
+import PeopleIcon from '@mui/icons-material/People';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import SearchIcon from '@mui/icons-material/Search';
 function LeftMenu(props) {
   return (
 
@@ -32,14 +36,16 @@ function LeftMenu(props) {
                 </ListItemButton>
               </ListItem>
             </Link>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <DraftsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Новости" />
-              </ListItemButton>
-            </ListItem>
+            <Link to={'/NewsPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <FeedIcon/>
+                  </ListItemIcon>
+                  <ListItemText primary="Новости" />
+                </ListItemButton>
+              </ListItem>
+            </Link>
             <Link to={'/ChatPage/default'} style={{ textDecoration: 'none', color: 'inherit' }}>
               <ListItem disablePadding>
                 <ListItemButton>
@@ -55,7 +61,7 @@ function LeftMenu(props) {
               <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <DraftsIcon />
+                    <PeopleIcon />
                   </ListItemIcon>
                   <ListItemText primary="Друзья" />
                 </ListItemButton>
@@ -64,7 +70,7 @@ function LeftMenu(props) {
             <ListItem disablePadding>
               <ListItemButton>
                 <ListItemIcon>
-                  <DraftsIcon />
+                  <PhotoCameraIcon />
                 </ListItemIcon>
                 <ListItemText primary="Фотографии" />
               </ListItemButton>
@@ -72,7 +78,7 @@ function LeftMenu(props) {
             <ListItem disablePadding>
               <ListItemButton>
                 <ListItemIcon>
-                  <DraftsIcon />
+                  <ShoppingCartIcon />
                 </ListItemIcon>
                 <ListItemText primary="Товары" />
               </ListItemButton>
@@ -81,7 +87,7 @@ function LeftMenu(props) {
               <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <DraftsIcon />
+                    <SearchIcon />
                   </ListItemIcon>
                   <ListItemText primary="Найти людей" />
                 </ListItemButton>
@@ -90,20 +96,7 @@ function LeftMenu(props) {
           </List>
         </nav>
         <Divider />
-        <nav aria-label="secondary mailbox folders">
-          <List>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemText primary="Trash" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component="a" href="#simple-list">
-                <ListItemText primary="Spam" />
-              </ListItemButton>
-            </ListItem>
-          </List>
-        </nav>
+       
       </Box>
     </div>
   )

@@ -55,17 +55,19 @@ function Search({ details }) {
   if (String(url) === "https://localhost:3000/FriendsPage") {
 
     return (
-      <Box container component={Paper}>
-
+      <>
         <Typography marginLeft={'35%'} marginTop={'1%'} variant="h4" gutterBottom component="div">
           Друзья
         </Typography>
+      <Box container component={Paper}>
+
 
         <Box width={'100%'}>
           <TextField onChange={handleChange} id="outlined-basic-email" label="Поиск" fullWidth />
         </Box>
         {searchList()}
       </Box>
+      </>
     );
   }
   if (String(url).substring(0,32) === "https://localhost:3000/ChatPage/") {

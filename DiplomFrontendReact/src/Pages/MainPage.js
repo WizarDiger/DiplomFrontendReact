@@ -21,7 +21,7 @@ import Footer from '../Layout/Footer';
 import Header from '../Layout/Header';
 import { Input } from '@mui/material';
 import { Button } from '@mui/material';
-
+import Post from '../Layout/Post';
 function getCookie(name) {
   var dc = document.cookie;
   var prefix = name + "=";
@@ -45,7 +45,8 @@ function MainPage(props) {
 
   const [myData, setData] = useState("");
   const [myPicture, setPicture] = useState("");
-
+  const [myFeed, setFeed] = useState([]);
+  const [myFriends, setFriends] = useState([]);
   const getUserData = async () => {
     fetch('https://localhost:7049/api/Login', {
       method: 'GET',
@@ -57,10 +58,50 @@ function MainPage(props) {
       });
 
   }
+
+
+
+  let myPosts = myFeed.filter(
+    post => {
+      return (
+        post.sender.includes(myData.Id)
+      )
+    }
+  )
+
+
+  const getFeed = async () => {
+    fetch('https://localhost:7049/api/Feed', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFeed(data)
+      });
+
+  }
+  let feed = [];
+  if (myPosts[0] !== undefined) {
+
+    feed = myPosts
+      .map(m => <Post
+        key={Date.now() * Math.random()}
+        sendername={m.sendername}
+        title={m.title}
+        sendtime={m.sendtime}
+        description={m.description}
+        imagename={m.imagename}
+      />);
+  }
+  else {
+    feed = ["Сейчас постов нет"];
+  }
   useEffect(() => {
 
     getUserData();
-
+    getFeed();
+    getFriends();
     var cookie = getCookie('jwt');
     if (String(cookie) === "null") {
       navigate('/LoginPage'
@@ -82,10 +123,32 @@ function MainPage(props) {
     setPicture(event.target.files[0].name)
     alert(event.target.files[0].name)
   }
+  const getFriends = async () => {
+    fetch('https://localhost:7049/api/ChatSearch', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFriends(data)
+      })
 
+  }
+
+  const filteredFriends = myFriends.filter(
+
+    person => {
+
+      return (
+        person
+          .host
+          .includes(myData.Id)
+      );
+    }
+  );
   return (
     <>
-   
+
       <Header />
       <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
         <LeftMenu />
@@ -100,6 +163,16 @@ function MainPage(props) {
                 Upload
               </Button>
             </label>
+            <Box bgcolor={'white'} borderRadius={2} marginTop={'5%'} paddingTop={'15px'} paddingBottom={'15px'}>
+              <Box marginLeft={'25px'} marginRight={'25px'}>
+
+                <Link to={'/FriendsPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
+
+                  <Button fullWidth variant="contained">Друзья {filteredFriends.length}</Button>
+                </Link>
+              </Box>
+
+            </Box>
           </Box>
           <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
 
@@ -130,7 +203,8 @@ function MainPage(props) {
                 </ListItem>
               </Typography>
             </List>
-
+            <ColoredLine color="black" />
+            {feed}
           </Box>
         </Box>
 

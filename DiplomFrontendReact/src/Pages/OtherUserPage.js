@@ -22,6 +22,7 @@ import Header from '../Layout/Header';
 import { Input } from '@mui/material';
 import { Button } from '@mui/material';
 import { useParams } from 'react-router';
+import Post from '../Layout/Post';
 function getCookie(name) {
   var dc = document.cookie;
   var prefix = name + "=";
@@ -44,7 +45,7 @@ function OtherUserPage(props) {
   const [myData, setData] = useState("");
   const [myUsers, setUsers] = useState([]);
   const [myPicture, setPicture] = useState("");
-
+  const [myFeed, setFeed] = useState([])
   let currentUserId = useParams().id;
 
   const currentUser = myUsers.filter(
@@ -58,8 +59,43 @@ function OtherUserPage(props) {
 
     }
   );
+  let myPosts = myFeed.filter(
+    post => {
+      return (
+        post.sender.includes(currentUserId)
+      )
+    }
+  )
 
-  
+
+  const getFeed = async () => {
+    fetch('https://localhost:7049/api/Feed', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFeed(data)
+      });
+
+  }
+  let feed = [];
+  console.log(myPosts);
+  if (myPosts[0] !== undefined) {
+    feed = myPosts
+      .map(m => <Post
+        key={Date.now() * Math.random()}
+        sendername={m.sendername}
+        title={m.title}
+        sendtime={m.sendtime}
+        description={m.description}
+        imagename={m.imagename}
+      />);
+  }
+  else {
+    feed = ["Сейчас постов нет"];
+  }
+
   const getUserData = async () => {
     fetch('https://localhost:7049/api/Search', {
       method: 'GET',
@@ -76,7 +112,7 @@ function OtherUserPage(props) {
   useEffect(() => {
 
     getUserData();
-
+    getFeed();
     var cookie = getCookie('jwt');
     if (String(cookie) === "null") {
       navigate('/LoginPage'
@@ -105,8 +141,8 @@ function OtherUserPage(props) {
     <>
 
       <Header />
-     
-      
+
+
       <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
         <LeftMenu />
         <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
@@ -129,7 +165,7 @@ function OtherUserPage(props) {
 
                 <Typography variant="h5" gutterBottom component="div">
                   <p>
-                    {currentUser.map(m=>m.Name)} {currentUser.map(m=>m.Patronymic)} {currentUser.map(m=>m.Surname)}
+                    {currentUser.map(m => m.Name)} {currentUser.map(m => m.Patronymic)} {currentUser.map(m => m.Surname)}
                   </p>
                 </Typography>
               </ListItem>
@@ -140,20 +176,20 @@ function OtherUserPage(props) {
               <Typography variant="h6" gutterBottom component="div">
 
                 <ListItem>
-                  E-mail: {currentUser.map(m=>m.Email)}
+                  E-mail: {currentUser.map(m => m.Email)}
                 </ListItem>
                 <ListItem>
-                  City: {currentUser.map(m=>m.City)}
+                  City: {currentUser.map(m => m.City)}
                 </ListItem>
                 <ListItem>
-                  BirthDaty: {currentUser.map(m=>m.DateOfBirth)}
+                  BirthDaty: {currentUser.map(m => m.DateOfBirth)}
                 </ListItem>
               </Typography>
             </List>
 
+            {feed}
           </Box>
         </Box>
-
 
       </div>
       <Footer />

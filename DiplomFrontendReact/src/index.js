@@ -17,6 +17,7 @@ import ChatPage from './Pages/ChatPage';
 import FindPeoplePage from './Pages/FindPeoplePage';
 import FriendsPage from './Pages/FriendsPage'
 import OtherUserPage from './Pages/OtherUserPage'
+import NewsPage from './Pages/NewsPage';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 
@@ -32,6 +33,7 @@ root.render(
       <Route path="FindPeoplePage" element={<FindPeoplePage />} />
       <Route path="FriendsPage" element={<FriendsPage />} />
       <Route path="OtherUserPage/:id" element={<OtherUserPage />} />
+      <Route path="NewsPage" element={<NewsPage />} />
 
     </Routes>
   </BrowserRouter>
