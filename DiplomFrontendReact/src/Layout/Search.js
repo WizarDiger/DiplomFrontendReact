@@ -91,24 +91,6 @@ function Search({ details }) {
     }
   );
 
- const allchatswithstrangers = chatwithstrangers.filter(
-
-    person => {
-
-      return (
-
-        person
-          .Id
-          .toLowerCase()
-          .includes(myData.Id) ||
-        chatEntry
-          .reciever
-          .toLowerCase()
-          .includes(myData.Id)
-
-      );
-    }
-  );
   if (String(url) === "https://localhost:3000/ProductsPage/AllProducts") {
 
     filteredProducts = array.filter(
@@ -178,7 +160,40 @@ function Search({ details }) {
     setSearchField(e.target.value);
   };
 
+  for (var i = 0; i < chatwithstrangers.length; i++) {
 
+    let buffArray = myUsers.filter(
+
+      person => {
+
+        return (
+
+          person
+            .Id
+            .toLowerCase()
+            .includes(chatwithstrangers[i].sender) ||
+          person
+            .Id
+            .toLowerCase()
+            .includes(chatwithstrangers[i].reciever)
+
+        );
+      }
+    );
+    if (!allchatswithstrangers.includes(buffArray)) {
+      for (var j = 0; j < buffArray.length; j++) {
+        if (!allchatswithstrangers.includes(buffArray[j])) {
+          for (var k = 0; k < filteredPersons.length; k++) {
+
+            if (!filteredPersons[0].Name.includes(buffArray[j].Name)) {              
+              allchatswithstrangers.push(buffArray[j]);
+            }
+          }
+        }
+      }
+    }
+  }
+  console.log(allchatswithstrangers);
   function searchList() {
     if (String(url) === "https://localhost:3000/ProductsPage/MyProducts") {
       return (
@@ -195,11 +210,12 @@ function Search({ details }) {
       );
     }
     else {
-       var allchats = filteredPersons.concat(chatwithstrangers);
-       console.log(allchats);
+      console.log(filteredPersons.concat(allchatswithstrangers))
+      var buff = filteredPersons.concat(allchatswithstrangers);
+      var allDialogs = [...new Set(buff)];
       return (
         <Scroll>
-          <SearchList filteredPersons={filteredPersons.concat(chatwithstrangers)} />
+          <SearchList filteredPersons={allDialogs} />
         </Scroll>
       );
     }
