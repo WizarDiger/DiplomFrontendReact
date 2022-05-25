@@ -40,7 +40,7 @@ function LeftMenu(props) {
               <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <FeedIcon/>
+                    <FeedIcon />
                   </ListItemIcon>
                   <ListItemText primary="Новости" />
                 </ListItemButton>
@@ -75,14 +75,17 @@ function LeftMenu(props) {
                 <ListItemText primary="Фотографии" />
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <ShoppingCartIcon />
-                </ListItemIcon>
-                <ListItemText primary="Товары" />
-              </ListItemButton>
-            </ListItem>
+            <Link to={'/ProductsPage/AllProducts'} style={{ textDecoration: 'none', color: 'inherit' }}>
+
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <ShoppingCartIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Товары" />
+                </ListItemButton>
+              </ListItem>
+            </Link>
             <Link to={'/FindPeoplePage'} style={{ textDecoration: 'none', color: 'inherit' }}>
               <ListItem disablePadding>
                 <ListItemButton>
@@ -96,7 +99,7 @@ function LeftMenu(props) {
           </List>
         </nav>
         <Divider />
-       
+
       </Box>
     </div>
   )

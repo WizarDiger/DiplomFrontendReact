@@ -64,13 +64,18 @@ function RegisterPage(props) {
 
             .then(res => res.json())
             .then((result) => {
-
                 if (JSON.stringify(result) === '1') {
-                 
+                    
                     navigate('/LoginPage')
+                }
+                else
+                {
+
+                    alert(result)  
                 }
             },
                 (error) => {
+                    
                     alert(error);
                 })
     }

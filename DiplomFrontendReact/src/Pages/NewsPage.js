@@ -55,6 +55,8 @@ function NewsPage(props) {
     const [open, setOpen] = React.useState(false);
     const [myTitle, setTitle] = useState('')
     const [myDescription, setDescription] = useState('')
+    const [myPrice, setPrice] = useState('')
+    const [myAmount, setAmount] = useState('')
     const [myFeed, setFeed] = useState([])
     const [myFriends, setFriends] = useState([]);
     const handleClickOpen = () => {
@@ -98,6 +100,39 @@ function NewsPage(props) {
                 })
         setOpen(false);
     };
+
+    const handleAddProduct = () => {
+
+        fetch('https://localhost:7049/api/Products', {
+            method: 'POST',
+            headers:
+            {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    Title: myTitle,
+                    Description: myDescription,
+                    Price: myPrice,
+                    Amount: myAmount,
+                    SenderId: myData.Id
+                    
+                }
+            )
+        })
+
+            .then(res => res.json())
+            .then((result) => {
+
+                console.log(result);
+            },
+                (error) => {
+                    console.log(error);
+                })
+        setOpen(false);
+    };
+
     const getFriends = async () => {
         fetch('https://localhost:7049/api/ChatSearch', {
             method: 'GET',
@@ -122,27 +157,28 @@ function NewsPage(props) {
     );
     let feedData = [];
     for (var i = 0; i < filteredFriends.length; i++) {
-        
+
         let buffArray = myFeed.filter(
             post => {
                 return (
                     post.sender.includes(filteredFriends[i].friend) ||
                     post.sender.includes(filteredFriends[i].host) ||
                     post.sender.includes(myData.Id)
-                    
                 )
             }
         )
-        for (var j =0 ; j< buffArray.length; j++)
-        {
-            feedData.push(buffArray[j]);
+        for (var j = 0; j < buffArray.length; j++) {
+            if (!feedData.includes(buffArray[j])) {
+
+                feedData.push(buffArray[j]);
+            }
         }
 
     }
-    
+    feedData.reverse();
     let feed = [];
     if (feedData[0] !== undefined) {
-     
+
         feed = feedData
             .map(m => <Post
                 key={Date.now() * Math.random()}
@@ -153,8 +189,7 @@ function NewsPage(props) {
                 imagename={m.imagename}
             />);
     }
-    else
-    {
+    else {
         feed = ["Сейчас постов нет"];
     }
 
@@ -259,6 +294,56 @@ function NewsPage(props) {
                                     <DialogActions>
                                         <Button onClick={handleClose}>Отмена</Button>
                                         <Button onClick={handlePublish}>Опубликовать</Button>
+                                    </DialogActions>
+                                </Dialog>
+                                <Button style={{ marginLeft: "45%" }} onClick={handleClickOpen} variant="contained">Выставить товар</Button>
+                                <Dialog open={open} onClose={handleClose}>
+                                    <DialogTitle>Создать пост</DialogTitle>
+                                    <DialogContent>
+                                        <TextField value={myTitle} onChange={(e) => setTitle(e.target.value)}
+                                            autoFocus
+                                            margin="dense"
+                                            id="name"
+                                            label="Название"
+                                            type="email"
+                                            fullWidth
+                                            variant="standard"
+                                        />
+                                        <TextField value={myDescription} onChange={(e) => setDescription(e.target.value)}
+                                            autoFocus
+                                            margin="dense"
+                                            id="name"
+                                            label="Описание"
+                                            type="email"
+                                            fullWidth
+                                            variant="standard"
+                                        />
+                                        <TextField value={myPrice} onChange={(e) => setPrice(e.target.value)}
+                                            autoFocus
+                                            margin="dense"
+                                            id="name"
+                                            label="Цена"
+                                            type="email"
+                                            fullWidth
+                                            variant="standard"
+                                        />
+                                        <TextField value={myAmount} onChange={(e) => setAmount(e.target.value)}
+                                            autoFocus
+                                            margin="dense"
+                                            id="name"
+                                            label="Количество"
+                                            type="email"
+                                            fullWidth
+                                            variant="standard"
+                                        />
+                                        <p>
+                                            <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handleChange} />
+                                        </p>
+
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={handleClose}>Отмена</Button>
+                                        <Button onClick={handleAddProduct}>Выставить</Button>
                                     </DialogActions>
                                 </Dialog>
                             </ListItem>
