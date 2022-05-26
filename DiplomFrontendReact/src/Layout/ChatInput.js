@@ -140,7 +140,7 @@ const ChatInput = (props) => {
                 <Grid style={{ verticalAlign: 'end' }} container component={Paper} >
 
                     <Grid item xs={90}>
-                        <Paper style={{ maxHeight: 700, overflow: 'auto' }}>
+                        <Paper style={{height: 700, maxHeight: 700, overflow: 'auto' }}>
 
                             <List>
                                 {chat}

@@ -209,13 +209,23 @@ function Search({ details }) {
         </Scroll>
       );
     }
-    else {
+    console.log(url);
+    if (String(url).includes("https://localhost:3000/ChatPage")) {
+     
       console.log(filteredPersons.concat(allchatswithstrangers))
       var buff = filteredPersons.concat(allchatswithstrangers);
       var allDialogs = [...new Set(buff)];
       return (
         <Scroll>
           <SearchList filteredPersons={allDialogs} />
+        </Scroll>
+      );
+    }
+    else
+    {
+      return (
+        <Scroll>
+          <SearchList filteredPersons={filteredPersons} />
         </Scroll>
       );
     }
