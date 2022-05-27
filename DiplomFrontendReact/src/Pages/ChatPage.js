@@ -72,7 +72,7 @@ const ChatPage = () => {
             });
 
     }
-  
+
     const savedChat = loadedChat.filter(
 
         chat => {
@@ -80,20 +80,20 @@ const ChatPage = () => {
                 chat
                     .sender
                     .includes(myCurrentUser.Id) &&
-                    chat
-                        .reciever
-                        .includes(currentChatFriendId) ||
+                chat
+                    .reciever
+                    .includes(currentChatFriendId) ||
                 chat
                     .reciever
                     .includes(myCurrentUser.Id) &&
-                    chat
-                        .sender
-                        .includes(currentChatFriendId)
+                chat
+                    .sender
+                    .includes(currentChatFriendId)
             );
 
         }
     );
-  
+
     const getFriends = async () => {
         fetch('https://localhost:7049/api/ChatSearch', {
             method: 'GET',
@@ -133,12 +133,12 @@ const ChatPage = () => {
         getFriends();
         getAllUsers();
         getChat();
-        
+
     }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
         setChat(savedChat);
-    },[currentChatFriendId])
+    }, [currentChatFriendId])
 
     const sendMessage = async (user, message) => {
         const chatMessage = {

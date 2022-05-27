@@ -68,7 +68,7 @@ function MainPage(props) {
       )
     }
   )
-
+ 
 
   const getFeed = async () => {
     fetch('https://localhost:7049/api/Feed', {
@@ -102,11 +102,13 @@ function MainPage(props) {
     getUserData();
     getFeed();
     getFriends();
+    console.log(myData);
     var cookie = getCookie('jwt');
     if (String(cookie) === "null") {
       navigate('/LoginPage'
       )
     }
+   
   }, [""]);
 
   let navigate = useNavigate();

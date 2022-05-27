@@ -53,6 +53,7 @@ function NewsPage(props) {
     const [myData, setData] = useState("");
     const [myPicture, setPicture] = useState("");
     const [open, setOpen] = React.useState(false);
+    const [openProduct, setOpenProduct] = React.useState(false);
     const [myTitle, setTitle] = useState('')
     const [myDescription, setDescription] = useState('')
     const [myPrice, setPrice] = useState('')
@@ -65,6 +66,13 @@ function NewsPage(props) {
 
     const handleClose = () => {
         setOpen(false);
+    };
+    const handleClickOpenProduct = () => {
+        setOpenProduct(true);
+    };
+
+    const handleCloseProduct = () => {
+        setOpenProduct(false);
     };
     const handlePublish = () => {
 
@@ -117,7 +125,7 @@ function NewsPage(props) {
                     Price: myPrice,
                     Amount: myAmount,
                     SenderId: myData.Id
-                    
+
                 }
             )
         })
@@ -130,7 +138,7 @@ function NewsPage(props) {
                 (error) => {
                     console.log(error);
                 })
-        setOpen(false);
+        setOpenProduct(false);
     };
 
     const getFriends = async () => {
@@ -182,6 +190,8 @@ function NewsPage(props) {
         feed = feedData
             .map(m => <Post
                 key={Date.now() * Math.random()}
+                id={m.id}
+                sender={m.sender}
                 sendername={m.sendername}
                 title={m.title}
                 sendtime={m.sendtime}
@@ -296,9 +306,9 @@ function NewsPage(props) {
                                         <Button onClick={handlePublish}>Опубликовать</Button>
                                     </DialogActions>
                                 </Dialog>
-                                <Button style={{ marginLeft: "45%" }} onClick={handleClickOpen} variant="contained">Выставить товар</Button>
-                                <Dialog open={open} onClose={handleClose}>
-                                    <DialogTitle>Создать пост</DialogTitle>
+                                <Button style={{ marginLeft: "45%" }} onClick={handleClickOpenProduct} variant="contained">Выставить товар</Button>
+                                <Dialog open={openProduct} onClose={handleCloseProduct}>
+                                    <DialogTitle>Выставить товар</DialogTitle>
                                     <DialogContent>
                                         <TextField value={myTitle} onChange={(e) => setTitle(e.target.value)}
                                             autoFocus
@@ -342,7 +352,7 @@ function NewsPage(props) {
 
                                     </DialogContent>
                                     <DialogActions>
-                                        <Button onClick={handleClose}>Отмена</Button>
+                                        <Button onClick={handleCloseProduct}>Отмена</Button>
                                         <Button onClick={handleAddProduct}>Выставить</Button>
                                     </DialogActions>
                                 </Dialog>

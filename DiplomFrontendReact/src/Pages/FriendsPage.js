@@ -34,11 +34,7 @@ function getCookie(name) {
 const FriendsPage = () => {
 
     const [user, setUser] = useState('');
-
-
     const [myData, setData] = useState("");
-
-
     const [myUsers, setUsers] = useState([]);
     const [myFriends, setFriends] = useState([]);
 
@@ -74,9 +70,6 @@ const FriendsPage = () => {
                 person
                     .host
                     .includes(myData.Id)
-                    
-                    
-
             );
         }
     );
@@ -94,11 +87,6 @@ const FriendsPage = () => {
 
         friendsData.push(buffArray[0]);
     }
-
-
- 
-
-
 
     function getCookie(name) {
         var dc = document.cookie;

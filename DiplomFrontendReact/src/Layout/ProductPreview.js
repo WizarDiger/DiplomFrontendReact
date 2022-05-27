@@ -107,7 +107,7 @@ function ProductPreview({ product, currentUserId }) {
                             </ListItem>
                             <ListItem>
                               <Typography variant="h6" gutterBottom component="div">
-                                Количество: {product.amount} 
+                                Количество: {product.amount}
                               </Typography>
                             </ListItem>
                             <ListItem>
@@ -116,7 +116,7 @@ function ProductPreview({ product, currentUserId }) {
                               </Typography>
                             </ListItem>
                             <ListItem>
-                               <Link to={'/ChatPage/'+product.senderid} style={{ textDecoration: 'none', color: 'inherit' }}>
+                              <Link to={'/ChatPage/' + product.senderid} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 <Button variant='contained'>
                                   Связаться с продавцом
                                 </Button>
@@ -145,9 +145,11 @@ function ProductPreview({ product, currentUserId }) {
                 </b>
               </ListItem>
               <ListItem>
-                <Button variant='contained'>
-                  Связаться с продавцом
-                </Button>
+                <Link to={'/ChatPage/' + product.senderid} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <Button variant='contained'>
+                    Связаться с продавцом
+                  </Button>
+                </Link>
               </ListItem>
             </List>
           </Box>
