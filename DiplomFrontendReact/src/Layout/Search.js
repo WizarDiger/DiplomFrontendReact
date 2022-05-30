@@ -137,7 +137,7 @@ function Search({ details }) {
     );
   }
   if (String(url).substring(0, 35) !== "https://localhost:3000/ProductsPage") {
-
+    console.log(array)
     filteredPersons = array.filter(
 
       person => {

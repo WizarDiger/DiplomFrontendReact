@@ -49,8 +49,8 @@ namespace DiplomBackendASPNet.Controllers
         [HttpPost]
         public JsonResult SaveMessage(Product product)
         {
-            string query = $@"INSERT INTO ""Products"" (title, description, price, amount, senderid)
-               VALUES(@title,@description,@price,@amount,@senderid)";
+            string query = $@"INSERT INTO ""Products"" (title, description, price, amount, senderid, sendername, imagepath)
+               VALUES(@title,@description,@price,@amount,@senderid,@sendername,@imagepath)";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
             NpgsqlDataReader myReader;
@@ -64,6 +64,8 @@ namespace DiplomBackendASPNet.Controllers
                     myCommand.Parameters.AddWithValue("@price", product.Price);
                     myCommand.Parameters.AddWithValue("@amount", product.Amount);
                     myCommand.Parameters.AddWithValue("@senderid", product.SenderId);
+                    myCommand.Parameters.AddWithValue("@sendername", product.SenderName);
+                    myCommand.Parameters.AddWithValue("@imagepath", product.ImagePath);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -73,6 +75,29 @@ namespace DiplomBackendASPNet.Controllers
             }
 
             return new JsonResult(table);
+        }
+        [HttpDelete("{id}")]
+        public JsonResult Delete(int id)
+        {
+            string query = @"delete from ""Products""
+	        where id = @id";
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
+            NpgsqlDataReader myReader;
+            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@id", id);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+
+                }
+            }
+            return new JsonResult("Deleted Succesfully");
         }
     }
 }

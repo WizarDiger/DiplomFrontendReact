@@ -125,11 +125,11 @@ namespace DiplomBackendASPNet.Controllers
             return new JsonResult("Updated Succesfully");
         }
 
-        [HttpDelete("{id}")]
-        public JsonResult Delete(int id)
+        [HttpDelete("{Id}")]
+        public JsonResult Delete(string Id)
         {
-            string query = @"delete from Пользователь
-	        where id = @id";
+            string query = @"delete from ""AspNetUsers""
+	        where ""Id"" = @Id";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
             NpgsqlDataReader myReader;
@@ -138,7 +138,7 @@ namespace DiplomBackendASPNet.Controllers
                 myCon.Open();
                 using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@id", id);                  
+                    myCommand.Parameters.AddWithValue("@Id", Id);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();

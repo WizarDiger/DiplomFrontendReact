@@ -3,6 +3,8 @@ using DiplomBackendASPNet.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Npgsql;
+using System.Data;
 
 namespace DiplomBackendASPNet.Controllers
 {
@@ -29,7 +31,28 @@ namespace DiplomBackendASPNet.Controllers
             this.roleManager = roleManager;
         }
 
-       
+        [HttpGet]
+        public JsonResult GetAll()
+        {
+            string query = $@"SELECT * FROM ""AspNetUserRoles""";
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
+            NpgsqlDataReader myReader;
+            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
+                {
+
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+
+                }
+            }
+            return new JsonResult(table);
+        }
         [HttpPost]
         public async Task<JsonResult> Register(User user)
         {

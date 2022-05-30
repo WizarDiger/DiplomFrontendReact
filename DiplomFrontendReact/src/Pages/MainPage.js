@@ -68,7 +68,7 @@ function MainPage(props) {
       )
     }
   )
- 
+
 
   const getFeed = async () => {
     fetch('https://localhost:7049/api/Feed', {
@@ -108,7 +108,7 @@ function MainPage(props) {
       navigate('/LoginPage'
       )
     }
-   
+
   }, [""]);
 
   let navigate = useNavigate();
@@ -159,12 +159,14 @@ function MainPage(props) {
           <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
 
             <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
-            <label htmlFor="contained-button-file">
-              <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handleChange} />
+            <Box paddingTop={3}>
+              <label htmlFor="contained-button-file">
+                <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handleChange} />
+              </label>
               <Button variant="contained" component="span">
                 Upload
               </Button>
-            </label>
+            </Box>
             <Box bgcolor={'white'} borderRadius={2} marginTop={'5%'} paddingTop={'15px'} paddingBottom={'15px'}>
               <Box marginLeft={'25px'} marginRight={'25px'}>
 

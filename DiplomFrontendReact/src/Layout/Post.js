@@ -1,5 +1,6 @@
 import { Box, Button, List, ListItem, Typography } from '@mui/material';
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component, useState, useEffect, useReducer } from 'react';
+import { Link } from 'react-router-dom';
 
 const Post = (props) => {
 
@@ -7,7 +8,7 @@ const Post = (props) => {
     const [myData, setData] = useState("");
     const [isAdmin, setIsAdmin] = useState(false);
     const [isModerator, setIsModerator] = useState(false);
-
+    const [refreshcounter, setRefresh] = useReducer(x => x + 1, 0);
     const getUserData = async () => {
         fetch('https://localhost:7049/api/Login', {
             method: 'GET',
@@ -124,7 +125,7 @@ const Post = (props) => {
                 (error) => {
                     console.log(error)
                 })
-                window.location.reload();
+                setRefresh();
     }
     useEffect(() => {
         
@@ -152,7 +153,7 @@ const Post = (props) => {
                     </ListItem>
                     <ListItem>
                         <Typography variant="body1" gutterBottom component="div">
-                            Опубликовано {props.sendername} в {props.sendtime.substring(0, 16)}
+                            Опубликовано  <Link to={'/OtherUserPage/' + props.sender} style={{ textDecoration: 'none', color: 'inherit' }}> {props.sendername}</Link> в {props.sendtime.substring(0, 16)}
                         </Typography>
                     </ListItem>
                     <ListItem >

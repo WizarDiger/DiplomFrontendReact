@@ -60,6 +60,7 @@ function NewsPage(props) {
     const [myAmount, setAmount] = useState('')
     const [myFeed, setFeed] = useState([])
     const [myFriends, setFriends] = useState([]);
+    const [myStaff, setAllStaff] = useState([]);
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -124,7 +125,9 @@ function NewsPage(props) {
                     Description: myDescription,
                     Price: myPrice,
                     Amount: myAmount,
-                    SenderId: myData.Id
+                    SenderId: myData.Id,
+                    SenderName: myData.Name + " " + myData.Surname,
+                    ImagePath: './2374-ed4_wide.jpg'
 
                 }
             )
@@ -152,6 +155,17 @@ function NewsPage(props) {
             })
 
     }
+    const getAllStaff = async () => {
+        fetch('https://localhost:7049/api/Moderator', {
+          method: 'GET',
+          credentials: 'include',
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setAllStaff(data)
+          })
+    
+      }
     const filteredFriends = myFriends.filter(
 
         person => {
@@ -182,6 +196,24 @@ function NewsPage(props) {
             }
         }
 
+    }
+    for (var i = 0; i < myStaff.length; i++)
+    {
+   
+        let buffArray = myFeed.filter(
+            post => {
+                return (
+                    post.sender.includes(myStaff[i].UserId)
+                )
+            }
+        )
+       
+        for (var j = 0; j < buffArray.length; j++) {
+            if (!feedData.includes(buffArray[j])) {
+
+                feedData.push(buffArray[j]);
+            }
+        }
     }
     feedData.reverse();
     let feed = [];
@@ -230,6 +262,7 @@ function NewsPage(props) {
         getUserData();
         getFeed();
         getFriends();
+        getAllStaff();
         var cookie = getCookie('jwt');
         if (String(cookie) === "null") {
             navigate('/LoginPage'

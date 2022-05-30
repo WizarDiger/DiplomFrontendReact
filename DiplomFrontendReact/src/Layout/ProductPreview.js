@@ -18,6 +18,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import productimg from './2374-ed4_wide.jpg'
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -28,6 +29,9 @@ function ProductPreview({ product, currentUserId }) {
   const [open, setOpen] = React.useState(false);
   const [FriendList, setFriend] = useState("");
   const [isFriend, setCheckFriend] = useState(0);
+  const [isUserAdmin, setIsAdmin] = useState(false);
+  const [myData, setData] = useState("");
+  const [isUserModerator, setIsModerator] = useState(false);
 
   const theme = createTheme({
     status: {
@@ -65,16 +69,241 @@ function ProductPreview({ product, currentUserId }) {
       })
 
   }
+  const getUserData = async () => {
+    fetch('https://localhost:7049/api/Login', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data)
+      });
 
+  }
+
+
+
+  if (myData.Login !== undefined) {
+
+
+    const isAdmin = async () => {
+
+      fetch('https://localhost:7049/api/Roles', {
+
+        method: 'POST',
+        credentials: 'include',
+
+        headers:
+        {
+          'Access-Control-Allow-Origin': 'https://localhost:3000/',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+          {
+            login: 1,
+            password: 1,
+            email: '1',
+            name: 1,
+            surname: '1',
+            patronymic: '1',
+            dateOfBirth: '1',
+            city: '1',
+            UserName: myData.Login
+          }
+        )
+      })
+
+        .then(res => res.json())
+        .then((result) => {
+          setIsAdmin(result);
+        },
+          (error) => {
+
+          })
+    }
+    isAdmin();
+
+    const isModerator = async () => {
+
+      fetch('https://localhost:7049/api/Moderator', {
+
+        method: 'POST',
+        credentials: 'include',
+
+        headers:
+        {
+          'Access-Control-Allow-Origin': 'https://localhost:3000/',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+          {
+            login: 1,
+            password: 1,
+            email: '1',
+            name: 1,
+            surname: '1',
+            patronymic: '1',
+            dateOfBirth: '1',
+            city: '1',
+            UserName: myData.Login
+          }
+        )
+      })
+
+        .then(res => res.json())
+        .then((result) => {
+          setIsModerator(result);
+        },
+          (error) => {
+
+          })
+    }
+    isModerator();
+
+  }
+
+  const handleDelete = async () => {
+
+    fetch(`https://localhost:7049/api/Products/${product.id}`, {
+
+      method: 'DELETE',
+      credentials: 'include',
+
+      headers:
+      {
+        'Access-Control-Allow-Origin': 'https://localhost:3000/',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+
+      )
+    })
+
+      .then(res => res.json())
+      .then((result) => {
+        console.log(result);
+        alert('Товар успешно удалён')
+      },
+        (error) => {
+          console.log(error)
+
+        })
+    window.location.reload()
+    setRefresh();
+  }
   useEffect(() => {
-
+    getUserData();
     getFriends();
+
   }, [refreshcounter]);
 
 
 
 
+  if (isUserModerator || isUserAdmin || myData.Id === product.senderid) {
 
+
+    return (
+      <Box display={'inline-block'} width={'30%'}>
+
+        <List>
+          <ListItem>
+
+            <Box marginLeft={'10%'} width='100%'>
+              <List>
+                <ListItem>
+                  <Button style={{ width: '100%', justifyContent: "flex-start", textTransform: 'none', fontSize: '25px' }} variant="theme" onClick={handleClickOpen} >{product.title}</Button>
+                  <Dialog maxWidth={'70%'} open={open} onClose={handleClose}>
+                    <DialogTitle> <b>{product.title}</b></DialogTitle>
+                    <DialogContent>
+                      <Box>
+                        <List>
+                          <ListItem>
+                            <img src={productimg} width={'400px'} height={'400px'}>
+
+                            </img>
+                            <List>
+                              <ListItem>
+                                <Typography variant="h4" gutterBottom component="div">
+
+                                  {product.title}
+                                </Typography>
+
+                              </ListItem>
+                              <ListItem>
+                                {product.description}
+                              </ListItem>
+                              <ListItem>
+                                <Typography variant="h6" gutterBottom component="div">
+                                  Количество: {product.amount}
+                                </Typography>
+                              </ListItem>
+                              <ListItem>
+                                <Typography variant="h4" gutterBottom component="div">
+                                  Цена: {product.price} ₽
+                                </Typography>
+                              </ListItem>
+                              <ListItem>
+                                <Typography variant="h4" gutterBottom component="div">
+                                  Продавец: {product.sendername}
+                                </Typography>
+                              </ListItem>
+                              <ListItem>
+                                <Link to={'/ChatPage/' + product.senderid} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                  <Button variant='contained'>
+                                    Связаться с продавцом
+                                  </Button>
+                                </Link>
+                              </ListItem>
+                            </List>
+                          </ListItem>
+                        </List>
+                      </Box>
+
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClose}>Отмена</Button>
+
+                    </DialogActions>
+                  </Dialog>
+
+                </ListItem>
+                <ListItem>
+
+                  <img src={dstu} style={{ marginLeft: '10%', width: '200px', height: 200 }} />
+                </ListItem>
+                <ListItem>
+                  <b>
+                    Цена: {product.price}
+                  </b>
+                </ListItem>
+                <ListItem>
+                  <Link to={'/ChatPage/' + product.senderid} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Button variant='contained'>
+                      Связаться с продавцом
+                    </Button>
+                  </Link>
+                </ListItem>
+                <ListItem style={{ marginLeft: '15%' }}>
+
+                  <Button onClick={handleDelete} variant='outlined'>
+                    Удалить товар
+                  </Button>
+
+                </ListItem>
+              </List>
+            </Box>
+          </ListItem>
+        </List>
+
+
+      </Box >
+    );
+
+  }
   return (
     <Box display={'inline-block'} width={'30%'}>
 
@@ -91,7 +320,7 @@ function ProductPreview({ product, currentUserId }) {
                     <Box>
                       <List>
                         <ListItem>
-                          <img src={dstu} width={'400px'} height={'400px'}>
+                          <img src={productimg} width={'400px'} height={'400px'}>
 
                           </img>
                           <List>
@@ -113,6 +342,11 @@ function ProductPreview({ product, currentUserId }) {
                             <ListItem>
                               <Typography variant="h4" gutterBottom component="div">
                                 Цена: {product.price} ₽
+                              </Typography>
+                            </ListItem>
+                            <ListItem>
+                              <Typography variant="h4" gutterBottom component="div">
+                                Продавец: {product.sendername}
                               </Typography>
                             </ListItem>
                             <ListItem>
@@ -159,8 +393,6 @@ function ProductPreview({ product, currentUserId }) {
 
     </Box >
   );
-
-
 
 }
 

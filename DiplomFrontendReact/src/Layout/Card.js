@@ -170,32 +170,7 @@ function Card({ person, currentUserId }) {
           alert(error);
         })
 
-    fetch('https://localhost:7049/api/AddFriend', {
-
-      method: 'DELETE',
-      credentials: 'include',
-
-      headers:
-      {
-
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(
-        {
-          Host: person.Id,
-          Friend: currentUserId
-        }
-      )
-    })
-
-      .then(res => res.json())
-      .then((result) => {
-
-      },
-        (error) => {
-          alert(error);
-        })
+    
 
     setRefresh();
   }
