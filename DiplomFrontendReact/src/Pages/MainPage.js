@@ -54,6 +54,7 @@ function MainPage(props) {
     })
       .then((response) => response.json())
       .then((data) => {
+        data.DateOfBirth = data.DateOfBirth.toString().substring(0,10);
         setData(data)
       });
 

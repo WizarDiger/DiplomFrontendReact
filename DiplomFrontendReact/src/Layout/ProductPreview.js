@@ -2,7 +2,7 @@ import React, { Component, useState, useEffect, useRef, useReducer } from 'react
 import { useNavigate } from 'react-router-dom';
 
 import dstu from './dstu.jpg'
-import { Box, fontSize, textAlign } from '@mui/system';
+import { Box, fontSize, height, textAlign } from '@mui/system';
 import { List, ListItem } from '@mui/material';
 import { Typography } from '@mui/material';
 import { Avatar } from '@mui/material';
@@ -32,7 +32,7 @@ function ProductPreview({ product, currentUserId }) {
   const [isUserAdmin, setIsAdmin] = useState(false);
   const [myData, setData] = useState("");
   const [isUserModerator, setIsModerator] = useState(false);
-
+  const [myStaff, setStaff] = useState([]);
   const theme = createTheme({
     status: {
       danger: '#e53e3e',
@@ -80,90 +80,17 @@ function ProductPreview({ product, currentUserId }) {
       });
 
   }
-
-
-
-  if (myData.Login !== undefined) {
-
-
-    const isAdmin = async () => {
-
-      fetch('https://localhost:7049/api/Roles', {
-
-        method: 'POST',
-        credentials: 'include',
-
-        headers:
-        {
-          'Access-Control-Allow-Origin': 'https://localhost:3000/',
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(
-          {
-            login: 1,
-            password: 1,
-            email: '1',
-            name: 1,
-            surname: '1',
-            patronymic: '1',
-            dateOfBirth: '1',
-            city: '1',
-            UserName: myData.Login
-          }
-        )
+  const getStaff = async () => {
+    fetch('https://localhost:7049/api/Moderator', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setStaff(data)
       })
-
-        .then(res => res.json())
-        .then((result) => {
-          setIsAdmin(result);
-        },
-          (error) => {
-
-          })
-    }
-    isAdmin();
-
-    const isModerator = async () => {
-
-      fetch('https://localhost:7049/api/Moderator', {
-
-        method: 'POST',
-        credentials: 'include',
-
-        headers:
-        {
-          'Access-Control-Allow-Origin': 'https://localhost:3000/',
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(
-          {
-            login: 1,
-            password: 1,
-            email: '1',
-            name: 1,
-            surname: '1',
-            patronymic: '1',
-            dateOfBirth: '1',
-            city: '1',
-            UserName: myData.Login
-          }
-        )
-      })
-
-        .then(res => res.json())
-        .then((result) => {
-          setIsModerator(result);
-        },
-          (error) => {
-
-          })
-    }
-    isModerator();
 
   }
-
   const handleDelete = async () => {
 
     fetch(`https://localhost:7049/api/Products/${product.id}`, {
@@ -194,10 +121,28 @@ function ProductPreview({ product, currentUserId }) {
     window.location.reload()
     setRefresh();
   }
+
+  const defineRoles = async () => {     
+    for (var i = 0; i < myStaff.length; i++) {
+      
+      if (myStaff[i].UserId == myData.Id && myStaff[i].RoleId == "372292a0-6835-482e-9c80-f945af6bdcfd") {
+        setIsModerator(true);
+      }
+      if (myStaff[i].UserId == myData.Id && myStaff[i].RoleId == "ac8ecd46-fc40-47f6-9473-27aa9adee354") {
+        setIsAdmin(true);
+      }
+    }
+   
+  }
   useEffect(() => {
     getUserData();
     getFriends();
-
+    getStaff();
+    defineRoles();
+    if (myStaff.length === 0 || myData.Id === undefined)
+    {
+      setRefresh();
+    }
   }, [refreshcounter]);
 
 
@@ -215,7 +160,7 @@ function ProductPreview({ product, currentUserId }) {
             <Box marginLeft={'10%'} width='100%'>
               <List>
                 <ListItem>
-                  <Button style={{ width: '100%', justifyContent: "flex-start", textTransform: 'none', fontSize: '25px' }} variant="theme" onClick={handleClickOpen} >{product.title}</Button>
+                  <Button style={{ width: '100%', justifyContent: "flex-start", textTransform: 'none', fontSize: '25px', height: '70px' }} variant="theme" onClick={handleClickOpen} >{product.title}</Button>
                   <Dialog maxWidth={'70%'} open={open} onClose={handleClose}>
                     <DialogTitle> <b>{product.title}</b></DialogTitle>
                     <DialogContent>
@@ -313,7 +258,7 @@ function ProductPreview({ product, currentUserId }) {
           <Box marginLeft={'10%'} width='100%'>
             <List>
               <ListItem>
-                <Button style={{ width: '100%', justifyContent: "flex-start", textTransform: 'none', fontSize: '25px' }} variant="theme" onClick={handleClickOpen} >{product.title}</Button>
+                <Button style={{ width: '100%', justifyContent: "flex-start", textTransform: 'none', fontSize: '25px', height: '70px'}} variant="theme" onClick={handleClickOpen} >{product.title}</Button>
                 <Dialog maxWidth={'70%'} open={open} onClose={handleClose}>
                   <DialogTitle> <b>{product.title}</b></DialogTitle>
                   <DialogContent>

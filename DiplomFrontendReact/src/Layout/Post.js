@@ -1,7 +1,7 @@
 import { Box, Button, List, ListItem, Typography } from '@mui/material';
 import React, { Component, useState, useEffect, useReducer } from 'react';
 import { Link } from 'react-router-dom';
-
+import FavoriteIcon from '@mui/icons-material/Favorite';
 const Post = (props) => {
 
 
@@ -56,7 +56,7 @@ const Post = (props) => {
                     setIsAdmin(result);
                 },
                     (error) => {
-                        alert('Failed');
+                        console.log(error);
                     })
         }
         isAdmin();
@@ -94,7 +94,7 @@ const Post = (props) => {
                     setIsModerator(result);
                 },
                     (error) => {
-                        alert('Failed');
+                        console.log(error);
                     })
         }
         isModerator();
@@ -120,15 +120,15 @@ const Post = (props) => {
             .then(res => res.json())
             .then((result) => {
                 console.log(result);
-                
+
             },
                 (error) => {
                     console.log(error)
                 })
-                setRefresh();
+        setRefresh();
     }
     useEffect(() => {
-        
+
         getUserData();
 
     }, [""]);
@@ -168,6 +168,12 @@ const Post = (props) => {
                         <p>
                             {props.description}
                         </p>
+                    </ListItem>
+                    <ListItem>
+                        <FavoriteIcon />
+                        <Box marginLeft={'10px'} marginRight={'3px'} width={'100%'} height={'60px'} bgcolor={'white'} borderRadius={1}>
+                            1
+                        </Box>
                     </ListItem>
                 </List>
             </Box>

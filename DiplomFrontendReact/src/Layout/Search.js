@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Scroll from './Scroll';
 import SearchList from './SearchList';
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Input, Typography } from '@mui/material';
 import { TextField } from '@mui/material';
 import { Paper } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -22,7 +22,11 @@ function Search({ details }) {
   const [myData, setData] = useState("");
   const [myChat, setChat] = useState([]);
   const [myUsers, setUsers] = useState([]);
-
+  const [openProduct, setOpenProduct] = React.useState(false);
+  const [myTitle, setTitle] = useState('')
+  const [myDescription, setDescription] = useState('')
+  const [myPrice, setPrice] = useState('')
+  const [myAmount, setAmount] = useState('')
   var filteredProducts = [];
   var filteredPersons = [];
   var filteredMyProducts = [];
@@ -137,7 +141,7 @@ function Search({ details }) {
     );
   }
   if (String(url).substring(0, 35) !== "https://localhost:3000/ProductsPage") {
-    console.log(array)
+   
     filteredPersons = array.filter(
 
       person => {
@@ -185,7 +189,7 @@ function Search({ details }) {
         if (!allchatswithstrangers.includes(buffArray[j])) {
           for (var k = 0; k < filteredPersons.length; k++) {
 
-            if (!filteredPersons[0].Name.includes(buffArray[j].Name)) {              
+            if (!filteredPersons[0].Name.includes(buffArray[j].Name)) {
               allchatswithstrangers.push(buffArray[j]);
             }
           }
@@ -193,7 +197,7 @@ function Search({ details }) {
       }
     }
   }
-  console.log(allchatswithstrangers);
+  
   function searchList() {
     if (String(url) === "https://localhost:3000/ProductsPage/MyProducts") {
       return (
@@ -209,10 +213,9 @@ function Search({ details }) {
         </Scroll>
       );
     }
-    console.log(url);
     if (String(url).includes("https://localhost:3000/ChatPage")) {
-     
-      console.log(filteredPersons.concat(allchatswithstrangers))
+
+      
       var buff = filteredPersons.concat(allchatswithstrangers);
       var allDialogs = [...new Set(buff)];
       return (
@@ -221,8 +224,7 @@ function Search({ details }) {
         </Scroll>
       );
     }
-    else
-    {
+    else {
       return (
         <Scroll>
           <SearchList filteredPersons={filteredPersons} />
@@ -231,8 +233,48 @@ function Search({ details }) {
     }
   }
 
+  const handleAddProduct = () => {
 
+    fetch('https://localhost:7049/api/Products', {
+      method: 'POST',
+      headers:
+      {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+        {
+          Title: myTitle,
+          Description: myDescription,
+          Price: myPrice,
+          Amount: myAmount,
+          SenderId: myData.Id,
+          SenderName: myData.Name + " " + myData.Surname,
+          ImagePath: './2374-ed4_wide.jpg'
 
+        }
+      )
+    })
+
+      .then(res => res.json())
+      .then((result) => {
+
+        console.log(result);
+      },
+        (error) => {
+          console.log(error);
+        })
+    setOpenProduct(false);
+    window.location.reload()
+  };
+
+  const handleClickOpenProduct = () => {
+    setOpenProduct(true);
+  };
+
+  const handleCloseProduct = () => {
+    setOpenProduct(false);
+  };
 
   if (String(url) === "https://localhost:3000/ProductsPage/AllProducts") {
 
@@ -256,6 +298,56 @@ function Search({ details }) {
               <Button style={{ marginLeft: '2%' }} variant='outlined'>Мои товары</Button>
             </Link>
 
+            <Button style={{ marginLeft: "2%" }} onClick={handleClickOpenProduct} variant="contained">Выставить товар</Button>
+            <Dialog open={openProduct} onClose={handleCloseProduct}>
+              <DialogTitle>Выставить товар</DialogTitle>
+              <DialogContent>
+                <TextField value={myTitle} onChange={(e) => setTitle(e.target.value)}
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Название"
+                  type="email"
+                  fullWidth
+                  variant="standard"
+                />
+                <TextField value={myDescription} onChange={(e) => setDescription(e.target.value)}
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Описание"
+                  type="email"
+                  fullWidth
+                  variant="standard"
+                />
+                <TextField value={myPrice} onChange={(e) => setPrice(e.target.value)}
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Цена"
+                  type="email"
+                  fullWidth
+                  variant="standard"
+                />
+                <TextField value={myAmount} onChange={(e) => setAmount(e.target.value)}
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Количество"
+                  type="email"
+                  fullWidth
+                  variant="standard"
+                />
+                <p>
+                  <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handleChange} />
+                </p>
+
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseProduct}>Отмена</Button>
+                <Button onClick={handleAddProduct}>Выставить</Button>
+              </DialogActions>
+            </Dialog>
           </Box>
           {searchList()}
         </Box>
@@ -283,7 +375,7 @@ function Search({ details }) {
             <Link to={'/ProductsPage/MyProducts'} style={{ textDecoration: 'none', color: 'inherit' }}>
               <Button style={{ marginLeft: '2%' }} variant='contained'>Мои товары</Button>
             </Link>
-
+            <Button style={{ marginLeft: '2%' }} variant='outlined'>Добавить товар</Button>
           </Box>
           {searchList()}
         </Box>

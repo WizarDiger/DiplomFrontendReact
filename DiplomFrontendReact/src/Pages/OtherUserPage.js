@@ -43,14 +43,17 @@ function getCookie(name) {
 
 function OtherUserPage(props) {
   const [open, setOpen] = React.useState(false);
+  const [openModeratorNotification, setOpenModeratorNotification] = React.useState(false);
   const [myData, setData] = useState("");
   const [myUsers, setUsers] = useState([]);
   const [myPicture, setPicture] = useState("");
   const [myFeed, setFeed] = useState([]);
   const [FriendList, setFriend] = useState("");
-  const [myModerators, setModerators] = useState([]);
   const [refreshcounter, setRefresh] = useReducer(x => x + 1, 0);
-
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isModerator, setIsModerator] = useState(false);
+  const [isThisUserModerator, setIsThisUserModerator] = useState(false);
+  const [myStaff, setStaff] = useState([]);
   let currentUserId = useParams().id;
   let isFriend = false;
   const currentUser = myUsers.filter(
@@ -78,7 +81,13 @@ function OtherUserPage(props) {
 
     setOpen(false);
   };
+  const handleCloseModeratorNotification = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
 
+    setOpen(false);
+  };
   const getFriends = async () => {
     fetch('https://localhost:7049/api/ChatSearch', {
       method: 'GET',
@@ -90,21 +99,22 @@ function OtherUserPage(props) {
       })
 
   }
-  const getModerators = async () => {
-    fetch('https://localhost:7049/api/AddToRole', {
+
+  const getStaff = async () => {
+    fetch('https://localhost:7049/api/Moderator', {
       method: 'GET',
       credentials: 'include',
     })
       .then((response) => response.json())
       .then((data) => {
-        setModerators(data)
+        setStaff(data)
       })
 
   }
   const handleAddFriend = async () => {
 
     setOpen(true);
-    setRefresh();
+
     fetch('https://localhost:7049/api/AddFriend', {
 
       method: 'POST',
@@ -128,7 +138,7 @@ function OtherUserPage(props) {
       .then((result) => {
       },
         (error) => {
-          alert('Failed');
+          console.log(error);
         })
 
 
@@ -157,9 +167,10 @@ function OtherUserPage(props) {
 
       },
         (error) => {
-          alert('Failed');
+          console.log(error);
         })
     setRefresh();
+
   }
 
   const getFeed = async () => {
@@ -211,104 +222,31 @@ function OtherUserPage(props) {
       });
 
   }
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isModerator, setIsModerator] = useState(false);
 
-  useEffect(() => {
-    getUserData();
-    getAllUsersData();
-    getFeed();
-    getFriends();
-    getModerators();
-    var cookie = getCookie('jwt');
-    if (String(cookie) === "null") {
-      navigate('/LoginPage'
-      )
+
+
+  const defineRoles = async () => {
+
+
+    for (var i = 0; i < myStaff.length; i++) {
+      
+      if (myStaff[i].UserId == currentUserId && myStaff[i].RoleId == "372292a0-6835-482e-9c80-f945af6bdcfd") {
+
+        setIsThisUserModerator(true);
+      }
+      if (myStaff[i].UserId == myData.Id && myStaff[i].RoleId == "372292a0-6835-482e-9c80-f945af6bdcfd") {
+
+        setIsModerator(true);
+      }
+      if (myStaff[i].UserId == myData.Id && myStaff[i].RoleId == "ac8ecd46-fc40-47f6-9473-27aa9adee354") {
+
+        setIsAdmin(true);
+      }
     }
-  }, [""]);
-
-
-  if (myData.Login !== undefined) {
-    const isAdmin = async () => {
-
-      fetch('https://localhost:7049/api/Roles', {
-
-        method: 'POST',
-        credentials: 'include',
-
-        headers:
-        {
-          'Access-Control-Allow-Origin': 'https://localhost:3000/',
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(
-          {
-            login: 1,
-            password: 1,
-            email: '1',
-            name: 1,
-            surname: '1',
-            patronymic: '1',
-            dateOfBirth: '1',
-            city: '1',
-            UserName: myData.Login
-          }
-        )
-      })
-
-        .then(res => res.json())
-        .then((result) => {
-          setIsAdmin(result);
-        },
-          (error) => {
-            alert('Failed');
-          })
-    }
-    isAdmin();
-
-    const isModerator = async () => {
-
-      fetch('https://localhost:7049/api/Moderator', {
-
-        method: 'POST',
-        credentials: 'include',
-
-        headers:
-        {
-          'Access-Control-Allow-Origin': 'https://localhost:3000/',
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(
-          {
-            login: 1,
-            password: 1,
-            email: '1',
-            name: 1,
-            surname: '1',
-            patronymic: '1',
-            dateOfBirth: '1',
-            city: '1',
-            UserName: myData.Login
-          }
-        )
-      })
-
-        .then(res => res.json())
-        .then((result) => {
-          setIsModerator(result);
-        },
-          (error) => {
-            alert('Failed');
-          })
-    }
-    isModerator();
+    
   }
-
-
   const handleSetModerator = async () => {
-
+    setOpenModeratorNotification(true);
     fetch('https://localhost:7049/api/AddToRole', {
 
       method: 'POST',
@@ -331,14 +269,18 @@ function OtherUserPage(props) {
       .then(res => res.json())
       .then((result) => {
         console.log(result);
+        setRefresh();
       },
         (error) => {
-          alert('Failed');
+          console.log(error);
         })
+
+        window.location.reload();
+  
   }
   const handleDeleteFromAllFriends = async () => {
 
-    
+
     fetch('https://localhost:7049/api/DeleteFromAllFriendLists', {
 
       method: 'DELETE',
@@ -363,7 +305,7 @@ function OtherUserPage(props) {
 
       },
         (error) => {
-          alert(error);
+          console.log(error);
         })
   }
   const handleDeleteUser = async () => {
@@ -397,7 +339,8 @@ function OtherUserPage(props) {
   }
 
   const handleDeleteModerator = async () => {
-
+    setOpenModeratorNotification(true);
+   
     fetch(`https://localhost:7049/api/AddToRole/${currentUserId}`, {
 
       method: 'DELETE',
@@ -416,14 +359,15 @@ function OtherUserPage(props) {
 
       .then(res => res.json())
       .then((result) => {
-        alert("Права успешно сняты")
+
         console.log(result);
 
       },
         (error) => {
           console.log(error)
         })
-    setRefresh();
+    
+      window.location.reload();
   }
   let navigate = useNavigate();
   const ColoredLine = ({ color }) => (
@@ -467,36 +411,12 @@ function OtherUserPage(props) {
 
       },
         (error) => {
-          alert(error);
+          console.log(error);
         })
 
-    fetch('https://localhost:7049/api/AddFriend', {
 
-      method: 'DELETE',
-      credentials: 'include',
-
-      headers:
-      {
-
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(
-        {
-          Host: myData.Id,
-          Friend: currentUserId
-        }
-      )
-    })
-
-      .then(res => res.json())
-      .then((result) => {
-
-      },
-        (error) => {
-          alert(error);
-        })
     setRefresh();
+
   }
   for (var i = 0; i < FriendList.length; i++) {
 
@@ -505,16 +425,25 @@ function OtherUserPage(props) {
       isFriend = true;
     }
   }
-
-  let isThisUserModerator = false;
-  for (var i = 0; i < myModerators.length; i++) {
-    if (myModerators[i].UserId == currentUserId) {
-      isThisUserModerator = true;
+  useEffect(() => {
+    getUserData();
+    getAllUsersData();
+    getFeed();
+    getFriends();
+    getStaff();
+    defineRoles();
+    if (myStaff.length === 0 || myData.Id === undefined) {
+      setRefresh();
     }
-  }
-  console.log(isThisUserModerator);
+    var cookie = getCookie('jwt');
+    if (String(cookie) === "null") {
+      navigate('/LoginPage'
+      )
+    }
+  }, [refreshcounter]);
 
   if (isAdmin && !isModerator && !isFriend && isThisUserModerator) {
+    
     return (
       <>
         <Header />
@@ -526,7 +455,7 @@ function OtherUserPage(props) {
 
               <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
               <label htmlFor="contained-button-file">
-                <List >
+                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
 
                   <ListItem style={{ marginLeft: '18%' }}>
 
@@ -535,7 +464,7 @@ function OtherUserPage(props) {
                     </Button>
                     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                       <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Друг успешно добавлен
+                        Друг успешно удалён
                       </Alert>
                     </Snackbar>
                   </ListItem>
@@ -555,6 +484,11 @@ function OtherUserPage(props) {
                     <Button onClick={handleDeleteModerator} variant='outlined'>
                       Снять с должности модератора
                     </Button>
+                    <Snackbar open={openModeratorNotification} autoHideDuration={6000} onClose={handleCloseModeratorNotification}>
+                      <Alert onClose={handleCloseModeratorNotification} severity="success" sx={{ width: '100%' }}>                       
+                        Пользователю выданы права модератора
+                      </Alert>
+                    </Snackbar>
                   </ListItem>
                 </List>
               </label>
@@ -584,7 +518,7 @@ function OtherUserPage(props) {
                     City: {currentUser.map(m => m.City)}
                   </ListItem>
                   <ListItem>
-                    BirthDaty: {currentUser.map(m => m.DateOfBirth)}
+                    BirthDaty: {currentUser.map(m => m.DateOfBirth.substring(0,10))}
                   </ListItem>
                 </Typography>
               </List>
@@ -611,7 +545,7 @@ function OtherUserPage(props) {
 
               <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
               <label htmlFor="contained-button-file">
-                <List >
+                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
 
                   <ListItem style={{ marginLeft: '18%' }}>
 
@@ -620,7 +554,7 @@ function OtherUserPage(props) {
                     </Button>
                     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                       <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Друг успешно удалён
+                        Друг успешно добавлен
                       </Alert>
                     </Snackbar>
                   </ListItem>
@@ -641,6 +575,11 @@ function OtherUserPage(props) {
                     <Button onClick={handleDeleteModerator} variant='outlined'>
                       Снять с должности модератора
                     </Button>
+                    <Snackbar open={openModeratorNotification} autoHideDuration={6000} onClose={handleCloseModeratorNotification}>
+                      <Alert onClose={handleCloseModeratorNotification} severity="success" sx={{ width: '100%' }}>
+                        Модератор снят с должности
+                      </Alert>
+                    </Snackbar>
                   </ListItem>
                 </List>
               </label>
@@ -670,7 +609,7 @@ function OtherUserPage(props) {
                     City: {currentUser.map(m => m.City)}
                   </ListItem>
                   <ListItem>
-                    BirthDaty: {currentUser.map(m => m.DateOfBirth)}
+                    BirthDaty: {currentUser.map(m => m.DateOfBirth.substring(0,10))}
                   </ListItem>
                 </Typography>
               </List>
@@ -697,7 +636,7 @@ function OtherUserPage(props) {
 
               <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
               <label htmlFor="contained-button-file">
-                <List >
+                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
 
                   <ListItem style={{ marginLeft: '18%' }}>
 
@@ -706,7 +645,7 @@ function OtherUserPage(props) {
                     </Button>
                     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                       <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Друг успешно добавлен
+                        Друг успешно удалён
                       </Alert>
                     </Snackbar>
                   </ListItem>
@@ -722,7 +661,7 @@ function OtherUserPage(props) {
                       Заблокировать
                     </Button>
                   </ListItem>
-                  <ListItem style={{ marginLeft: '12%' }}>
+                  <ListItem style={{ marginLeft: '11%' }}>
                     <Button onClick={handleSetModerator} variant='contained'>
                       Назначить модератором
                     </Button>
@@ -755,7 +694,7 @@ function OtherUserPage(props) {
                     City: {currentUser.map(m => m.City)}
                   </ListItem>
                   <ListItem>
-                    BirthDaty: {currentUser.map(m => m.DateOfBirth)}
+                    BirthDaty: {currentUser.map(m => m.DateOfBirth.substring(0,10))}
                   </ListItem>
                 </Typography>
               </List>
@@ -782,7 +721,7 @@ function OtherUserPage(props) {
 
               <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
               <label htmlFor="contained-button-file">
-                <List >
+                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
 
                   <ListItem style={{ marginLeft: '18%' }}>
 
@@ -791,7 +730,7 @@ function OtherUserPage(props) {
                     </Button>
                     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                       <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Друг успешно удалён
+                        Друг успешно добавлен
                       </Alert>
                     </Snackbar>
                   </ListItem>
@@ -841,7 +780,7 @@ function OtherUserPage(props) {
                     City: {currentUser.map(m => m.City)}
                   </ListItem>
                   <ListItem>
-                    BirthDaty: {currentUser.map(m => m.DateOfBirth)}
+                    BirthDaty: {currentUser.map(m => m.DateOfBirth.substring(0,10))}
                   </ListItem>
                 </Typography>
               </List>
@@ -859,10 +798,7 @@ function OtherUserPage(props) {
   if (isModerator && !isFriend) {
     return (
       <>
-
         <Header />
-
-
         <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
           <LeftMenu />
           <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
@@ -871,7 +807,7 @@ function OtherUserPage(props) {
 
               <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
               <label htmlFor="contained-button-file">
-                <List>
+                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
 
                   <ListItem style={{ marginLeft: '18%' }}>
 
@@ -880,7 +816,7 @@ function OtherUserPage(props) {
                     </Button>
                     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                       <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Друг успешно добавлен
+                        Друг успешно удалён
                       </Alert>
                     </Snackbar>
                   </ListItem>
@@ -921,7 +857,7 @@ function OtherUserPage(props) {
                     City: {currentUser.map(m => m.City)}
                   </ListItem>
                   <ListItem>
-                    BirthDaty: {currentUser.map(m => m.DateOfBirth)}
+                    BirthDaty: {currentUser.map(m => m.DateOfBirth.substring(0,10))}
                   </ListItem>
                 </Typography>
               </List>
@@ -943,14 +879,14 @@ function OtherUserPage(props) {
             <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
               <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
               <label htmlFor="contained-button-file">
-                <List>
+                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
                   <ListItem style={{ marginLeft: '18%' }}>
                     <Button onClick={handleDeleteFriend} variant='outlined' component="span">
                       Удалить из друзей
                     </Button>
                     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                       <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Друг успешно удалён
+                        Друг успешно добавлен
                       </Alert>
                     </Snackbar>
                   </ListItem>
@@ -961,7 +897,7 @@ function OtherUserPage(props) {
                       </Button>
                     </Link>
                   </ListItem>
-                  <ListItem>
+                  <ListItem style={{ marginLeft: '22%' }}>
                     <Button onClick={handleDeleteUser} variant='contained'>
                       Заблокировать
                     </Button>
@@ -989,7 +925,7 @@ function OtherUserPage(props) {
                     City: {currentUser.map(m => m.City)}
                   </ListItem>
                   <ListItem>
-                    BirthDaty: {currentUser.map(m => m.DateOfBirth)}
+                    BirthDaty: {currentUser.map(m => m.DateOfBirth.substring(0,10))}
                   </ListItem>
                 </Typography>
               </List>
@@ -1013,14 +949,14 @@ function OtherUserPage(props) {
 
               <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
               <label htmlFor="contained-button-file">
-                <List>
+                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
                   <ListItem style={{ marginLeft: '18%' }}>
                     <Button onClick={handleAddFriend} variant="contained" component="span">
                       Добавить в друзья
                     </Button>
                     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                       <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Друг успешно добавлен
+                        Друг успешно удалён
                       </Alert>
                     </Snackbar>
                   </ListItem>
@@ -1054,7 +990,7 @@ function OtherUserPage(props) {
                     City: {currentUser.map(m => m.City)}
                   </ListItem>
                   <ListItem>
-                    BirthDaty: {currentUser.map(m => m.DateOfBirth)}
+                    BirthDaty: {currentUser.map(m => m.DateOfBirth.substring(0,10))}
                   </ListItem>
                 </Typography>
               </List>
@@ -1081,18 +1017,18 @@ function OtherUserPage(props) {
 
               <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
               <label htmlFor="contained-button-file">
-                <List>
-                  <ListItem>
+                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
+                  <ListItem style={{ marginLeft: '18%' }}>
+                    <Button onClick={handleDeleteFriend} variant='outlined' component="span">
+                      Удалить из друзей
+                    </Button>
+                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                      <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                        Друг успешно добавлен
+                      </Alert>
+                    </Snackbar>
                   </ListItem>
-                  <Button onClick={handleDeleteFriend} variant='outlined' component="span">
-                    Удалить из друзей
-                  </Button>
-                  <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                      Друг успешно удалён
-                    </Alert>
-                  </Snackbar>
-                  <ListItem style={{ marginLeft: '17%' }}>
+                  <ListItem style={{ marginLeft: '14%' }}>
                     <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
                       <Button variant='contained'>
                         Написать сообщение
