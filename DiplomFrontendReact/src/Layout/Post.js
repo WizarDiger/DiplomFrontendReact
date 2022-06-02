@@ -126,12 +126,19 @@ const Post = (props) => {
                     console.log(error)
                 })
         setRefresh();
+        window.location.reload();
+    }
+
+    function getImage() {
+        var img = new Image();
+        img.src = props.imagename;     
+        return img;
     }
     useEffect(() => {
 
         getUserData();
 
-    }, [""]);
+    }, [refreshcounter]);
 
 
     if (myData.Id === props.sender || isModerator || isAdmin) {
@@ -160,7 +167,7 @@ const Post = (props) => {
                         <Box marginLeft={'10%'}>
 
 
-                            <img src={props.imagename} width="300px" height={'200px'} />
+                            <img src={`data:image/jpeg;base64,${props.imagename}`} width={"70%"} height={"5000%"}/>
                         </Box>
                     </ListItem>
                     <ListItem>

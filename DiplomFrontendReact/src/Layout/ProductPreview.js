@@ -167,7 +167,7 @@ function ProductPreview({ product, currentUserId }) {
                       <Box>
                         <List>
                           <ListItem>
-                            <img src={productimg} width={'400px'} height={'400px'}>
+                            <img src={`data:image/jpeg;base64,${product.imagepath}`} width={'400px'} height={'400px'}>
 
                             </img>
                             <List>
@@ -218,7 +218,7 @@ function ProductPreview({ product, currentUserId }) {
                 </ListItem>
                 <ListItem>
 
-                  <img src={dstu} style={{ marginLeft: '10%', width: '200px', height: 200 }} />
+                  <img src={`data:image/jpeg;base64,${product.imagepath}`} style={{ marginLeft: '10%', width: '200px', height: 200 }} />
                 </ListItem>
                 <ListItem>
                   <b>
@@ -265,7 +265,7 @@ function ProductPreview({ product, currentUserId }) {
                     <Box>
                       <List>
                         <ListItem>
-                          <img src={productimg} width={'400px'} height={'400px'}>
+                          <img src={`data:image/jpeg;base64,${product.imagepath}`} width={'400px'} height={'400px'}>
 
                           </img>
                           <List>
@@ -316,7 +316,7 @@ function ProductPreview({ product, currentUserId }) {
               </ListItem>
               <ListItem>
 
-                <img src={dstu} style={{ marginLeft: '10%', width: '200px', height: 200 }} />
+                <img src={`data:image/jpeg;base64,${product.imagepath}`} style={{ marginLeft: '10%', width: '200px', height: 200 }} />
               </ListItem>
               <ListItem>
                 <b>

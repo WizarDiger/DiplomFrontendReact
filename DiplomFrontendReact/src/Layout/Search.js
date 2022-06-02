@@ -27,6 +27,7 @@ function Search({ details }) {
   const [myDescription, setDescription] = useState('')
   const [myPrice, setPrice] = useState('')
   const [myAmount, setAmount] = useState('')
+  const [myImageString, setImageString] = useState('')
   var filteredProducts = [];
   var filteredPersons = [];
   var filteredMyProducts = [];
@@ -141,7 +142,7 @@ function Search({ details }) {
     );
   }
   if (String(url).substring(0, 35) !== "https://localhost:3000/ProductsPage") {
-   
+
     filteredPersons = array.filter(
 
       person => {
@@ -160,8 +161,19 @@ function Search({ details }) {
     );
 
   }
-  const handleChange = e => {
-    setSearchField(e.target.value);
+  function handleChange(event) {
+  
+    console.log(event.target.files[0]);
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result
+        .replace('data:', '')
+        .replace(/^.+,/, '');
+      console.log(base64String);
+      setImageString(base64String);
+    };
+    reader.readAsDataURL(file);
   };
 
   for (var i = 0; i < chatwithstrangers.length; i++) {
@@ -197,7 +209,7 @@ function Search({ details }) {
       }
     }
   }
-  
+
   function searchList() {
     if (String(url) === "https://localhost:3000/ProductsPage/MyProducts") {
       return (
@@ -215,7 +227,7 @@ function Search({ details }) {
     }
     if (String(url).includes("https://localhost:3000/ChatPage")) {
 
-      
+
       var buff = filteredPersons.concat(allchatswithstrangers);
       var allDialogs = [...new Set(buff)];
       return (
@@ -250,7 +262,7 @@ function Search({ details }) {
           Amount: myAmount,
           SenderId: myData.Id,
           SenderName: myData.Name + " " + myData.Surname,
-          ImagePath: './2374-ed4_wide.jpg'
+          ImagePath: myImageString
 
         }
       )
@@ -375,7 +387,56 @@ function Search({ details }) {
             <Link to={'/ProductsPage/MyProducts'} style={{ textDecoration: 'none', color: 'inherit' }}>
               <Button style={{ marginLeft: '2%' }} variant='contained'>Мои товары</Button>
             </Link>
-            <Button style={{ marginLeft: '2%' }} variant='outlined'>Добавить товар</Button>
+            <Button style={{ marginLeft: "2%" }} onClick={handleClickOpenProduct} variant="contained">Выставить товар</Button>
+            <Dialog open={openProduct} onClose={handleCloseProduct}>
+              <DialogTitle>Выставить товар</DialogTitle>
+              <DialogContent>
+                <TextField value={myTitle} onChange={(e) => setTitle(e.target.value)}
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Название"
+                  type="email"
+                  fullWidth
+                  variant="standard"
+                />
+                <TextField value={myDescription} onChange={(e) => setDescription(e.target.value)}
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Описание"
+                  type="email"
+                  fullWidth
+                  variant="standard"
+                />
+                <TextField value={myPrice} onChange={(e) => setPrice(e.target.value)}
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Цена"
+                  type="email"
+                  fullWidth
+                  variant="standard"
+                />
+                <TextField value={myAmount} onChange={(e) => setAmount(e.target.value)}
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Количество"
+                  type="email"
+                  fullWidth
+                  variant="standard"
+                />
+                <p>
+                  <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handleChange} />
+                </p>
+
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseProduct}>Отмена</Button>
+                <Button onClick={handleAddProduct}>Выставить</Button>
+              </DialogActions>
+            </Dialog>
           </Box>
           {searchList()}
         </Box>

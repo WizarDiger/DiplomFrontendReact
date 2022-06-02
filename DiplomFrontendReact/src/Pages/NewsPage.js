@@ -1,6 +1,6 @@
 
 
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component, useState, useEffect, useReducer } from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -58,9 +58,12 @@ function NewsPage(props) {
     const [myDescription, setDescription] = useState('')
     const [myPrice, setPrice] = useState('')
     const [myAmount, setAmount] = useState('')
+    const [myImageString, setImageString] = useState('')
     const [myFeed, setFeed] = useState([])
     const [myFriends, setFriends] = useState([]);
     const [myStaff, setAllStaff] = useState([]);
+    const [refreshcounter, setRefresh] = useReducer(x => x + 1, 0);
+
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -91,7 +94,7 @@ function NewsPage(props) {
                     SenderName: myData.Name,
                     SendTime: 1,
                     Description: myDescription,
-                    ImageName: dstu
+                    ImageName: myImageString
                 }
             )
         })
@@ -99,14 +102,13 @@ function NewsPage(props) {
             .then(res => res.json())
             .then((result) => {
 
-                if (JSON.stringify(result) === '1') {
-
-
-                }
+                setRefresh();
+                console.log('1');
             },
                 (error) => {
                     alert(error);
                 })
+        setRefresh();
         setOpen(false);
     };
 
@@ -142,6 +144,7 @@ function NewsPage(props) {
                     console.log(error);
                 })
         setOpenProduct(false);
+        setRefresh();
     };
 
     const getFriends = async () => {
@@ -157,15 +160,15 @@ function NewsPage(props) {
     }
     const getAllStaff = async () => {
         fetch('https://localhost:7049/api/Moderator', {
-          method: 'GET',
-          credentials: 'include',
+            method: 'GET',
+            credentials: 'include',
         })
-          .then((response) => response.json())
-          .then((data) => {
-            setAllStaff(data)
-          })
-    
-      }
+            .then((response) => response.json())
+            .then((data) => {
+                setAllStaff(data)
+            })
+
+    }
     const filteredFriends = myFriends.filter(
 
         person => {
@@ -197,9 +200,8 @@ function NewsPage(props) {
         }
 
     }
-    for (var i = 0; i < myStaff.length; i++)
-    {
-   
+    for (var i = 0; i < myStaff.length; i++) {
+
         let buffArray = myFeed.filter(
             post => {
                 return (
@@ -207,7 +209,7 @@ function NewsPage(props) {
                 )
             }
         )
-       
+
         for (var j = 0; j < buffArray.length; j++) {
             if (!feedData.includes(buffArray[j])) {
 
@@ -215,6 +217,7 @@ function NewsPage(props) {
             }
         }
     }
+    feedData.sort(function (a, b) { return a.id - b.id });
     feedData.reverse();
     let feed = [];
     if (feedData[0] !== undefined) {
@@ -268,7 +271,7 @@ function NewsPage(props) {
             navigate('/LoginPage'
             )
         }
-    }, [""]);
+    }, [refreshcounter]);
 
     let navigate = useNavigate();
     const ColoredLine = ({ color }) => (
@@ -280,9 +283,21 @@ function NewsPage(props) {
             }}
         />
     );
+
     function handleChange(event) {
-        setPicture(event.target.files[0].name)
-        alert(event.target.files[0].name)
+        setPicture(event.target.files[0])
+        console.log(event.target.files[0]);
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64String = reader.result
+                .replace('data:', '')
+                .replace(/^.+,/, '');
+            console.log(base64String);
+            setImageString(base64String);
+        };
+        reader.readAsDataURL(file);
+
     }
 
     return (
