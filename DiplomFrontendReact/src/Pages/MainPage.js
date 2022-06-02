@@ -1,6 +1,6 @@
 
 
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component, useState, useEffect, useReducer } from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -15,7 +15,7 @@ import { wait } from '@testing-library/user-event/dist/utils';
 import LeftMenu from '../Layout/LeftMenu';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
-import dstu from './PageImages/dstu.jpg'
+import placeholder from './PageImages/placeholder.png'
 import { BrowserRouter as Router, Link, Navigate } from "react-router-dom";
 import Footer from '../Layout/Footer';
 import Header from '../Layout/Header';
@@ -46,7 +46,11 @@ function MainPage(props) {
   const [myData, setData] = useState("");
   const [myPicture, setPicture] = useState("");
   const [myFeed, setFeed] = useState([]);
+  const [myProfilePictures, setProfilePictures] = useState([]);
   const [myFriends, setFriends] = useState([]);
+  const [myImageString, setImageString] = useState('')
+  const [refreshcounter, setRefresh] = useReducer(x => x + 1, 0);
+
   const getUserData = async () => {
     fetch('https://localhost:7049/api/Login', {
       method: 'GET',
@@ -54,14 +58,85 @@ function MainPage(props) {
     })
       .then((response) => response.json())
       .then((data) => {
-        data.DateOfBirth = data.DateOfBirth.toString().substring(0,10);
+        data.DateOfBirth = data.DateOfBirth.toString().substring(0, 10);
         setData(data)
       });
 
   }
+  const getProfilePictures = async () => {
+    fetch('https://localhost:7049/api/ProfilePicture', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setProfilePictures(data)
+      });
+
+  }
+
+  const handleChangePicture = async () => {
+    console.log(profilePicture)
+    if (myImageString !== "") {
 
 
+      if (profilePicture === undefined || profilePicture.length === 0) {
+        console.log(myData.Id);
 
+        fetch('https://localhost:7049/api/ProfilePicture', {
+          method: 'POST',
+          headers:
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(
+            {
+              Picture: myImageString,
+              SenderId: myData.Id
+            }
+          )
+        })
+
+          .then(res => res.json())
+          .then((result) => {
+
+            console.log(result);
+          },
+            (error) => {
+              console.log(error);
+            })
+      }
+      else {
+        fetch('https://localhost:7049/api/ProfilePicture', {
+          method: 'PUT',
+          headers:
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(
+            {
+              Picture: myImageString,
+              SenderId: myData.Id
+            }
+          )
+        })
+          .then(res => res.json())
+          .then((result) => {
+
+            console.log(result);
+          },
+            (error) => {
+              console.log(error);
+            })
+      }
+      setRefresh();
+    }
+    else {
+      alert("Сначала необходимо выбрать фотографию");
+    }
+  }
   let myPosts = myFeed.filter(
     post => {
       return (
@@ -103,6 +178,7 @@ function MainPage(props) {
     getUserData();
     getFeed();
     getFriends();
+    getProfilePictures();
     console.log(myData);
     var cookie = getCookie('jwt');
     if (String(cookie) === "null") {
@@ -110,7 +186,30 @@ function MainPage(props) {
       )
     }
 
-  }, [""]);
+  }, [refreshcounter]);
+
+  let profilePicture;
+  if (myProfilePictures.length !== 0) {
+
+    var profilePictureBuff = myProfilePictures.filter(
+
+      picture => {
+
+        return (
+
+          picture
+            .senderid
+            .toLowerCase()
+            .includes(myData.Id)
+        );
+      }
+    );
+    if (profilePictureBuff.length !== 0) {
+
+      profilePicture = profilePictureBuff[0].picture;
+      console.log(profilePicture);
+    }
+  }
 
   let navigate = useNavigate();
   const ColoredLine = ({ color }) => (
@@ -123,8 +222,15 @@ function MainPage(props) {
     />
   );
   function handleChange(event) {
-    setPicture(event.target.files[0].name)
-    alert(event.target.files[0].name)
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result
+        .replace('data:', '')
+        .replace(/^.+,/, '');
+      setImageString(base64String);
+    };
+    reader.readAsDataURL(file);
   }
   const getFriends = async () => {
     fetch('https://localhost:7049/api/ChatSearch', {
@@ -149,77 +255,122 @@ function MainPage(props) {
       );
     }
   );
-  return (
-    <>
 
-      <Header />
-      <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
-        <LeftMenu />
-        <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
-
-          <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
-
-            <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
-            <Box paddingTop={3}>
-              <label htmlFor="contained-button-file">
-                <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handleChange} />
-              </label>
-              <Button variant="contained" component="span">
-                Upload
-              </Button>
-            </Box>
-            <Box bgcolor={'white'} borderRadius={2} marginTop={'5%'} paddingTop={'15px'} paddingBottom={'15px'}>
-              <Box marginLeft={'25px'} marginRight={'25px'}>
-
-                <Link to={'/FriendsPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
-
-                  <Button fullWidth variant="contained">Друзья {filteredFriends.length}</Button>
-                </Link>
+  console.log(profilePicture)
+  if (profilePicture !== undefined) {
+    return (
+      <>
+        <Header />
+        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
+          <LeftMenu />
+          <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
+            <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
+              <img src={`data:image/jpeg;base64,${profilePicture}`} width={"330"} height={"350"} />
+              <Box paddingTop={1} paddingBottom={1} marginTop={3} bgcolor={'white'} border={3} borderRadius={3} borderColor={'whitesmoke'}>
+                <input style={{ marginLeft: '10%' }} accept="image/*" id="contained-button-file" multiple type="file" onChange={handleChange} />
+                <Button onClick={handleChangePicture} variant="contained" component="span">
+                  Загрузить фотографию
+                </Button>
               </Box>
+              <Box bgcolor={'white'} borderRadius={2} marginTop={'5%'} paddingTop={'15px'} paddingBottom={'15px'}>
+                <Box marginLeft={'25px'} marginRight={'25px'}>
+                  <Link to={'/FriendsPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Button fullWidth variant="contained">Друзья {filteredFriends.length}</Button>
+                  </Link>
+                </Box>
+              </Box>
+            </Box>
+            <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
+              <List>
+                <ListItem>
+                  <Typography variant="h5" gutterBottom component="div">
+                    <p>
+                      {myData.Name} {myData.Patronymic} {myData.Surname}
+                    </p>
+                  </Typography>
+                </ListItem>
+                <ListItem>
+                  <ColoredLine color="black" />
+                </ListItem>
+                <Typography variant="h6" gutterBottom component="div">
 
+                  <ListItem>
+                    E-mail: {myData.Email}
+                  </ListItem>
+                  <ListItem>
+                    City: {myData.City}
+                  </ListItem>
+                  <ListItem>
+                    BirthDaty: {myData.DateOfBirth}
+                  </ListItem>
+                </Typography>
+              </List>
+              <ColoredLine color="black" />
+              {feed}
             </Box>
           </Box>
-          <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
+        </div>
+        <Footer />
+      </>
+    );
+  }
+  else {
+    return (
+      <>
+        <Header />
+        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
+          <LeftMenu />
+          <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
+            <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
+              <img src={placeholder} width={"330"} height={"350"} />
+              <Box paddingTop={1} paddingBottom={1} marginTop={3} bgcolor={'white'} border={3} borderRadius={3} borderColor={'whitesmoke'}>
+                <input style={{ marginLeft: '10%' }} accept="image/*" id="contained-button-file" multiple type="file" onChange={handleChange} />
+                <Button onClick={handleChangePicture} variant="contained" component="span">
+                  Загрузить фотографию
+                </Button>
+              </Box>
+              <Box bgcolor={'white'} borderRadius={2} marginTop={'5%'} paddingTop={'15px'} paddingBottom={'15px'}>
+                <Box marginLeft={'25px'} marginRight={'25px'}>
+                  <Link to={'/FriendsPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Button fullWidth variant="contained">Друзья {filteredFriends.length}</Button>
+                  </Link>
+                </Box>
+              </Box>
+            </Box>
+            <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
+              <List>
+                <ListItem>
+                  <Typography variant="h5" gutterBottom component="div">
+                    <p>
+                      {myData.Name} {myData.Patronymic} {myData.Surname}
+                    </p>
+                  </Typography>
+                </ListItem>
+                <ListItem>
+                  <ColoredLine color="black" />
+                </ListItem>
+                <Typography variant="h6" gutterBottom component="div">
 
-
-            <List>
-              <ListItem>
-
-                <Typography variant="h5" gutterBottom component="div">
-                  <p>
-                    {myData.Name} {myData.Patronymic} {myData.Surname}
-                  </p>
+                  <ListItem>
+                    E-mail: {myData.Email}
+                  </ListItem>
+                  <ListItem>
+                    City: {myData.City}
+                  </ListItem>
+                  <ListItem>
+                    BirthDaty: {myData.DateOfBirth}
+                  </ListItem>
                 </Typography>
-              </ListItem>
-              <ListItem>
-
-                <ColoredLine color="black" />
-              </ListItem>
-              <Typography variant="h6" gutterBottom component="div">
-
-                <ListItem>
-                  E-mail: {myData.Email}
-                </ListItem>
-                <ListItem>
-                  City: {myData.City}
-                </ListItem>
-                <ListItem>
-                  BirthDaty: {myData.DateOfBirth}
-                </ListItem>
-              </Typography>
-            </List>
-            <ColoredLine color="black" />
-            {feed}
+              </List>
+              <ColoredLine color="black" />
+              {feed}
+            </Box>
           </Box>
-        </Box>
-
-
-      </div>
-      <Footer />
-    </>
-
-  );
-
+        </div>
+        <Footer />
+      </>
+    );
+  }
 }
 
 export default MainPage;
