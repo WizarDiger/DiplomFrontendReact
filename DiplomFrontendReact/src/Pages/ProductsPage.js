@@ -33,9 +33,10 @@ function getCookie(name) {
   }
 const ProductsPage = () => {
 
-    const [myProducts, setProducts] = useState("");
+    const [myProducts, setProducts] = useState([]);
+    
     let navigate = useNavigate();
-    const getUserData = async () => {
+    const getProducts = async () => {
       fetch('https://localhost:7049/api/Products', {
         method: 'GET',
         credentials: 'include',
@@ -49,7 +50,7 @@ const ProductsPage = () => {
     }
     useEffect(() => {
        
-      getUserData();     
+      getProducts();     
       var cookie = getCookie('jwt');
       if (String(cookie) === "null") {
         navigate('/LoginPage'

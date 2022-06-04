@@ -30,9 +30,9 @@ function ProductPreview({ product, currentUserId }) {
   const [FriendList, setFriend] = useState("");
   const [isFriend, setCheckFriend] = useState(0);
   const [isUserAdmin, setIsAdmin] = useState(false);
-  const [myData, setData] = useState("");
   const [isUserModerator, setIsModerator] = useState(false);
   const [myStaff, setStaff] = useState([]);
+  const [myData, setData] = useState("");
   const theme = createTheme({
     status: {
       danger: '#e53e3e',

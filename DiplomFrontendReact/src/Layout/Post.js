@@ -6,8 +6,12 @@ const Post = (props) => {
 
 
     const [myData, setData] = useState("");
-    const [isAdmin, setIsAdmin] = useState(false);
-    const [isModerator, setIsModerator] = useState(false);
+
+    const [isUserAdmin, setIsAdmin] = useState(false);
+    const [isUserModerator, setIsModerator] = useState(false);
+    const [myStaff, setStaff] = useState([]);
+    const [myLikes, setLikes] = useState(props.likecounter);
+    const [myAllLikes, setAllLikes] = useState([]);
     const [refreshcounter, setRefresh] = useReducer(x => x + 1, 0);
     const getUserData = async () => {
         fetch('https://localhost:7049/api/Login', {
@@ -20,85 +24,31 @@ const Post = (props) => {
             });
 
     }
-
-    if (myData.Login !== undefined) {
-
-        const isAdmin = async () => {
-
-            fetch('https://localhost:7049/api/Roles', {
-
-                method: 'POST',
-                credentials: 'include',
-
-                headers:
-                {
-                    'Access-Control-Allow-Origin': 'https://localhost:3000/',
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(
-                    {
-                        login: 1,
-                        password: 1,
-                        email: '1',
-                        name: 1,
-                        surname: '1',
-                        patronymic: '1',
-                        dateOfBirth: '1',
-                        city: '1',
-                        UserName: myData.Login
-                    }
-                )
+    const getStaff = async () => {
+        fetch('https://localhost:7049/api/Moderator', {
+            method: 'GET',
+            credentials: 'include',
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setStaff(data)
             })
 
-                .then(res => res.json())
-                .then((result) => {
-                    setIsAdmin(result);
-                },
-                    (error) => {
-                        console.log(error);
-                    })
-        }
-        isAdmin();
-
-        const isModerator = async () => {
-
-            fetch('https://localhost:7049/api/Moderator', {
-
-                method: 'POST',
-                credentials: 'include',
-
-                headers:
-                {
-                    'Access-Control-Allow-Origin': 'https://localhost:3000/',
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(
-                    {
-                        login: 1,
-                        password: 1,
-                        email: '1',
-                        name: 1,
-                        surname: '1',
-                        patronymic: '1',
-                        dateOfBirth: '1',
-                        city: '1',
-                        UserName: myData.Login
-                    }
-                )
-            })
-
-                .then(res => res.json())
-                .then((result) => {
-                    setIsModerator(result);
-                },
-                    (error) => {
-                        console.log(error);
-                    })
-        }
-        isModerator();
     }
+
+    const getLikes = async () => {
+        fetch('https://localhost:7049/api/Like', {
+            method: 'GET',
+            credentials: 'include',
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setAllLikes(data)
+            })
+
+    }
+
+
     const handleDelete = async () => {
 
         fetch(`https://localhost:7049/api/Feed/${props.id}`, {
@@ -129,19 +79,174 @@ const Post = (props) => {
         window.location.reload();
     }
 
-    function getImage() {
-        var img = new Image();
-        img.src = props.imagename;     
-        return img;
+
+
+    const didThisUserLike = myAllLikes.filter(
+
+        like => {
+
+            return (
+                like
+                    .likesender
+                    .includes(myData.Id) &&
+                like
+                    .postid
+                    .includes(props.id)
+            );
+        }
+    );
+
+
+    const handleLike = async () => {
+        if (didThisUserLike[0] === undefined) {
+            fetch('https://localhost:7049/api/Feed', {
+                method: 'PUT',
+                headers:
+                {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        FeedId: props.id,
+                        SenderId: 1,
+                        Title: 1,
+                        SenderName: 1,
+                        SendTime: 1,
+                        Description: 1,
+                        ImageName: 1,
+                        LikeCounter: (props.likecounter + 1)
+
+                    }
+                )
+            })
+
+                .then(res => res.json())
+                .then((result) => {
+                    console.log(result);
+                    setRefresh();
+
+                },
+                    (error) => {
+                        alert(error);
+                    })
+
+            fetch('https://localhost:7049/api/Like', {
+                method: 'POST',
+                headers:
+                {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        PostId: props.id,
+                        LikeSender: myData.Id
+                    }
+                )
+            })
+
+                .then(res => res.json())
+                .then((result) => {
+                    console.log(result);
+                    setRefresh();
+
+                },
+                    (error) => {
+                        alert(error);
+                    })
+
+            setLikes(myLikes + 1)
+        }
+        else {
+            fetch('https://localhost:7049/api/Feed', {
+                method: 'PUT',
+                headers:
+                {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        FeedId: props.id,
+                        SenderId: 1,
+                        Title: 1,
+                        SenderName: props.sendtime,
+                        SendTime: 1,
+                        Description: 1,
+                        ImageName: 1,
+                        LikeCounter: (props.likecounter - 1)
+
+                    }
+                )
+            })
+
+                .then(res => res.json())
+                .then((result) => {
+                    console.log(result);
+                    setRefresh();
+
+                },
+                    (error) => {
+                        alert(error);
+                    })
+
+            fetch(`https://localhost:7049/api/Like/${didThisUserLike[0].postid}`, {
+
+                method: 'DELETE',
+                credentials: 'include',
+
+                headers:
+                {
+                    'Access-Control-Allow-Origin': 'https://localhost:3000/',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+
+                )
+            })
+
+                .then(res => res.json())
+                .then((result) => {
+                    console.log(result);
+
+                },
+                    (error) => {
+                        console.log(error)
+                    })
+            setLikes(myLikes - 1)
+        }
+        setRefresh();
+
+
+    };
+
+    const defineRoles = async () => {
+        for (var i = 0; i < myStaff.length; i++) {
+
+            if (myStaff[i].UserId == myData.Id && myStaff[i].RoleId == "372292a0-6835-482e-9c80-f945af6bdcfd") {
+                setIsModerator(true);
+            }
+            if (myStaff[i].UserId == myData.Id && myStaff[i].RoleId == "ac8ecd46-fc40-47f6-9473-27aa9adee354") {
+                setIsAdmin(true);
+            }
+        }
+
     }
     useEffect(() => {
 
         getUserData();
+        getStaff();
+        defineRoles();
+        getLikes();
+        if (myStaff.length === 0 || myData.Id === undefined) {
+            setRefresh();
+        }
+    }, [myLikes, refreshcounter]);
+  
 
-    }, [refreshcounter]);
-
-
-    if (myData.Id === props.sender || isModerator || isAdmin) {
+    if (myData.Id === props.sender || isUserAdmin || isUserModerator) {
         return (
             <Box marginLeft={'3px'} marginRight={'3px'} marginBottom={'10px'} bgcolor={'whitesmoke'} borderRadius={4}>
                 <List>
@@ -152,7 +257,7 @@ const Post = (props) => {
 
                             </Box>
                         </Typography>
-                        <Box paddingLeft={'30px'}>
+                        <Box width={'200px'} paddingLeft={'30px'}>
                             <Button onClick={handleDelete}>
                                 Удалить пост
                             </Button>
@@ -160,27 +265,26 @@ const Post = (props) => {
                     </ListItem>
                     <ListItem>
                         <Typography variant="body1" gutterBottom component="div">
-                            Опубликовано  <Link to={'/OtherUserPage/' + props.sender} style={{ textDecoration: 'none', color: 'inherit' }}> {props.sendername}</Link> в {props.sendtime.substring(0, 16)}
+                            Опубликовано  <Link to={'/OtherUserPage/' + props.sender} style={{ textDecoration: 'none', color: 'Highlight' }}> {props.sendername}</Link> в {props.sendtime.substring(0, 16)}
                         </Typography>
                     </ListItem>
                     <ListItem >
                         <Box marginLeft={'10%'}>
 
 
-                            <img src={`data:image/jpeg;base64,${props.imagename}`} width={"70%"} height={"5000%"}/>
+                            <img src={`data:image/jpeg;base64,${props.imagename}`} width={"90%"} height={"5000%"} />
                         </Box>
                     </ListItem>
                     <ListItem>
 
-                        <p>
-                            {props.description}
-                        </p>
+                        {props.description}
+
                     </ListItem>
                     <ListItem>
-                        <FavoriteIcon />
-                        <Box marginLeft={'10px'} marginRight={'3px'} width={'100%'} height={'60px'} bgcolor={'white'} borderRadius={1}>
-                            1
-                        </Box>
+                        <Button onClick={(e) => { handleLike() }}>
+                            <FavoriteIcon /> {myLikes}
+                        </Button>
+
                     </ListItem>
                 </List>
             </Box>
@@ -200,14 +304,14 @@ const Post = (props) => {
                     </ListItem>
                     <ListItem>
                         <Typography variant="body1" gutterBottom component="div">
-                            Опубликовано {props.sendername} в {props.sendtime.substring(0, 16)}
+                            Опубликовано  <Link to={'/OtherUserPage/' + props.sender} style={{ textDecoration: 'none', color: 'Highlight' }}> {props.sendername}</Link> в {props.sendtime.substring(0, 16)}
                         </Typography>
                     </ListItem>
                     <ListItem >
                         <Box marginLeft={'10%'}>
 
 
-                            <img src={props.imagename} width="300px" height={'200px'} />
+                            <img src={`data:image/jpeg;base64,${props.imagename}`} width={'90%'} height={'5000%'} />
                         </Box>
                     </ListItem>
                     <ListItem>
@@ -215,6 +319,11 @@ const Post = (props) => {
                         <p>
                             {props.description}
                         </p>
+                    </ListItem>
+                    <ListItem>
+                        <Button onClick={(e) => { handleLike() }}>
+                            <FavoriteIcon /> {myLikes}
+                        </Button>
                     </ListItem>
                 </List>
             </Box>

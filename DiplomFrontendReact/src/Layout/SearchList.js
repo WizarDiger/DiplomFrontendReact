@@ -4,6 +4,7 @@ import { Box, Grid } from '@mui/material';
 import { Paper } from '@mui/material';
 import ProductPreview from './ProductPreview';
 import { Button } from 'react-chat-engine';
+import Photo from './Photo';
 function SearchList({ filteredPersons }) {
   const [myData, setData] = useState("");
   const getUserData = async () => {
@@ -23,6 +24,22 @@ function SearchList({ filteredPersons }) {
     getUserData();
 
   }, []);
+
+  if (String(url) === "https://localhost:3000/PhotosPage" ) 
+  {
+    const filtered = filteredPersons.map(photo => <Photo key={photo.id} photo={photo} currentUserId={myData.Id} />);
+  
+    return (
+      <div>
+       
+        <Grid width={"100%"} marginRight={"2px"} container component={Paper} >
+
+          {filtered}
+        </Grid>
+      </div>
+    );
+  }
+
 
   if (String(url) === "https://localhost:3000/ProductsPage/MyProducts" ) 
   {

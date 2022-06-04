@@ -13,6 +13,7 @@ import Stack from '@mui/material/Stack';
 import { Link } from 'react-router-dom';
 import { createTheme } from '@mui/material/styles';
 import { BrowserRouter } from 'react-router-dom';
+import placeholder from './placeholder.png'
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -23,6 +24,7 @@ function Card({ person, currentUserId }) {
   const [open, setOpen] = React.useState(false);
   const [FriendList, setFriend] = useState("");
   const [isFriend, setCheckFriend] = useState(0);
+  const [myProfilePictures, setProfilePictures] = useState([]);
 
   const theme = createTheme({
     status: {
@@ -46,6 +48,19 @@ function Card({ person, currentUserId }) {
 
     setOpen(false);
   };
+
+  const getProfilePictures = async () => {
+    fetch('https://localhost:7049/api/ProfilePicture', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setProfilePictures(data)
+      });
+
+  }
+
   let check = 0;
   let url = window.location.href;
   for (var i = 0; i < FriendList.length; i++) {
@@ -66,7 +81,7 @@ function Card({ person, currentUserId }) {
   }
 
   useEffect(() => {
-
+    getProfilePictures();
     getFriends();
   }, [refreshcounter]);
 
@@ -174,12 +189,40 @@ function Card({ person, currentUserId }) {
 
     setRefresh();
   }
+
+  let profilePicture;
+  if (myProfilePictures.length !== 0) {
+
+    var profilePictureBuff = myProfilePictures.filter(
+
+      picture => {
+
+        return (
+
+          picture
+            .senderid
+            .toLowerCase()
+            .includes(person.Id)
+        );
+      }
+    );
+    if (profilePictureBuff.length !== 0) {
+      console.log(profilePictureBuff)
+      profilePicture = `data:image/jpeg;base64,${profilePictureBuff[0].picture}`;
+ 
+    }
+    else
+    {
+      profilePicture = placeholder;
+    }
+  }
+
   if (String(url).substring(0, 32) === `https://localhost:3000/ChatPage/`) {
     return (
       <Box display={'inline-block'}>
         <Box display={'flex'} width={'20%'}>
 
-          <Avatar src={dstu} sx={{ width: 50, height: 50, marginTop: '25%', marginLeft: "10px" }} />
+          <Avatar src={profilePicture} sx={{ width: 50, height: 50, marginTop: '25%', marginLeft: "10px" }} />
           <List>
             <ListItem>
 
@@ -206,7 +249,7 @@ function Card({ person, currentUserId }) {
       <Box display={'inline-block'}>
         <Box display={'flex'} width={'40%'}>
 
-          <Avatar src={dstu} sx={{ width: 80, height: 80, marginTop: '15%', marginLeft: "10px" }} />
+          <Avatar src={profilePicture} sx={{ width: 80, height: 80, marginTop: '15%', marginLeft: "10px" }} />
           <List>
             <Link to={'/OtherUserPage/' + person.Id} style={{ textDecoration: 'none', color: 'inherit' }}>
 
@@ -238,7 +281,7 @@ function Card({ person, currentUserId }) {
 
         <Box display={'flex'} width={'40%'}>
 
-          <Avatar src={dstu} sx={{ width: 80, height: 80, marginTop: '15%', marginLeft: "10px" }} />
+          <Avatar src={profilePicture} sx={{ width: 80, height: 80, marginTop: '15%', marginLeft: "10px" }} />
           <List>
             <Link to={'/OtherUserPage/' + person.Id} style={{ textDecoration: 'none', color: 'inherit' }}>
               <Button style={{ width: '130%', justifyContent: "flex-start", textTransform: 'none' }} variant="theme">   <Typography variant="h5" gutterBottom component="div">
@@ -273,7 +316,7 @@ function Card({ person, currentUserId }) {
 
         <Box display={'flex'} width={'40%'}>
 
-          <Avatar src={dstu} sx={{ width: 80, height: 80, marginTop: '15%', marginLeft: "10px" }} />
+          <Avatar src={profilePicture} sx={{ width: 80, height: 80, marginTop: '15%', marginLeft: "10px" }} />
           <List>
             <Link to={'/OtherUserPage/' + person.Id} style={{ textDecoration: 'none', color: 'inherit' }}>
               <Button style={{ width: '100%', justifyContent: "flex-start", textTransform: 'none' }} variant="theme">   <Typography variant="h5" gutterBottom component="div">

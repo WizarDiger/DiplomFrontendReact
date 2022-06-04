@@ -94,7 +94,8 @@ function NewsPage(props) {
                     SenderName: myData.Name,
                     SendTime: 1,
                     Description: myDescription,
-                    ImageName: myImageString
+                    ImageName: myImageString,
+                    LikeCounter: 0
                 }
             )
         })
@@ -232,6 +233,7 @@ function NewsPage(props) {
                 sendtime={m.sendtime}
                 description={m.description}
                 imagename={m.imagename}
+                likecounter={m.likecounter}
             />);
     }
     else {
@@ -309,7 +311,7 @@ function NewsPage(props) {
                 <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
 
 
-                    <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
+                    <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'60%'} >
 
 
                         <List>
@@ -334,7 +336,7 @@ function NewsPage(props) {
                                             fullWidth
                                             variant="standard"
                                         />
-                                        <TextField value={myDescription} onChange={(e) => setDescription(e.target.value)}
+                                        <TextField value={myDescription}  onChange={(e) => setDescription(e.target.value)}
                                             autoFocus
                                             margin="dense"
                                             id="name"

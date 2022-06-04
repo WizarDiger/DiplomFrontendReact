@@ -31,6 +31,7 @@ function Search({ details }) {
   var filteredProducts = [];
   var filteredPersons = [];
   var filteredMyProducts = [];
+  var filteredMyPhotos = [];
   var chatwithstrangers = [];
   var allchatswithstrangers = [];
   var array = json2array(details);
@@ -141,7 +142,24 @@ function Search({ details }) {
       }
     );
   }
-  if (String(url).substring(0, 35) !== "https://localhost:3000/ProductsPage") {
+
+  if (String(url) === "https://localhost:3000/PhotosPage") {
+  
+    filteredMyPhotos = array.filter(
+
+      photo => {
+
+        return (
+
+          photo
+            .senderid
+            .toLowerCase()
+            .includes(myData.Id)
+        );
+      }
+    );
+  }
+  if (String(url).substring(0, 35) !== "https://localhost:3000/ProductsPage" && String(url).substring(0, 35) !== "https://localhost:3000/PhotosPage") {
 
     filteredPersons = array.filter(
 
@@ -162,7 +180,7 @@ function Search({ details }) {
 
   }
   function handleChange(event) {
-  
+
     console.log(event.target.files[0]);
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -211,6 +229,13 @@ function Search({ details }) {
   }
 
   function searchList() {
+    if (String(url) === "https://localhost:3000/PhotosPage") {
+      return (
+        <Scroll>
+          <SearchList filteredPersons={filteredMyPhotos} />
+        </Scroll>
+      );
+    }
     if (String(url) === "https://localhost:3000/ProductsPage/MyProducts") {
       return (
         <Scroll>
@@ -473,6 +498,18 @@ function Search({ details }) {
         <Box width={'100%'}>
           <TextField onChange={handleChange} id="outlined-basic-email" label="Поиск" fullWidth />
         </Box>
+        {searchList()}
+      </Box>
+    );
+  }
+  if (String(url) === "https://localhost:3000/PhotosPage") {
+
+    return (
+      <Box container component={Paper}>
+
+        <Typography marginLeft={'35%'} marginTop={'1%'} variant="h4" gutterBottom component="div">
+          Фотографии
+        </Typography>       
         {searchList()}
       </Box>
     );

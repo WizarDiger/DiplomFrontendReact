@@ -8,22 +8,22 @@ namespace DiplomBackendASPNet.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FeedController : ControllerBase
+    public class LikeController : ControllerBase
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
 
 
-        public FeedController(IConfiguration configuration, IWebHostEnvironment env)
+        public LikeController(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
             _env = env;
-
         }
+
         [HttpGet]
-        public JsonResult GetMessages()
+        public JsonResult GetLike()
         {
-            string query = $@"SELECT * FROM ""Posts""";
+            string query = $@"SELECT * FROM ""Likes""";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
             NpgsqlDataReader myReader;
@@ -43,10 +43,10 @@ namespace DiplomBackendASPNet.Controllers
             return new JsonResult(table);
         }
         [HttpPost]
-        public JsonResult SaveMessage(FeedEntry feedEntry)
+        public JsonResult SaveLike(Like like)
         {
-            string query = $@"INSERT INTO ""Posts"" (sender, title, sendername, sendtime, description, imagename)
-               VALUES(@sender,@title,@sendername,@sendtime,@description,@imagename)";
+            string query = $@"INSERT INTO ""Likes"" (postid, likesender)
+               VALUES(@postid,@likesender)";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
             NpgsqlDataReader myReader;
@@ -55,12 +55,8 @@ namespace DiplomBackendASPNet.Controllers
                 myCon.Open();
                 using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@sender", feedEntry.SenderId);
-                    myCommand.Parameters.AddWithValue("@title", feedEntry.Title);
-                    myCommand.Parameters.AddWithValue("@sendername", feedEntry.SenderName);
-                    myCommand.Parameters.AddWithValue("@sendtime", DateTime.Now);
-                    myCommand.Parameters.AddWithValue("@description", feedEntry.Description);
-                    myCommand.Parameters.AddWithValue("@imagename", feedEntry.ImageName);
+                    myCommand.Parameters.AddWithValue("@postid", like.PostId);
+                    myCommand.Parameters.AddWithValue("@likesender", like.LikeSender);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -71,38 +67,11 @@ namespace DiplomBackendASPNet.Controllers
 
             return new JsonResult(table);
         }
-        [HttpPut]
-        public JsonResult Put(FeedEntry feed)
-        {
-            string query = @"update ""Posts""
-	        set 
-	        likecounter = @likecounter
-            where id = @id;";
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
-            NpgsqlDataReader myReader;
-            using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
-                {
-                    myCommand.Parameters.AddWithValue("@likecounter", feed.LikeCounter);
-                    myCommand.Parameters.AddWithValue("@id", feed.FeedId);
-
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-
-                }
-            }
-            return new JsonResult("Updated Succesfully");
-        }
         [HttpDelete("{id}")]
-        public JsonResult Delete(int id)
+        public JsonResult Delete(string id)
         {
-            string query = @"delete from ""Posts""
-	        where id = @id";
+            string query = @"delete from ""Likes""
+	        where postid = @id";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
             NpgsqlDataReader myReader;

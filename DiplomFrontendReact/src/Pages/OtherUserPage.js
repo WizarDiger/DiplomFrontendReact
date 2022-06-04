@@ -23,6 +23,7 @@ import { Alert, Input, Snackbar } from '@mui/material';
 import { Button } from '@mui/material';
 import { useParams } from 'react-router';
 import Post from '../Layout/Post';
+import placeholder from './PageImages/placeholder.png'
 function getCookie(name) {
   var dc = document.cookie;
   var prefix = name + "=";
@@ -54,6 +55,8 @@ function OtherUserPage(props) {
   const [isModerator, setIsModerator] = useState(false);
   const [isThisUserModerator, setIsThisUserModerator] = useState(false);
   const [myStaff, setStaff] = useState([]);
+  const [myImageString, setImageString] = useState('')
+  const [myProfilePictures, setProfilePictures] = useState([]);
   let currentUserId = useParams().id;
   let isFriend = false;
   const currentUser = myUsers.filter(
@@ -67,6 +70,17 @@ function OtherUserPage(props) {
 
     }
   );
+  const getProfilePictures = async () => {
+    fetch('https://localhost:7049/api/ProfilePicture', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setProfilePictures(data)
+      });
+
+  }
   let myPosts = myFeed.filter(
     post => {
       return (
@@ -229,21 +243,21 @@ function OtherUserPage(props) {
 
 
     for (var i = 0; i < myStaff.length; i++) {
-      
-      if (myStaff[i].UserId == currentUserId && myStaff[i].RoleId == "372292a0-6835-482e-9c80-f945af6bdcfd") {
+
+      if (myStaff[i].UserId == currentUserId && myStaff[i].RoleId === "372292a0-6835-482e-9c80-f945af6bdcfd") {
 
         setIsThisUserModerator(true);
       }
-      if (myStaff[i].UserId == myData.Id && myStaff[i].RoleId == "372292a0-6835-482e-9c80-f945af6bdcfd") {
+      if (myStaff[i].UserId == myData.Id && myStaff[i].RoleId === "372292a0-6835-482e-9c80-f945af6bdcfd") {
 
         setIsModerator(true);
       }
-      if (myStaff[i].UserId == myData.Id && myStaff[i].RoleId == "ac8ecd46-fc40-47f6-9473-27aa9adee354") {
+      if (myStaff[i].UserId == myData.Id && myStaff[i].RoleId === "ac8ecd46-fc40-47f6-9473-27aa9adee354") {
 
         setIsAdmin(true);
       }
     }
-    
+
   }
   const handleSetModerator = async () => {
     setOpenModeratorNotification(true);
@@ -275,8 +289,8 @@ function OtherUserPage(props) {
           console.log(error);
         })
 
-        window.location.reload();
-  
+    window.location.reload();
+
   }
   const handleDeleteFromAllFriends = async () => {
 
@@ -340,7 +354,7 @@ function OtherUserPage(props) {
 
   const handleDeleteModerator = async () => {
     setOpenModeratorNotification(true);
-   
+
     fetch(`https://localhost:7049/api/AddToRole/${currentUserId}`, {
 
       method: 'DELETE',
@@ -366,8 +380,8 @@ function OtherUserPage(props) {
         (error) => {
           console.log(error)
         })
-    
-      window.location.reload();
+
+    window.location.reload();
   }
   let navigate = useNavigate();
   const ColoredLine = ({ color }) => (
@@ -379,10 +393,7 @@ function OtherUserPage(props) {
       }}
     />
   );
-  function handleChange(event) {
-    setPicture(event.target.files[0].name)
-    alert(event.target.files[0].name)
-  }
+ 
   const handleDeleteFriend = async () => {
 
     setOpen(true);
@@ -432,6 +443,7 @@ function OtherUserPage(props) {
     getFriends();
     getStaff();
     defineRoles();
+    getProfilePictures();
     if (myStaff.length === 0 || myData.Id === undefined) {
       setRefresh();
     }
@@ -442,636 +454,332 @@ function OtherUserPage(props) {
     }
   }, [refreshcounter]);
 
-  if (isAdmin && !isModerator && !isFriend && isThisUserModerator) {
-    
-    return (
-      <>
-        <Header />
-        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
-          <LeftMenu />
-          <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
+  let profilePicture;
+  if (myProfilePictures.length !== 0) {
 
-            <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
+    var profilePictureBuff = myProfilePictures.filter(
 
-              <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
-              <label htmlFor="contained-button-file">
-                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
+      picture => {
 
-                  <ListItem style={{ marginLeft: '18%' }}>
+        return (
 
-                    <Button onClick={handleAddFriend} variant="contained" component="span">
-                      Добавить в друзья
-                    </Button>
-                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                      <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Друг успешно удалён
-                      </Alert>
-                    </Snackbar>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '14%' }}>
-                    <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <Button variant='contained'>
-                        Написать сообщение
-                      </Button>
-                    </Link>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '22%' }}>
-                    <Button onClick={handleDeleteUser} variant='contained'>
-                      Заблокировать
-                    </Button>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '2%' }}>
-                    <Button onClick={handleDeleteModerator} variant='outlined'>
-                      Снять с должности модератора
-                    </Button>
-                    <Snackbar open={openModeratorNotification} autoHideDuration={6000} onClose={handleCloseModeratorNotification}>
-                      <Alert onClose={handleCloseModeratorNotification} severity="success" sx={{ width: '100%' }}>                       
-                        Пользователю выданы права модератора
-                      </Alert>
-                    </Snackbar>
-                  </ListItem>
-                </List>
-              </label>
-            </Box>
-            <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
-
-
-              <List>
-                <ListItem>
-
-                  <Typography variant="h5" gutterBottom component="div">
-                    <p>
-                      {currentUser.map(m => m.Name)} {currentUser.map(m => m.Patronymic)} {currentUser.map(m => m.Surname)}
-                    </p>
-                  </Typography>
-                </ListItem>
-                <ListItem>
-
-                  <ColoredLine color="black" />
-                </ListItem>
-                <Typography variant="h6" gutterBottom component="div">
-
-                  <ListItem>
-                    E-mail: {currentUser.map(m => m.Email)}
-                  </ListItem>
-                  <ListItem>
-                    City: {currentUser.map(m => m.City)}
-                  </ListItem>
-                  <ListItem>
-                    BirthDaty: {currentUser.map(m => m.DateOfBirth.substring(0,10))}
-                  </ListItem>
-                </Typography>
-              </List>
-
-              {feed}
-            </Box>
-          </Box>
-
-        </div>
-        <Footer />
-      </>
-
+          picture
+            .senderid
+            .toLowerCase()
+            .includes(currentUserId)
+        );
+      }
     );
+    let placeholderPicture;
+    if (profilePictureBuff.length !== 0) {
+
+      profilePicture = profilePictureBuff[0].picture;
+      
+    }
+    else
+    {
+     
+      placeholderPicture = placeholder.substr(22, placeholder.length);
+      profilePicture = placeholderPicture;
+    }
+    console.log(profilePicture)
+  }
+  let controlpanel;
+  if (myData.Id === currentUserId)
+  {
+    navigate("/MainPage");
+  }
+  if (isAdmin && !isModerator && !isFriend && isThisUserModerator) {
+
+    controlpanel = <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
+
+      <ListItem style={{ marginLeft: '11%' }}>
+
+        <Button style={{ width: '70%' }} onClick={handleAddFriend} variant="contained" component="span">
+          Добавить в друзья
+        </Button>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            Друг успешно удалён
+          </Alert>
+        </Snackbar>
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Button style={{ width: '112%' }} variant='contained'>
+            Написать сообщение
+          </Button>
+        </Link>
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Button style={{ width: '70%' }} onClick={handleDeleteUser} variant='contained'>
+          Заблокировать
+        </Button>
+      </ListItem>
+      <ListItem style={{ marginLeft: '2%' }}>
+        <Button onClick={handleDeleteModerator} variant='outlined'>
+          Снять с должности модератора
+        </Button>
+        <Snackbar open={openModeratorNotification} autoHideDuration={6000} onClose={handleCloseModeratorNotification}>
+          <Alert onClose={handleCloseModeratorNotification} severity="success" sx={{ width: '100%' }}>
+            Пользователю выданы права модератора
+          </Alert>
+        </Snackbar>
+      </ListItem>
+    </List>
   }
   if (isAdmin && !isModerator && isFriend && isThisUserModerator) {
-    return (
-      <>
-        <Header />
-        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
-          <LeftMenu />
-          <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
+    controlpanel = <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
 
-            <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Button style={{ width: '70%' }} onClick={handleDeleteFriend} variant='outlined' component="span">
+          Удалить из друзей
+        </Button>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            Друг успешно добавлен
+          </Alert>
+        </Snackbar>
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Button style={{ width: '112%' }} variant='contained'>
+            Написать сообщение
+          </Button>
+        </Link>
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Button style={{ width: '70%' }} onClick={handleDeleteUser} variant='contained'>
+          Заблокировать
+        </Button>
 
-              <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
-              <label htmlFor="contained-button-file">
-                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
-
-                  <ListItem style={{ marginLeft: '18%' }}>
-
-                    <Button onClick={handleDeleteFriend} variant='outlined' component="span">
-                      Удалить из друзей
-                    </Button>
-                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                      <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Друг успешно добавлен
-                      </Alert>
-                    </Snackbar>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '14%' }}>
-                    <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <Button variant='contained'>
-                        Написать сообщение
-                      </Button>
-                    </Link>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '22%' }}>
-                    <Button onClick={handleDeleteUser} variant='contained'>
-                      Заблокировать
-                    </Button>
-
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '2%' }}>
-                    <Button onClick={handleDeleteModerator} variant='outlined'>
-                      Снять с должности модератора
-                    </Button>
-                    <Snackbar open={openModeratorNotification} autoHideDuration={6000} onClose={handleCloseModeratorNotification}>
-                      <Alert onClose={handleCloseModeratorNotification} severity="success" sx={{ width: '100%' }}>
-                        Модератор снят с должности
-                      </Alert>
-                    </Snackbar>
-                  </ListItem>
-                </List>
-              </label>
-            </Box>
-            <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
-
-
-              <List>
-                <ListItem>
-
-                  <Typography variant="h5" gutterBottom component="div">
-                    <p>
-                      {currentUser.map(m => m.Name)} {currentUser.map(m => m.Patronymic)} {currentUser.map(m => m.Surname)}
-                    </p>
-                  </Typography>
-                </ListItem>
-                <ListItem>
-
-                  <ColoredLine color="black" />
-                </ListItem>
-                <Typography variant="h6" gutterBottom component="div">
-
-                  <ListItem>
-                    E-mail: {currentUser.map(m => m.Email)}
-                  </ListItem>
-                  <ListItem>
-                    City: {currentUser.map(m => m.City)}
-                  </ListItem>
-                  <ListItem>
-                    BirthDaty: {currentUser.map(m => m.DateOfBirth.substring(0,10))}
-                  </ListItem>
-                </Typography>
-              </List>
-
-              {feed}
-            </Box>
-          </Box>
-
-        </div>
-        <Footer />
-      </>
-
-    );
+      </ListItem>
+      <ListItem style={{ marginLeft: '2%' }}>
+        <Button onClick={handleDeleteModerator} variant='outlined'>
+          Снять с должности модератора
+        </Button>
+        <Snackbar open={openModeratorNotification} autoHideDuration={6000} onClose={handleCloseModeratorNotification}>
+          <Alert onClose={handleCloseModeratorNotification} severity="success" sx={{ width: '100%' }}>
+            Модератор снят с должности
+          </Alert>
+        </Snackbar>
+      </ListItem>
+    </List>
   }
-  if (isAdmin && !isModerator && !isFriend) {
-    return (
-      <>
-        <Header />
-        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
-          <LeftMenu />
-          <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
+  if (isAdmin && !isModerator && !isFriend && !isThisUserModerator) {
+    controlpanel = <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
 
-            <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
+      <ListItem style={{ marginLeft: '11%' }}>
 
-              <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
-              <label htmlFor="contained-button-file">
-                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
-
-                  <ListItem style={{ marginLeft: '18%' }}>
-
-                    <Button onClick={handleAddFriend} variant="contained" component="span">
-                      Добавить в друзья
-                    </Button>
-                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                      <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Друг успешно удалён
-                      </Alert>
-                    </Snackbar>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '14%' }}>
-                    <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <Button variant='contained'>
-                        Написать сообщение
-                      </Button>
-                    </Link>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '22%' }}>
-                    <Button onClick={handleDeleteUser} variant='contained'>
-                      Заблокировать
-                    </Button>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '11%' }}>
-                    <Button onClick={handleSetModerator} variant='contained'>
-                      Назначить модератором
-                    </Button>
-                  </ListItem>
-                </List>
-              </label>
-            </Box>
-            <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
-
-
-              <List>
-                <ListItem>
-
-                  <Typography variant="h5" gutterBottom component="div">
-                    <p>
-                      {currentUser.map(m => m.Name)} {currentUser.map(m => m.Patronymic)} {currentUser.map(m => m.Surname)}
-                    </p>
-                  </Typography>
-                </ListItem>
-                <ListItem>
-
-                  <ColoredLine color="black" />
-                </ListItem>
-                <Typography variant="h6" gutterBottom component="div">
-
-                  <ListItem>
-                    E-mail: {currentUser.map(m => m.Email)}
-                  </ListItem>
-                  <ListItem>
-                    City: {currentUser.map(m => m.City)}
-                  </ListItem>
-                  <ListItem>
-                    BirthDaty: {currentUser.map(m => m.DateOfBirth.substring(0,10))}
-                  </ListItem>
-                </Typography>
-              </List>
-
-              {feed}
-            </Box>
-          </Box>
-
-        </div>
-        <Footer />
-      </>
-
-    );
+        <Button style={{ width: '70%' }} onClick={handleAddFriend} variant="contained" component="span">
+          Добавить в друзья
+        </Button>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            Друг успешно удалён
+          </Alert>
+        </Snackbar>
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Button style={{ width: '112%' }} variant='contained'>
+            Написать сообщение
+          </Button>
+        </Link>
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Button style={{ width: '70%' }} onClick={handleDeleteUser} variant='contained'>
+          Заблокировать
+        </Button>
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Button onClick={handleSetModerator} variant='contained'>
+          Назначить модератором
+        </Button>
+      </ListItem>
+    </List>
   }
-  if (isAdmin && !isModerator && isFriend) {
-    return (
-      <>
-        <Header />
-        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
-          <LeftMenu />
-          <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
+  if (isAdmin && !isModerator && isFriend && !isThisUserModerator) {
+    controlpanel = <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
 
-            <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
+      <ListItem style={{ marginLeft: '11%' }}>
 
-              <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
-              <label htmlFor="contained-button-file">
-                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
+        <Button style={{ width: '70%' }} onClick={handleDeleteFriend} variant='outlined' component="span">
+          Удалить из друзей
+        </Button>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            Друг успешно добавлен
+          </Alert>
+        </Snackbar>
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Button style={{ width: '112%' }} variant='contained'>
+            Написать сообщение
+          </Button>
+        </Link>
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Button style={{ width: '70%' }} onClick={handleDeleteUser} variant='contained'>
+          Заблокировать
+        </Button>
 
-                  <ListItem style={{ marginLeft: '18%' }}>
-
-                    <Button onClick={handleDeleteFriend} variant='outlined' component="span">
-                      Удалить из друзей
-                    </Button>
-                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                      <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Друг успешно добавлен
-                      </Alert>
-                    </Snackbar>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '14%' }}>
-                    <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <Button variant='contained'>
-                        Написать сообщение
-                      </Button>
-                    </Link>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '22%' }}>
-                    <Button onClick={handleDeleteUser} variant='contained'>
-                      Заблокировать
-                    </Button>
-
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '12%' }}>
-                    <Button onClick={handleSetModerator} variant='contained'>
-                      Назначить модератором
-                    </Button>
-                  </ListItem>
-                </List>
-              </label>
-            </Box>
-            <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
-
-
-              <List>
-                <ListItem>
-
-                  <Typography variant="h5" gutterBottom component="div">
-                    <p>
-                      {currentUser.map(m => m.Name)} {currentUser.map(m => m.Patronymic)} {currentUser.map(m => m.Surname)}
-                    </p>
-                  </Typography>
-                </ListItem>
-                <ListItem>
-
-                  <ColoredLine color="black" />
-                </ListItem>
-                <Typography variant="h6" gutterBottom component="div">
-
-                  <ListItem>
-                    E-mail: {currentUser.map(m => m.Email)}
-                  </ListItem>
-                  <ListItem>
-                    City: {currentUser.map(m => m.City)}
-                  </ListItem>
-                  <ListItem>
-                    BirthDaty: {currentUser.map(m => m.DateOfBirth.substring(0,10))}
-                  </ListItem>
-                </Typography>
-              </List>
-
-              {feed}
-            </Box>
-          </Box>
-
-        </div>
-        <Footer />
-      </>
-
-    );
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Button onClick={handleSetModerator} variant='contained'>
+          Назначить модератором
+        </Button>
+      </ListItem>
+    </List>
   }
   if (isModerator && !isFriend) {
-    return (
-      <>
-        <Header />
-        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
-          <LeftMenu />
-          <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
+    controlpanel = <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
 
-            <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
+      <ListItem style={{ marginLeft: '11%' }}>
 
-              <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
-              <label htmlFor="contained-button-file">
-                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
+        <Button style={{ width: '70%' }} onClick={handleAddFriend} variant="contained" component="span">
+          Добавить в друзья
+        </Button>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            Друг успешно удалён
+          </Alert>
+        </Snackbar>
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Button style={{ width: '112%' }} variant='contained'>
+            Написать сообщение
+          </Button>
+        </Link>
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Button style={{ width: '70%' }} onClick={handleDeleteUser} variant='contained'>
+          Заблокировать
+        </Button>
+      </ListItem>
+    </List>
 
-                  <ListItem style={{ marginLeft: '18%' }}>
-
-                    <Button onClick={handleAddFriend} variant="contained" component="span">
-                      Добавить в друзья
-                    </Button>
-                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                      <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Друг успешно удалён
-                      </Alert>
-                    </Snackbar>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '14%' }}>
-                    <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <Button variant='contained'>
-                        Написать сообщение
-                      </Button>
-                    </Link>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '22%' }}>
-
-                    <Button onClick={handleDeleteUser} variant='contained'>
-                      Заблокировать
-                    </Button>
-                  </ListItem>
-                </List>
-              </label>
-            </Box>
-            <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
-              <List>
-                <ListItem>
-
-                  <Typography variant="h5" gutterBottom component="div">
-                    <p>
-                      {currentUser.map(m => m.Name)} {currentUser.map(m => m.Patronymic)} {currentUser.map(m => m.Surname)}
-                    </p>
-                  </Typography>
-                </ListItem>
-                <ListItem>
-                  <ColoredLine color="black" />
-                </ListItem>
-                <Typography variant="h6" gutterBottom component="div">
-                  <ListItem>
-                    E-mail: {currentUser.map(m => m.Email)}
-                  </ListItem>
-                  <ListItem>
-                    City: {currentUser.map(m => m.City)}
-                  </ListItem>
-                  <ListItem>
-                    BirthDaty: {currentUser.map(m => m.DateOfBirth.substring(0,10))}
-                  </ListItem>
-                </Typography>
-              </List>
-              {feed}
-            </Box>
-          </Box>
-        </div>
-        <Footer />
-      </>
-    );
   }
   if (isModerator && isFriend) {
-    return (
-      <>
-        <Header />
-        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
-          <LeftMenu />
-          <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
-            <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
-              <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
-              <label htmlFor="contained-button-file">
-                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
-                  <ListItem style={{ marginLeft: '18%' }}>
-                    <Button onClick={handleDeleteFriend} variant='outlined' component="span">
-                      Удалить из друзей
-                    </Button>
-                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                      <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Друг успешно добавлен
-                      </Alert>
-                    </Snackbar>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '14%' }}>
-                    <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <Button variant='contained'>
-                        Написать сообщение
-                      </Button>
-                    </Link>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '22%' }}>
-                    <Button onClick={handleDeleteUser} variant='contained'>
-                      Заблокировать
-                    </Button>
-                  </ListItem>
-                </List>
-              </label>
-            </Box>
-            <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
-              <List>
-                <ListItem>
-                  <Typography variant="h5" gutterBottom component="div">
-                    <p>
-                      {currentUser.map(m => m.Name)} {currentUser.map(m => m.Patronymic)} {currentUser.map(m => m.Surname)}
-                    </p>
-                  </Typography>
-                </ListItem>
-                <ListItem>
-                  <ColoredLine color="black" />
-                </ListItem>
-                <Typography variant="h6" gutterBottom component="div">
-                  <ListItem>
-                    E-mail: {currentUser.map(m => m.Email)}
-                  </ListItem>
-                  <ListItem>
-                    City: {currentUser.map(m => m.City)}
-                  </ListItem>
-                  <ListItem>
-                    BirthDaty: {currentUser.map(m => m.DateOfBirth.substring(0,10))}
-                  </ListItem>
-                </Typography>
-              </List>
-              {feed}
-            </Box>
-          </Box>
-        </div>
-        <Footer />
-      </>
-    );
+    controlpanel = <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
+      <ListItem style={{ marginLeft: '11%' }}>
+
+        <Button style={{ width: '70%' }} onClick={handleDeleteFriend} variant='outlined' component="span">
+          Удалить из друзей
+        </Button>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            Друг успешно добавлен
+          </Alert>
+        </Snackbar>
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Button style={{ width: '112%' }} variant='contained'>
+            Написать сообщение
+          </Button>
+        </Link>
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Button style={{ width: '70%' }} onClick={handleDeleteUser} variant='contained'>
+          Заблокировать
+        </Button>
+      </ListItem>
+    </List>
   }
   if (!isAdmin && !isModerator && !isFriend) {
-    return (
-      <>
-        <Header />
-        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
-          <LeftMenu />
-          <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
+    controlpanel = <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
+      <ListItem style={{ marginLeft: '11%' }}>
 
-            <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
-
-              <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
-              <label htmlFor="contained-button-file">
-                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
-                  <ListItem style={{ marginLeft: '18%' }}>
-                    <Button onClick={handleAddFriend} variant="contained" component="span">
-                      Добавить в друзья
-                    </Button>
-                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                      <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Друг успешно удалён
-                      </Alert>
-                    </Snackbar>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '14%' }}>
-                    <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <Button variant='contained'>
-                        Написать сообщение
-                      </Button>
-                    </Link>
-                  </ListItem>
-                </List>
-              </label>
-            </Box>
-            <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
-              <List>
-                <ListItem>
-                  <Typography variant="h5" gutterBottom component="div">
-                    <p>
-                      {currentUser.map(m => m.Name)} {currentUser.map(m => m.Patronymic)} {currentUser.map(m => m.Surname)}
-                    </p>
-                  </Typography>
-                </ListItem>
-                <ListItem>
-                  <ColoredLine color="black" />
-                </ListItem>
-                <Typography variant="h6" gutterBottom component="div">
-                  <ListItem>
-                    E-mail: {currentUser.map(m => m.Email)}
-                  </ListItem>
-                  <ListItem>
-                    City: {currentUser.map(m => m.City)}
-                  </ListItem>
-                  <ListItem>
-                    BirthDaty: {currentUser.map(m => m.DateOfBirth.substring(0,10))}
-                  </ListItem>
-                </Typography>
-              </List>
-              {feed}
-            </Box>
-          </Box>
-
-        </div>
-        <Footer />
-      </>
-
-    );
+        <Button style={{ width: '70%' }} onClick={handleAddFriend} variant="contained" component="span">
+          Добавить в друзья
+        </Button>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            Друг успешно удалён
+          </Alert>
+        </Snackbar>
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Button style={{ width: '112%' }} variant='contained'>
+            Написать сообщение
+          </Button>
+        </Link>
+      </ListItem>
+    </List>
   }
 
   if (!isAdmin && !isModerator && isFriend) {
-    return (
-      <>
-        <Header />
-        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
-          <LeftMenu />
-          <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
-
-            <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
-
-              <img src={dstu} alt="Dstu" width={"330"} height={"350"} />
-              <label htmlFor="contained-button-file">
-                <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
-                  <ListItem style={{ marginLeft: '18%' }}>
-                    <Button onClick={handleDeleteFriend} variant='outlined' component="span">
-                      Удалить из друзей
-                    </Button>
-                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                      <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        Друг успешно добавлен
-                      </Alert>
-                    </Snackbar>
-                  </ListItem>
-                  <ListItem style={{ marginLeft: '14%' }}>
-                    <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <Button variant='contained'>
-                        Написать сообщение
-                      </Button>
-                    </Link>
-                  </ListItem>
-                </List>
-              </label>
-            </Box>
-            <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
-              <List>
-                <ListItem>
-                  <Typography variant="h5" gutterBottom component="div">
-                    <p>
-                      {currentUser.map(m => m.Name)} {currentUser.map(m => m.Patronymic)} {currentUser.map(m => m.Surname)}
-                    </p>
-                  </Typography>
-                </ListItem>
-                <ListItem>
-                  <ColoredLine color="black" />
-                </ListItem>
-                <Typography variant="h6" gutterBottom component="div">
-                  <ListItem>
-                    E-mail: {currentUser.map(m => m.Email)}
-                  </ListItem>
-                  <ListItem>
-                    City: {currentUser.map(m => m.City)}
-                  </ListItem>
-                  <ListItem>
-                    BirthDaty: {currentUser.map(m => m.DateOfBirth)}
-                  </ListItem>
-                </Typography>
-              </List>
-              {feed}
-            </Box>
-          </Box>
-
-        </div>
-        <Footer />
-      </>
-
-    );
+    controlpanel = <List style={{ marginTop: '30px', backgroundColor: 'white', borderRadius: 20 }}>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Button style={{ width: '70%' }} onClick={handleDeleteFriend} variant='outlined' component="span">
+          Удалить из друзей
+        </Button>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            Друг успешно добавлен
+          </Alert>
+        </Snackbar>
+      </ListItem>
+      <ListItem style={{ marginLeft: '11%' }}>
+        <Link to={'/ChatPage/' + currentUserId} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Button style={{ width: '112%' }} variant='contained'>
+            Написать сообщение
+          </Button>
+        </Link>
+      </ListItem>
+    </List>
   }
+  return (
+    <>
+      <Header />
+      <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
+        <LeftMenu />
+        <Box width={'60%'} marginRight={'10%'} textAlign={'start'} display={'flex'} justify-content={'space-between'}>
+
+          <Box paddingTop={3} bgcolor={'white'} borderRadius={3} borderBottom={0} marginTop={'2%'} width={'370px'} height={'370px'} textAlign={'center'} verticalAlign={'top'}>
+
+            <img src={`data:image/jpeg;base64,${profilePicture}`}  width={"330"} height={"350"} />
+            <label htmlFor="contained-button-file">
+              {controlpanel}
+            </label>
+          </Box>
+          <Box textAlign={'center'} bgcolor={'white'} borderRadius={3} borderTop={0} marginLeft={'2%'} marginTop={'2%'} width={'50%'} >
+            <List>
+              <ListItem>
+                <Typography variant="h5" gutterBottom component="div">
+                  <p>
+                    {currentUser.map(m => m.Name)} {currentUser.map(m => m.Patronymic)} {currentUser.map(m => m.Surname)}
+                  </p>
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <ColoredLine color="black" />
+              </ListItem>
+              <Typography variant="h6" gutterBottom component="div">
+                <ListItem>
+                  E-mail: {currentUser.map(m => m.Email)}
+                </ListItem>
+                <ListItem>
+                  City: {currentUser.map(m => m.City)}
+                </ListItem>
+                <ListItem>
+                  BirthDaty: {currentUser.map(m => m.DateOfBirth.substring(0, 10))}
+                </ListItem>
+              </Typography>
+            </List>
+            {feed}
+          </Box>
+        </Box>
+
+      </div>
+      <Footer />
+    </>
+
+  );
 }
 
 export default OtherUserPage;

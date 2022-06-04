@@ -76,7 +76,6 @@ function MainPage(props) {
   }
 
   const handleChangePicture = async () => {
-    console.log(profilePicture)
     if (myImageString !== "") {
 
 
@@ -207,7 +206,7 @@ function MainPage(props) {
     if (profilePictureBuff.length !== 0) {
 
       profilePicture = profilePictureBuff[0].picture;
-      console.log(profilePicture);
+
     }
   }
 
@@ -256,7 +255,7 @@ function MainPage(props) {
     }
   );
 
-  console.log(profilePicture)
+
   if (profilePicture !== undefined) {
     return (
       <>
@@ -305,6 +304,12 @@ function MainPage(props) {
                   </ListItem>
                 </Typography>
               </List>
+              <ColoredLine color="black" />             
+              <Box>             
+                <Typography variant='h4'>
+                  Записи пользователя
+                </Typography>
+              </Box>
               <ColoredLine color="black" />
               {feed}
             </Box>
@@ -362,6 +367,12 @@ function MainPage(props) {
                   </ListItem>
                 </Typography>
               </List>
+              <ColoredLine color="black" />
+              <Box>             
+                <Typography variant='h4'>
+                  Записи пользователя
+                </Typography>
+              </Box>
               <ColoredLine color="black" />
               {feed}
             </Box>

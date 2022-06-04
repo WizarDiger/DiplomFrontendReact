@@ -27,6 +27,7 @@ function RegisterPage(props) {
 
     const [myLogin, setLogin] = useState('')
     const [myPassword, setPassword] = useState('')
+    const [myPasswordRepeat, setPasswordRepeat] = useState('')
     const [myEmail, setEmail] = useState('')
     const [myName, setName] = useState('')
     const [mySurname, setSurname] = useState('')
@@ -38,7 +39,11 @@ function RegisterPage(props) {
     let navigate = useNavigate();
 
     const handleSubmit = async () => {
-
+        if (myPasswordRepeat != myPassword)
+        {
+            alert("Повторно введённый пароль и пароль не совпадают")
+            return 0;
+        }
 
         fetch('https://localhost:7049/api/Login', {
             method: 'POST',
@@ -121,7 +126,7 @@ function RegisterPage(props) {
                 <Box>
 
                     <KeyIcon sx={{ mr: 1, my: 3 }} />
-                    <TextField required sx={{ my: 1 }}
+                    <TextField  value={myPasswordRepeat} onChange={(e) => setPasswordRepeat(e.target.value)} sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Повторите пароль"
                         type="password"
@@ -130,7 +135,7 @@ function RegisterPage(props) {
                 <Box>
 
                     <EmailIcon sx={{ mr: 1, my: 3 }} />
-                    <TextField required value={myEmail} onChange={(e) => setEmail(e.target.value)} sx={{ my: 1 }}
+                    <TextField  value={myEmail} onChange={(e) => setEmail(e.target.value)} sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Почта"
 
@@ -140,7 +145,7 @@ function RegisterPage(props) {
                 <Box>
 
                     <BadgeIcon sx={{ mr: 1, my: 3 }} />
-                    <TextField required value={myName} onChange={(e) => setName(e.target.value)} sx={{ my: 1 }}
+                    <TextField value={myName} onChange={(e) => setName(e.target.value)} sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Имя"
 
@@ -149,7 +154,7 @@ function RegisterPage(props) {
                 <Box>
 
                     <BadgeIcon sx={{ mr: 1, my: 3 }} />
-                    <TextField required value={mySurname} onChange={(e) => setSurname(e.target.value)} sx={{ my: 1 }}
+                    <TextField  value={mySurname} onChange={(e) => setSurname(e.target.value)} sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Фамилия"
 
@@ -186,7 +191,7 @@ function RegisterPage(props) {
                 <Box>
 
                     <LocationCityIcon sx={{ mr: 1, my: 3 }} />
-                    <TextField required value={myCity} onChange={(e) => setCity(e.target.value)} sx={{ my: 1 }}
+                    <TextField  value={myCity} onChange={(e) => setCity(e.target.value)} sx={{ my: 1 }}
                         id="outlined-password-input"
                         label="Город"
 

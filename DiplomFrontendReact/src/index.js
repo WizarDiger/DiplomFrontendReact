@@ -19,6 +19,7 @@ import FriendsPage from './Pages/FriendsPage'
 import OtherUserPage from './Pages/OtherUserPage'
 import NewsPage from './Pages/NewsPage';
 import ProductsPage from './Pages/ProductsPage';
+import PhotosPage from './Pages/PhotosPage'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 
@@ -36,6 +37,7 @@ root.render(
       <Route path="OtherUserPage/:id" element={<OtherUserPage />} />
       <Route path="NewsPage" element={<NewsPage />} />
       <Route path="ProductsPage/:type" element={<ProductsPage />} />
+      <Route path="PhotosPage" element={<PhotosPage />} />
 
     </Routes>
   </BrowserRouter>
