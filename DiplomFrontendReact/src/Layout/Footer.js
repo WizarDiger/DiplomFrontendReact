@@ -13,32 +13,28 @@ export default function Footer() {
                         <Grid item xs={12} sm={4}>
                             <Box borderBottom={1}>Help</Box>
                             <Box>
-                                <Link to={'/MainPage'} style={{ textDecoration: 'none' , color: 'inherit'}}>
+                                <Link to={'/FriendsPage'} style={{ textDecoration: 'none' , color: 'inherit'}}>
                                     Contacts
                                 </Link>
                             </Box>
                             <Box>
-                                <Link to={'/MainPage'} style={{ textDecoration: 'none', color: 'inherit'}}>
+                                <Link to={'/ChatPage/22fb5247-8599-4b8e-b52a-ae095bfa29fb'} style={{ textDecoration: 'none', color: 'inherit'}}>
                                     Support
                                 </Link>
                             </Box>
-                            <Box>
-                                <Link to={'/MainPage'} style={{ textDecoration: 'none', color: 'inherit'}}>
-                                    Privacy
-                                </Link>
-                            </Box>
+                           
 
                         </Grid>
                         <Grid item xs={12} sm={4}>
                             <Box borderBottom={1}>Account</Box>
 
                             <Box>
-                                <Link to={'/MainPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                <Link to={'/LoginPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
                                     Login
                                 </Link>
                             </Box>
                             <Box>
-                                <Link to={'/MainPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                <Link to={'/RegisterPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
                                     Register
                                 </Link>
                             </Box>
@@ -47,7 +43,7 @@ export default function Footer() {
                         <Grid item xs={12} sm={4}>
                             <Box borderBottom={1}>Utilities</Box>
                             <Box>
-                                <Link to={'/MainPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                <Link to={'/ChatPage/default'} style={{ textDecoration: 'none', color: 'inherit' }}>
                                     My messages
                                 </Link>
                             </Box>
@@ -57,7 +53,7 @@ export default function Footer() {
                                 </Link>
                             </Box>
                             <Box>
-                                <Link to={'/MainPage'} style={{ textDecoration: 'none' , color: 'inherit'}}>
+                                <Link to={'/LoginPage'} style={{ textDecoration: 'none' , color: 'inherit'}}>
                                     Exit
                                 </Link>
                             </Box>

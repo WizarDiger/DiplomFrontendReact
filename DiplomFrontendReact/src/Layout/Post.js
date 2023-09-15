@@ -245,14 +245,13 @@ const Post = (props) => {
         }
     }, [myLikes, refreshcounter]);
   
-
     if (myData.Id === props.sender || isUserAdmin || isUserModerator) {
         return (
             <Box marginLeft={'3px'} marginRight={'3px'} marginBottom={'10px'} bgcolor={'whitesmoke'} borderRadius={4}>
                 <List>
                     <ListItem >
                         <Typography variant="h5" gutterBottom component="div">
-                            <Box width={'120%'}>
+                            <Box width={'100%'}>
                                 {props.title}
 
                             </Box>

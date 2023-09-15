@@ -162,11 +162,13 @@ function MainPage(props) {
     feed = myPosts
       .map(m => <Post
         key={Date.now() * Math.random()}
+        id = {m.id}
         sendername={m.sendername}
         title={m.title}
         sendtime={m.sendtime}
         description={m.description}
         imagename={m.imagename}
+        likecounter = {m.likecounter}
       />);
   }
   else {

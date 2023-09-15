@@ -132,6 +132,7 @@ function Header(props) {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+    navigate('/MainPage');
     handleMobileMenuClose();
   };
 
@@ -226,7 +227,7 @@ function Header(props) {
               component="div"
               sx={{ display: { xs: 'none', sm: 'block' } }}
             >
-              Diplom
+              SalesNet
             </Typography>
           </Toolbar>
         </AppBar>
@@ -248,7 +249,7 @@ function Header(props) {
               aria-label="open drawer"
               sx={{ mr: 2 }}
             >
-              <MenuIcon />
+             
             </IconButton>
             <Typography
               variant="h6"

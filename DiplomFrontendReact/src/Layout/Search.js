@@ -160,7 +160,7 @@ function Search({ details }) {
     );
   }
   if (String(url).substring(0, 35) !== "https://localhost:3000/ProductsPage" && String(url).substring(0, 35) !== "https://localhost:3000/PhotosPage") {
-
+    
     filteredPersons = array.filter(
 
       person => {
