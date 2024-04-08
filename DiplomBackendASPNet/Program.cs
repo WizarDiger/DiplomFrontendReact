@@ -62,7 +62,7 @@ app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
         Path.Combine(Directory.GetCurrentDirectory(), "Photos")),
-    RequestPath = "/Photos"
+    RequestPath = "/PhotosTESTTEST"
 });
 
 app.UseRouting();
