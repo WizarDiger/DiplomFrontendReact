@@ -27,7 +27,7 @@ builder.Services.AddControllersWithViews().AddNewtonsoftJson(options => options.
 
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-options.UseNpgsql("Server=localhost;Database=postgres;Port=5432;Ssl Mode=allow;User Id=postgres;Password="));
+options.UseNpgsql("Server=localhost;Database=postgres;Port=5432;Ssl Mode=allow;User Id=postgres;Password=20001508"));
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequireDigit = false;
@@ -62,7 +62,7 @@ app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
         Path.Combine(Directory.GetCurrentDirectory(), "Photos")),
-    RequestPath = "/PhotosTESTTEST"
+    RequestPath = "/Photos"
 });
 
 app.UseRouting();
