@@ -56,7 +56,6 @@ function LoginPage(props) {
       .then(res => res.json())
       .then((result) => {
         if (JSON.stringify(result) === '1') {
-
           navigate('/MainPage')
         }
         else {
@@ -66,7 +65,7 @@ function LoginPage(props) {
         }
       },
         (error) => {
-          alert('Failed');
+          alert(error);
         })
   }
 
