@@ -63,79 +63,9 @@ function MainPage(props) {
       });
 
   }
-  const getProfilePictures = async () => {
-    fetch('https://localhost:7049/api/ProfilePicture', {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setProfilePictures(data)
-      });
-
-  }
-
-  const handleChangePicture = async () => {
-    if (myImageString !== "") {
 
 
-      if (profilePicture === undefined || profilePicture.length === 0) {
-        console.log(myData.Id);
-
-        fetch('https://localhost:7049/api/ProfilePicture', {
-          method: 'POST',
-          headers:
-          {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(
-            {
-              Picture: myImageString,
-              SenderId: myData.Id
-            }
-          )
-        })
-
-          .then(res => res.json())
-          .then((result) => {
-
-            console.log(result);
-          },
-            (error) => {
-              console.log(error);
-            })
-      }
-      else {
-        fetch('https://localhost:7049/api/ProfilePicture', {
-          method: 'PUT',
-          headers:
-          {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(
-            {
-              Picture: myImageString,
-              SenderId: myData.Id
-            }
-          )
-        })
-          .then(res => res.json())
-          .then((result) => {
-
-            console.log(result);
-          },
-            (error) => {
-              console.log(error);
-            })
-      }
-      setRefresh();
-    }
-    else {
-      alert("Сначала необходимо выбрать фотографию");
-    }
-  }
+  
   let myPosts = myFeed.filter(
     post => {
       return (
@@ -179,7 +109,6 @@ function MainPage(props) {
     getUserData();
     getFeed();
     getFriends();
-    getProfilePictures();
     console.log(myData);
     var cookie = getCookie('jwt');
     if (String(cookie) === "null") {
@@ -269,7 +198,7 @@ function MainPage(props) {
               <img src={`data:image/jpeg;base64,${profilePicture}`} width={"330"} height={"350"} />
               <Box paddingTop={1} paddingBottom={1} marginTop={3} bgcolor={'white'} border={3} borderRadius={3} borderColor={'whitesmoke'}>
                 <input style={{ marginLeft: '10%' }} accept="image/*" id="contained-button-file" multiple type="file" onChange={handleChange} />
-                <Button onClick={handleChangePicture} variant="contained" component="span">
+                <Button variant="contained" component="span">
                   Загрузить фотографию
                 </Button>
               </Box>
@@ -332,7 +261,7 @@ function MainPage(props) {
               <img src={placeholder} width={"330"} height={"350"} />
               <Box paddingTop={1} paddingBottom={1} marginTop={3} bgcolor={'white'} border={3} borderRadius={3} borderColor={'whitesmoke'}>
                 <input style={{ marginLeft: '10%' }} accept="image/*" id="contained-button-file" multiple type="file" onChange={handleChange} />
-                <Button onClick={handleChangePicture} variant="contained" component="span">
+                <Button  variant="contained" component="span">
                   Загрузить фотографию
                 </Button>
               </Box>

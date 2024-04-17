@@ -66,7 +66,8 @@ function LoginPage(props) {
       },
         (error) => {
           alert(error);
-        })
+          })
+
   }
 
   const refreshList = async () => {

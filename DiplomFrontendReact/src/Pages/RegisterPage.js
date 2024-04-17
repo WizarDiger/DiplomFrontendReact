@@ -38,12 +38,14 @@ function RegisterPage(props) {
     const [value, setValue] = React.useState(null);
     let navigate = useNavigate();
 
+
     const handleSubmit = async () => {
         if (myPasswordRepeat != myPassword)
         {
             alert("Повторно введённый пароль и пароль не совпадают")
             return 0;
         }
+
 
         fetch('https://localhost:7049/api/Login', {
             method: 'POST',

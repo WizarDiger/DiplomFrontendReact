@@ -32,7 +32,7 @@ namespace DiplomBackendASPNet.Controllers
         [HttpGet]
         public JsonResult GetModerators()
         {
-            string query = $@"SELECT * FROM ""AspNetUserRoles"" WHERE ""RoleId""='372292a0-6835-482e-9c80-f945af6bdcfd'";
+            string query = $@"SELECT * FROM ""AspNetUserRoles"" WHERE ""RoleId""='19a7f18b-4150-4ff9-bba4-cb32e68e9e81'";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
             NpgsqlDataReader myReader;

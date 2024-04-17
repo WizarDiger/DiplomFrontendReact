@@ -125,10 +125,10 @@ function ProductPreview({ product, currentUserId }) {
   const defineRoles = async () => {     
     for (var i = 0; i < myStaff.length; i++) {
       
-      if (myStaff[i].UserId == myData.Id && myStaff[i].RoleId == "372292a0-6835-482e-9c80-f945af6bdcfd") {
+      if (myStaff[i].UserId == myData.Id && myStaff[i].RoleId == "19a7f18b-4150-4ff9-bba4-cb32e68e9e81") {
         setIsModerator(true);
       }
-      if (myStaff[i].UserId == myData.Id && myStaff[i].RoleId == "ac8ecd46-fc40-47f6-9473-27aa9adee354") {
+      if (myStaff[i].UserId == myData.Id && myStaff[i].RoleId == "86a72fd6-6eaf-435e-9680-231f1dbbae18") {
         setIsAdmin(true);
       }
     }
