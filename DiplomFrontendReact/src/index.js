@@ -19,7 +19,8 @@ import FriendsPage from './Pages/FriendsPage'
 import OtherUserPage from './Pages/OtherUserPage'
 import NewsPage from './Pages/NewsPage';
 import ProductsPage from './Pages/ProductsPage';
-import PhotosPage from './Pages/PhotosPage'
+import PhotosPage from './Pages/PhotosPage';
+import NeuronNetworkPage from './Pages/NeuronNetworkPage'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 
@@ -38,6 +39,7 @@ root.render(
       <Route path="NewsPage" element={<NewsPage />} />
       <Route path="ProductsPage/:type" element={<ProductsPage />} />
       <Route path="PhotosPage" element={<PhotosPage />} />
+      <Route path="NeuronNetworkPage" element={<NeuronNetworkPage />} />
 
     </Routes>
   </BrowserRouter>

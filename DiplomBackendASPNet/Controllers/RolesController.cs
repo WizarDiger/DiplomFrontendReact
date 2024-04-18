@@ -49,7 +49,7 @@ namespace DiplomBackendASPNet.Controllers
             }
         }
         [HttpPost]
-        public async Task<JsonResult> Register(User user)
+        public async Task<JsonResult> CheckIfAdmin(User user)
         {
            
             var currentUser = await userManager.FindByNameAsync(user.UserName);

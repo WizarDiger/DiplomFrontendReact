@@ -16,6 +16,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Navigate } from "react-router-dom";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -59,19 +60,65 @@ function Header(props) {
 
 
   const [myData, setData] = useState("");
-
+  const [isAdmin, setIsAdmin] = useState("");
   const getUserData = async () => {
     fetch('https://localhost:7049/api/Login', {
       method: 'GET',
       credentials: 'include',
     })
       .then((response) => response.json())
-      .then((data) => { setData(data) });
-  }
+        .then((data) => {
+            setData(data);
+            if (data.Name != null) {
+
+                fetch('https://localhost:7049/api/Roles', {
+                    method: 'POST',
+                    headers:
+                    {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(
+                        {
+                            login: data.Login,
+                            password: 1,
+                            email: '1',
+                            name: data.Name,
+                            surname: '1',
+                            patronymic: '1',
+                            dateOfBirth: '1',
+                            city: '1',
+                            UserName: data.Name
+                        }
+                    )
+                })
+
+                    .then(res => res.json())
+                    .then((result) => {
+                        
+                        if (JSON.stringify(result) === 'true') {
+
+                            setIsAdmin('1');
+                            
+                        }
+                        else {
+
+                            alert(result)
+                        }
+                    },
+                        (error) => {
+
+                            alert(error);
+                        })
+            }
+        });
+
+      
+    }
+
   useEffect(() => {
 
     getUserData();
-
   }, []);
   let navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -216,88 +263,160 @@ function Header(props) {
     </Menu>
   );
 
-  if (String(myData.Name) === "undefined") {
-    return (
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: 'none', sm: 'block' } }}
-            >
-              SalesNet
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        {renderMobileMenu}
-        {renderMenu}
+    if (String(myData.Name) === "undefined") {
+        return (
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="static">
+                    <Toolbar>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{ display: { xs: 'none', sm: 'block' } }}
+                        >
+                            SalesNet
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+                {renderMobileMenu}
+                {renderMenu}
 
-      </Box>
-    )
-  }
-  else
-    return (
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              sx={{ mr: 2 }}
-            >
-             
-            </IconButton>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: 'none', sm: 'block' } }}
-            >
-              SalesNet
-            </Typography>
-
-            <Box sx={{ flexGrow: 1 }} />
-
-
-            {myData.Name}
-
-            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-
-
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
             </Box>
-            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-              <IconButton
-                size="large"
-                aria-label="show more"
-                aria-controls={mobileMenuId}
-                aria-haspopup="true"
-                onClick={handleMobileMenuOpen}
-                color="inherit"
-              >
-                <MoreIcon />
-              </IconButton>
-            </Box>
-          </Toolbar>
-        </AppBar>
-        {renderMobileMenu}
-        {renderMenu}
+        )
+    }
+    else if (isAdmin) {
+        return (
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="open drawer"
+                            sx={{ mr: 2 }}
+                        >
 
-      </Box>
-    );
+                        </IconButton>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{ display: { xs: 'none', sm: 'block' } }}
+                        >
+                            SalesNet
+                        </Typography>
+
+                        <Box sx={{ flexGrow: 1 }} />
+                        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '5%', display: 'flex'}}>
+                            <Link to={'/NeuronNetworkPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
+                               
+                                       
+                                       нейронка
+                                                              
+                            </Link>
+                        </div>
+
+                        {myData.Name}
+
+                        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+
+
+                            <IconButton
+                                size="large"
+                                edge="end"
+                                aria-label="account of current user"
+                                aria-controls={menuId}
+                                aria-haspopup="true"
+                                onClick={handleProfileMenuOpen}
+                                color="inherit"
+                            >
+                                <AccountCircle />
+                            </IconButton>
+                        </Box>
+                        <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+                            <IconButton
+                                size="large"
+                                aria-label="show more"
+                                aria-controls={mobileMenuId}
+                                aria-haspopup="true"
+                                onClick={handleMobileMenuOpen}
+                                color="inherit"
+                            >
+                                <MoreIcon />
+                            </IconButton>
+                        </Box>
+                    </Toolbar>
+                </AppBar>
+                {renderMobileMenu}
+                {renderMenu}
+
+            </Box>
+        );
+    }
+    else
+    {
+        return (
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="open drawer"
+                            sx={{ mr: 2 }}
+                        >
+
+                        </IconButton>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{ display: { xs: 'none', sm: 'block' } }}
+                        >
+                            SalesNet
+                        </Typography>
+
+                        <Box sx={{ flexGrow: 1 }} />
+
+
+                        {myData.Name}
+
+                        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+
+
+                            <IconButton
+                                size="large"
+                                edge="end"
+                                aria-label="account of current user"
+                                aria-controls={menuId}
+                                aria-haspopup="true"
+                                onClick={handleProfileMenuOpen}
+                                color="inherit"
+                            >
+                                <AccountCircle />
+                            </IconButton>
+                        </Box>
+                        <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+                            <IconButton
+                                size="large"
+                                aria-label="show more"
+                                aria-controls={mobileMenuId}
+                                aria-haspopup="true"
+                                onClick={handleMobileMenuOpen}
+                                color="inherit"
+                            >
+                                <MoreIcon />
+                            </IconButton>
+                        </Box>
+                    </Toolbar>
+                </AppBar>
+                {renderMobileMenu}
+                {renderMenu}
+
+            </Box>
+        );
+    }
 }
 export default Header;
