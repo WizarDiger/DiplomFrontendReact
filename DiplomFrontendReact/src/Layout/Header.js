@@ -309,7 +309,7 @@ function Header(props) {
 
                         <Box sx={{ flexGrow: 1 }} />
                         <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '5%', display: 'flex'}}>
-                            <Link to={'/NeuronNetworkPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
+                            <Link to={'/NeuralNetworkPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
                                
                                        
                                        нейронка

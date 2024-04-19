@@ -31,33 +31,33 @@ function getCookie(name) {
     }
     return decodeURI(dc.substring(begin + prefix.length, end));
 }
-const NeuronNetowrkPage = () => {
+const NeuralNetworkPage = () => {
 
-    const [myProducts, setProducts] = useState([]);
+    const [myMoodRecords, setMoodRecords] = useState([]);
 
     let navigate = useNavigate();
-    /*const getProducts = async () => {
-        fetch('https://localhost:7049/api/Products', {
+    const getMoodRecords = async () => {
+        fetch('https://localhost:7049/api/NeuralNetwork', {
             method: 'GET',
             credentials: 'include',
         })
             .then((response) => response.json())
             .then((data) => {
-                setProducts(data)
+                setMoodRecords(data)
 
             });
 
     }
     useEffect(() => {
 
-        getProducts();
+        getMoodRecords();
         var cookie = getCookie('jwt');
         if (String(cookie) === "null") {
             navigate('/LoginPage'
             )
         }
     }, [""]);
-    */
+    
 
     return (
         <>
@@ -65,7 +65,7 @@ const NeuronNetowrkPage = () => {
             <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%', display: 'flex', backgroundColor: 'whitesmoke' }}>
                 <LeftMenu />
                 <div style={{ width: '60%' }}>
-                    <Search details={myProducts} />
+                    <Search details={myMoodRecords} />
                 </div>
             </div>
             <Footer />
@@ -74,4 +74,4 @@ const NeuronNetowrkPage = () => {
 };
 
 
-export default NeuronNetowrkPage;
+export default NeuralNetworkPage;
