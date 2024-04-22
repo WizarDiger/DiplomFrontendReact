@@ -209,19 +209,8 @@ function Search({ details }) {
 
     }
 
-    function handleChange(event) {
-
-        console.log(event.target.files[0]);
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            const base64String = reader.result
-                .replace('data:', '')
-                .replace(/^.+,/, '');
-            console.log(base64String);
-            setImageString(base64String);
-        };
-        reader.readAsDataURL(file);
+    const handleChange = e => {
+        setSearchField(e.target.value);
     };
 
     for (var i = 0; i < chatwithstrangers.length; i++) {
@@ -582,6 +571,15 @@ function Search({ details }) {
                 <Grid width={'100%'} container component={Paper} >
                     <TextField onChange={handleChange} id="outlined-basic-email" label="Поиск" fullWidth />
                 </Grid>
+                <Typography marginLeft={'3%'} marginTop={'1%'} variant="h5" gutterBottom component="div" display={'inline-block' }>
+                    Ключевое слово
+                </Typography>
+                <Typography marginLeft={'3%'} marginTop={'1%'} variant="h5" gutterBottom component="div" display={'inline-block'}>
+                    Положительные
+                </Typography>
+                <Typography marginLeft={'3%'} marginTop={'1%'} variant="h5" gutterBottom component="div" display={'inline-block'}>
+                    Отрицательные
+                </Typography>
                 {searchList()}
             </section>
         );

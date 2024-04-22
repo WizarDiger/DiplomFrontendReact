@@ -5,6 +5,7 @@ import { Paper } from '@mui/material';
 import ProductPreview from './ProductPreview';
 import { Button } from 'react-chat-engine';
 import Photo from './Photo';
+import MoodRecordCard from './MoodRecordCard';
 function SearchList({ filteredPersons }) {
     const [myData, setData] = useState("");
     const getUserData = async () => {
@@ -83,7 +84,7 @@ function SearchList({ filteredPersons }) {
 
     if (String(url) === "https://localhost:3000/NeuralNetworkPage") {
 
-        const filtered = filteredPersons.map(person => <Card key={person.id} person={person} currentUserId={myData.Id} />);
+        const filtered = filteredPersons.map(moodRecord => <MoodRecordCard key={moodRecord.id} moodRecord={moodRecord} currentUserId={myData.Id} />);
         return (
             <div>
                 <Grid width={"100%"} marginRight={"2px"} container component={Paper} >
