@@ -571,15 +571,17 @@ function Search({ details }) {
                 <Grid width={'100%'} container component={Paper} >
                     <TextField onChange={handleChange} id="outlined-basic-email" label="Поиск" fullWidth />
                 </Grid>
-                <Typography marginLeft={'3%'} marginTop={'1%'} variant="h5" gutterBottom component="div" display={'inline-block' }>
+                <Grid container rowSpacing={1} columnSpacing={{ xs: 5, sm: 2, md: 3 }}>
+                <Typography marginLeft={'9%'} marginTop={'1%'} variant="h5" gutterBottom component="div" display={'inline-block' }>
                     Ключевое слово
                 </Typography>
-                <Typography marginLeft={'3%'} marginTop={'1%'} variant="h5" gutterBottom component="div" display={'inline-block'}>
+                <Typography marginLeft={'19%'} marginTop={'1%'} variant="h5" gutterBottom component="div" display={'inline-block'}>
                     Положительные
                 </Typography>
-                <Typography marginLeft={'3%'} marginTop={'1%'} variant="h5" gutterBottom component="div" display={'inline-block'}>
+                <Typography marginLeft={'16%'} marginTop={'1%'} variant="h5" gutterBottom component="div" display={'inline-block'}>
                     Отрицательные
-                </Typography>
+                    </Typography>
+                </Grid>
                 {searchList()}
             </section>
         );

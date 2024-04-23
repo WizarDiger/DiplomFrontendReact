@@ -16,8 +16,9 @@ import { BrowserRouter } from 'react-router-dom';
 import placeholder from './placeholder.png'
 import {  Dialog, DialogActions, DialogContent, DialogTitle, Grid, Input } from '@mui/material';
 import { TextField } from '@mui/material';
-
+import { styled } from '@mui/material/styles';
 import { PieChart } from '@mui/x-charts/PieChart';
+import Paper from '@mui/material/Paper';
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -72,27 +73,44 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
         setOpenMoodRecord(false);
     };
 
+    const Item = styled(Paper)(({ theme }) => ({
+        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+        ...theme.typography.body2,
+        padding: theme.spacing(1),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+    }));
 
     return (
-        <Box >
-            <Button onClick={handleClickOpenMoodRecord} style={{ width: '500%', justifyContent: "flex-start", textTransform: 'none' }} variant="theme">
+        <Box width={'200%'} display={'inline-block'}>
+
+            <Button onClick={handleClickOpenMoodRecord} style={{ width: '100%', justifyContent: "flex-start", textTransform: 'none' }} variant="theme">
                 <Typography width='100%' variant="h5" gutterBottom component="div">
+                    <Grid container rowSpacing={1} columnSpacing={{ xs: 5, sm: 2, md: 3 }}>
+                        <Grid item xs={4}>
+                            
+                                <Box display={'inline-block'}>
+                                    {moodRecord.keyword}
+                                </Box>
+                           
+                        </Grid>
+                        <Grid item xs={4}>
+                        <Box  display={'inline-block'}  color={'green'}>
+                            {moodRecord.positive}
+                        </Box>
+                        </Grid>
+                        <Grid item xs={4}>
+                        <Box  display={'inline-block'}  color={'red'}>
+                            {moodRecord.negative}
+                        </Box>
+                        </Grid>
 
-                    <Box display={'inline-block'} marginRight={'25%'}>
-                        {moodRecord.keyword}
-                    </Box>
-                    <Box display={'inline-block'} marginRight={'25%'} color={'green'}>
-                        {moodRecord.positive}
-                    </Box>
-                    <Box display={'inline-block'} marginRight={'25%'} marginLeft={'0'} color={'red'}>
-                        {moodRecord.negative}
-                    </Box>
-
+                    </Grid>
 
                 </Typography>
             </Button>
-            <Dialog open={openMoodRecord} onClose={handleCloseMoodRecord}>
-                <DialogTitle variant="h4">Ключевое слово - {moodRecord.keyword}</DialogTitle>
+            <Dialog maxWidth='100%' open={openMoodRecord} onClose={handleCloseMoodRecord} >
+                <DialogTitle variant="h4">Ключевое слово - {moodRecord.keyword} </DialogTitle>
                 <DialogContent>
                     <Typography
                         autoFocus
@@ -100,10 +118,10 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
                         id="name"
                         label="Название"
                         type="email"
-                        
+
                         variant="h5"
                     >
-                        Позитивные реакции: {moodRecord.positive }
+                        Позитивные реакции: {moodRecord.positive}
                     </Typography>
                     <Typography
                         autoFocus
@@ -120,14 +138,14 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
                         series={[
                             {
                                 data: [
-                                    { id: 0, value: 10, label: 'series A' },
-                                    { id: 1, value: 15, label: 'series B' },
-                                    { id: 2, value: 20, label: 'series C' },
+                                    { id: 0, value: moodRecord.positive, label: 'Позитивные реакции' },
+                                    { id: 1, value: moodRecord.negative, label: 'Негативные реакции' },
+
                                 ],
                             },
                         ]}
-                        width={400}
-                        height={200}
+                        width={700}
+                        height={350}
                     />
 
                 </DialogContent>
