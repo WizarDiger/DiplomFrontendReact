@@ -27,11 +27,10 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
 
     const [refreshcounter, setRefresh] = useReducer(x => x + 1, 0);
     const [open, setOpen] = React.useState(false);
-    const [FriendList, setFriend] = useState("");
-    const [isFriend, setCheckFriend] = useState(0);
+    const [moodRecords, setMoodRecords] = useState("");
     const [openMoodRecord, setOpenMoodRecord] = React.useState(false);
     const [myProfilePictures, setProfilePictures] = useState([]);
-
+    
     const theme = createTheme({
         status: {
             danger: '#e53e3e',
@@ -54,13 +53,40 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
 
         setOpen(false);
     };
+    const getMoodRecords = () => {
 
+        fetch('https://localhost:7049/api/MoodRecord', {
+            method: 'POST',
+            headers:
+            {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    Keyword: moodRecord.keyword                 
+                }
+            )
+        })
+
+            .then(res => res.json())
+            .then((result) => {
+
+                setMoodRecords(result);
+                console.log('1');
+            },
+                (error) => {
+                    alert(error);
+                })
+       
+    };
 
     let url = window.location.href;
 
 
     useEffect(() => {
-
+        //alert(JSON.stringify(moodRecord));
+        getMoodRecords();
     }, [refreshcounter]);
 
 
@@ -72,14 +98,6 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
     const handleCloseMoodRecord = () => {
         setOpenMoodRecord(false);
     };
-
-    const Item = styled(Paper)(({ theme }) => ({
-        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    }));
 
     return (
         <Box width={'200%'} display={'inline-block'}>
@@ -96,12 +114,12 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
                         </Grid>
                         <Grid item xs={4}>
                         <Box  display={'inline-block'}  color={'green'}>
-                            {moodRecord.positive}
+                            {moodRecord.age}
                         </Box>
                         </Grid>
                         <Grid item xs={4}>
                         <Box  display={'inline-block'}  color={'red'}>
-                            {moodRecord.negative}
+                            {moodRecord.age}
                         </Box>
                         </Grid>
 
@@ -138,8 +156,8 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
                         series={[
                             {
                                 data: [
-                                    { id: 0, value: moodRecord.positive, label: 'Позитивные реакции' },
-                                    { id: 1, value: moodRecord.negative, label: 'Негативные реакции' },
+                                    { id: 0, value: moodRecord.age, label: 'Позитивные реакции' },
+                                    { id: 1, value: moodRecord.age, label: 'Негативные реакции' },
 
                                 ],
                             },

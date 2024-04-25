@@ -173,13 +173,11 @@ function Search({ details }) {
         );
     }
 
-    if (String(url) === "https://localhost:3000/NeuralNetworkPage") {      
+    if (String(url) === "https://localhost:3000/NeuralNetworkPage") {
         filteredMoodRecords = array.filter(
-
             moodrecord => {
 
                 return (
-
                     moodrecord
                         .keyword
                         .toLowerCase()
