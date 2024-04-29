@@ -22,9 +22,9 @@ namespace DiplomBackendASPNet.Controllers
 
 
 		[HttpPost]
-		public JsonResult GetMoodRecords(string keyword)
+		public JsonResult GetMoodRecords(MoodRecord moodRecord)
 		{
-			string query = $@"SELECT age,city,mood FROM ""MoodRecords"" WHERE ""keyword"" == @keyword";
+			string query = $@"SELECT * FROM ""MoodRecords"" WHERE ""keyword"" = @keyword";
 			DataTable table = new DataTable();
 			string sqlDataSource = _configuration.GetConnectionString("SocialNetworkCon");
 			NpgsqlDataReader myReader;
@@ -33,7 +33,7 @@ namespace DiplomBackendASPNet.Controllers
 				myCon.Open();
 				using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
 				{
-					myCommand.Parameters.AddWithValue("@keyword", keyword);
+					myCommand.Parameters.AddWithValue("@keyword", moodRecord.keyword);
 					myReader = myCommand.ExecuteReader();
 					table.Load(myReader);
 					myReader.Close();

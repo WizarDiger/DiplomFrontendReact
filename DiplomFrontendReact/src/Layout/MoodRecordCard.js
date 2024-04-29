@@ -27,10 +27,30 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
 
     const [refreshcounter, setRefresh] = useReducer(x => x + 1, 0);
     const [open, setOpen] = React.useState(false);
-    const [moodRecords, setMoodRecords] = useState("");
+
+    const [positiveReactions, setPositiveReactions] = useState("");
+    const [negativeReactions, setNegativeReactions] = useState("");
+    const [allAge, setAllAge] = useState(0);
+    const [amountOfRecords, setAmountOfRecords] = useState(0);
     const [openMoodRecord, setOpenMoodRecord] = React.useState(false);
-    const [myProfilePictures, setProfilePictures] = useState([]);
-    
+    const [usersBelowTwenty, setUsersBelowTwenty] = useState(0);
+    const [usersFromTwentyToThrity, setUsersFromTwentyToThirty] = useState(0);
+    const [usersFromThirtyToForty, setUsersFromThirtyToForty] = useState(0);
+    const [usersFromFortyToFifty, setUsersFromFortyToFifty] = useState(0);
+    const [usersFromFiftyToSixty, setUsersFromFiftyToSixty] = useState(0);
+    const [usersAboveSixty, setUsersAboveSixty] = useState(0);
+    const [pieChartCities, setPieChartCities] = useState([]);
+    var cityCounts = [];
+   
+    var filteredPositive = [];
+    var filteredNegative = [];
+    var filteredBelowTwenty = [];
+    var filteredFromTwentyToThirty = [];
+    var filteredFromThirtyToForty = [];
+    var filteredFromFortyToFifty = [];
+    var filteredFromFiftyToSixty = [];
+    var filteredAboveSixty = [];
+    var allCities = [];
     const theme = createTheme({
         status: {
             danger: '#e53e3e',
@@ -64,7 +84,10 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
             },
             body: JSON.stringify(
                 {
-                    Keyword: moodRecord.keyword                 
+                    Keyword: moodRecord.keyword,
+                    Age: moodRecord.age,
+                    City: moodRecord.city,
+                    Mood: moodRecord.mood
                 }
             )
         })
@@ -72,21 +95,94 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
             .then(res => res.json())
             .then((result) => {
 
-                setMoodRecords(result);
-                console.log('1');
+                //alert(JSON.stringify(result));
+                filteredPositive = result.filter((moodRecords) => {
+                    return (
+                        moodRecords.mood === "positive"
+                    );
+                }
+                );
+                filteredNegative = result.filter((moodRecords) => {
+                    return (
+                        moodRecords.mood === "negative"
+                    );
+                }
+                );
+                filteredBelowTwenty = result.filter((moodRecords) => {
+                    return (
+                        moodRecords.age < 20
+                    );
+                }
+                );
+                filteredFromTwentyToThirty = result.filter((moodRecords) => {
+                    return (
+                        moodRecords.age >= 20 && moodRecord.age < 30
+                    );
+                }
+                );
+                filteredFromThirtyToForty = result.filter((moodRecords) => {
+                    return (
+                        moodRecords.age >= 30 && moodRecord.age < 40
+                    );
+                }
+                );
+                filteredFromFortyToFifty = result.filter((moodRecords) => {
+                    return (
+                        moodRecords.age >= 40 && moodRecord.age < 50
+                    );
+                }
+                );
+                filteredFromFiftyToSixty = result.filter((moodRecords) => {
+                    return (
+                        moodRecords.age >= 50 && moodRecord.age < 60
+                    );
+                }
+                );
+                filteredAboveSixty = result.filter((moodRecords) => {
+                    return (
+                        moodRecords.age > 60
+                    );
+                }
+                );
+                setAmountOfRecords(0);
+                setAmountOfRecords(result.length);
+                setAllAge(0);
+                let allAgeBuff = 0;
+                result.forEach(record => { allAgeBuff = record.age + allAgeBuff; })
+                setAllAge(allAgeBuff);
+                setPositiveReactions(filteredPositive.length)
+                setNegativeReactions(filteredNegative.length)
+                setUsersBelowTwenty(filteredBelowTwenty.legnth)
+                setUsersFromTwentyToThirty(filteredFromTwentyToThirty.length)
+                setUsersFromThirtyToForty(filteredFromThirtyToForty.length)
+                setUsersFromFortyToFifty(filteredFromFortyToFifty.length)
+                setUsersFromFiftyToSixty(filteredFromFiftyToSixty.length)
+                setUsersAboveSixty(filteredAboveSixty.legnth);
+
+                result.forEach(record => { allCities.push(record.city) })
+                allCities.forEach(function (x) { cityCounts[x] = (cityCounts[x] || 0) + 1; });
+                let uniqueCities = [... new Set(allCities)];
+                var pieChartCitiesBuff = [];                         
+                uniqueCities.forEach(city => (pieChartCitiesBuff.push({ value: cityCounts[city], label: city })))
+               
+                setPieChartCities(pieChartCitiesBuff);
+               
+                //console.log(filteredBelowTwenty);
+                //console.log(filteredPositive.length);
             },
                 (error) => {
                     alert(error);
                 })
-       
+
     };
 
     let url = window.location.href;
-
+    
 
     useEffect(() => {
         //alert(JSON.stringify(moodRecord));
         getMoodRecords();
+    
     }, [refreshcounter]);
 
 
@@ -114,12 +210,12 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
                         </Grid>
                         <Grid item xs={4}>
                         <Box  display={'inline-block'}  color={'green'}>
-                            {moodRecord.age}
+                            {positiveReactions}
                         </Box>
                         </Grid>
                         <Grid item xs={4}>
                         <Box  display={'inline-block'}  color={'red'}>
-                            {moodRecord.age}
+                            {negativeReactions}
                         </Box>
                         </Grid>
 
@@ -135,31 +231,65 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
                         margin="dense"
                         id="name"
                         label="Название"
-                        type="email"
-
                         variant="h5"
                     >
-                        Позитивные реакции: {moodRecord.positive}
+                        Позитивные реакции: {positiveReactions}
                     </Typography>
                     <Typography
                         autoFocus
                         margin="dense"
                         id="name"
                         label="Название"
-                        type="email"
-
                         variant="h5"
                     >
-                        Негативные реакции: {moodRecord.negative}
+                        Негативные реакции: {negativeReactions}
                     </Typography>
                     <PieChart
                         series={[
                             {
                                 data: [
-                                    { id: 0, value: moodRecord.age, label: 'Позитивные реакции' },
-                                    { id: 1, value: moodRecord.age, label: 'Негативные реакции' },
+                                    { id: 0, value: positiveReactions, label: 'Позитивные реакции' },
+                                    { id: 1, value: negativeReactions, label: 'Негативные реакции' },
 
                                 ],
+                            },
+                        ]}
+                        width={700}
+                        height={350}
+                    />
+                    <Typography autoFocus margin="dense" id="name" label="Название" variant="h5" >
+                        Средний возраст пользователя: {allAge/amountOfRecords}
+                    </Typography>
+
+                    <PieChart
+                        series={[
+                            {
+                                data: [
+                                    { id: 0, value: usersBelowTwenty, label: 'До 20 лет' },
+                                    { id: 1, value: usersFromTwentyToThrity, label: 'От 20 до 30 лет' },
+                                    { id: 2, value: usersFromThirtyToForty, label: 'От 30 до 40 лет' },
+                                    { id: 3, value: usersFromFortyToFifty, label: 'От 40 до 50 лет' },
+                                    { id: 4, value: usersFromFiftyToSixty, label: 'От 50 до 60 лет' },
+                                    { id: 5, value: usersAboveSixty, label: 'От 60 лет' },
+
+                                ],
+                            },
+                        ]}
+                        width={700}
+                        height={350}
+                    />
+
+                    <Typography autoFocus margin="dense" id="name" label="Название" variant="h5" >
+                        Города пользователей
+                    </Typography>
+
+                    <PieChart
+                        series={[
+                            {
+                                data: pieChartCities
+                                   
+                                     
+                               
                             },
                         ]}
                         width={700}

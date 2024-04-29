@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useRef } from 'react';
+﻿import React, { Component, useState, useEffect, useRef } from 'react';
 import Card from './Card';
 import { Box, Grid } from '@mui/material';
 import { Paper } from '@mui/material';
@@ -83,8 +83,9 @@ function SearchList({ filteredPersons }) {
     }
 
     if (String(url) === "https://localhost:3000/NeuralNetworkPage") {
-
-        const filtered = filteredPersons.map(moodRecord => <MoodRecordCard key={moodRecord.id} moodRecord={moodRecord} currentUserId={myData.Id} />);
+        let uniqueKeywords = filteredPersons.filter((ele, ind) => ind === filteredPersons.findIndex(elem => elem.keyword === ele.keyword))
+        const filtered = uniqueKeywords.map(moodRecord => <MoodRecordCard key={moodRecord.id} moodRecord={moodRecord} currentUserId={myData.Id} />);
+        //alert(JSON.stringify(uniqueKeywords));
         return (
             <div>
                 <Grid width={"100%"} marginRight={"2px"} container component={Paper} >
@@ -93,6 +94,7 @@ function SearchList({ filteredPersons }) {
                 </Grid>
             </div>
         );
+        //todo сделать чтобы передавались данные всех в keywordom а не записи по одной чтобы не делать запрос к дб в MoodRecordCard
     }
 }
 
