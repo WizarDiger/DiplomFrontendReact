@@ -308,11 +308,11 @@ function Header(props) {
                         </Typography>
 
                         <Box sx={{ flexGrow: 1 }} />
-                        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '5%', display: 'flex'}}>
+                        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '15%', display: 'flex'}}>
                             <Link to={'/NeuralNetworkPage'} style={{ textDecoration: 'none', color: 'inherit' }}>
                                
                                        
-                                       нейронка
+                                       Раздел анализа тональности текста
                                                               
                             </Link>
                         </div>

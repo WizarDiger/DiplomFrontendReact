@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var hostName = "https://localhost:3000/";
+var pythonHostName = "http://127.0.0.1:8000/";
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -20,6 +21,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(c =>
 {
     c.AddPolicy("AllowOrigin", options => options.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed(hostName => true));
+	c.AddPolicy("AllowOrigin", options => options.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed(pythonHostName => true));
+
 });
 
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
@@ -57,6 +60,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(options=>options.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed(hostName => true));
+app.UseCors(options => options.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed(pythonHostName => true));
 
 app.UseStaticFiles(new StaticFileOptions
 {
@@ -68,15 +72,15 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseRouting();
 app.UseEndpoints(endpoints => endpoints.MapHub<ChatHub>("/hubs/chat"));
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseAuthentication();
 
 app.MapControllers();
 
-app.Run();
 
+app.Run();
 
 
 //public static void ConfigureIdentity(WebApplicationBuilder builder)

@@ -18,6 +18,11 @@
       "applicationUrl": "https://localhost:7049",
       "dotnetRunMessages": true
     },
+    "PythonBackend": {
+      "commandName": "Project",
+      "launchUrl": "swagger",
+      "applicationUrl": "http://127.0.0.1:8000"
+    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,

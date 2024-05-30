@@ -223,23 +223,19 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
 
                 </Typography>
             </Button>
-            <Dialog maxWidth='100%' open={openMoodRecord} onClose={handleCloseMoodRecord} >
+            <Dialog open={openMoodRecord} onClose={handleCloseMoodRecord} fullWidth maxWidth="md">
                 <DialogTitle variant="h4">Ключевое слово - {moodRecord.keyword} </DialogTitle>
                 <DialogContent>
                     <Typography
                         autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Название"
+                        margin="dense"                      
                         variant="h5"
                     >
                         Позитивные реакции: {positiveReactions}
                     </Typography>
                     <Typography
                         autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Название"
+                        margin="dense"                      
                         variant="h5"
                     >
                         Негативные реакции: {negativeReactions}
@@ -257,7 +253,7 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
                         width={700}
                         height={350}
                     />
-                    <Typography autoFocus margin="dense" id="name" label="Название" variant="h5" >
+                    <Typography autoFocus margin="dense" variant="h5" >
                         Средний возраст пользователя: {allAge/amountOfRecords}
                     </Typography>
 
@@ -283,7 +279,7 @@ function MoodRecordCard({ moodRecord, currentUserId }) {
                         Города пользователей
                     </Typography>
 
-                    <PieChart
+                    <PieChart 
                         series={[
                             {
                                 data: pieChartCities
